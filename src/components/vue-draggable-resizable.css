@@ -1,0 +1,91 @@
+.vdr {
+  touch-action: none;
+  position: absolute;
+  box-sizing: border-box;
+  border: 1px dashed #d6d6d6;
+}
+.handle {
+  box-sizing: border-box;
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #ffffff;
+  border: 1px solid #333;
+  box-shadow: 0 0 2px #bbb;
+}
+.handle-tl {
+  top: -5px;
+  left: -5px;
+  cursor: nw-resize;
+}
+.handle-tm {
+  top: -5px;
+  left: 50%;
+  margin-left: -5px;
+  cursor: n-resize;
+}
+.handle-tr {
+  top: -5px;
+  right: -5px;
+  cursor: ne-resize;
+}
+.handle-ml {
+  top: 50%;
+  margin-top: -5px;
+  left: -5px;
+  cursor: w-resize;
+}
+.handle-mr {
+  top: 50%;
+  margin-top: -5px;
+  right: -5px;
+  cursor: e-resize;
+}
+.handle-bl {
+  bottom: -5px;
+  left: -5px;
+  cursor: sw-resize;
+}
+.handle-bm {
+  bottom: -5px;
+  left: 50%;
+  margin-left: -5px;
+  cursor: s-resize;
+}
+.handle-br {
+  bottom: -5px;
+  right: -5px;
+  cursor: se-resize;
+}
+/*旋转handle*/
+/*.handle-rot {
+  top: 0;
+  left: 50%;
+  margin-top: -20px;
+  margin-left: -1px;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  cursor: grab;
+  transform: translate(-50%, 0);
+}
+.handle-rot:before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  width: 0;
+  height: 7px;
+  border-left: 1px solid #000000;
+  transform: translate(-50%, 0);
+}*/
+@media only screen and (max-width: 768px) {
+  [class*="handle-"]:before {
+    content: '';
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    top: -10px;
+    position: absolute;
+  }
+}

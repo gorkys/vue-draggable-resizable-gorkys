@@ -1,0 +1,80 @@
+{
+  "name": "vue-draggable-resizable-gorkys",
+  "version": "2.0.0",
+  "author": "Maurizio Bonani <maurizio.bonani@gmail.com>",
+  "main": "dist/VueDraggableResizable.umd.min.js",
+  "unpkg": "dist/VueDraggableResizable.umd.min.js",
+  "browser": {
+    "./sfc": "src/vue-draggable-resizable.vue"
+  },
+  "private": false,
+  "description": "Vue 用于可调整大小和可拖动元素的组件并支持冲突检测与吸附对齐",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "build-bundle": "vue-cli-service build --target lib --name VueDraggableResizable ./src/index.js",
+    "unit": "cross-env BABEL_ENV=test node_modules/karma/bin/karma start tests/unit/karma.conf.js --single-run",
+    "unit-watch": "cross-env BABEL_ENV=test node_modules/karma/bin/karma start tests/unit/karma.conf.js",
+    "storybook": "start-storybook -p 9001 -c .storybook",
+    "gh-pages:clean": "rm -rf docs",
+    "gh-pages:build": "build-storybook -c .storybook -o docs",
+    "gh-pages:publish": "$(npm bin)/git-directory-deploy --directory docs",
+    "gh-pages": "npm run gh-pages:clean && npm run gh-pages:build && npm run gh-pages:publish"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@storybook/addon-notes": "^4.1.4",
+    "@storybook/vue": "^4.1.4",
+    "@vue/cli-plugin-babel": "^3.0.1",
+    "@vue/cli-plugin-eslint": "^3.0.1",
+    "@vue/cli-service": "^3.0.1",
+    "@vue/eslint-config-standard": "^3.0.1",
+    "@vue/test-utils": "^1.0.0-beta.24",
+    "babel-plugin-istanbul": "^4.1.6",
+    "babel-preset-vue": "^2.0.2",
+    "chai": "^4.1.2",
+    "cross-env": "^5.2.0",
+    "git-directory-deploy": "^1.5.1",
+    "karma": "^3.0.0",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-coverage": "^1.1.2",
+    "karma-coverage-istanbul-reporter": "^2.0.1",
+    "karma-mocha": "^1.3.0",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-spec-reporter": "0.0.32",
+    "karma-webpack": "^3.0.0",
+    "mocha": "^5.2.0",
+    "sinon": "^6.1.5",
+    "style-loader": "^0.22.1",
+    "syn": "^0.5.0",
+    "vue": "^2.5.21",
+    "vue-template-compiler": "^2.5.21"
+  },
+  "files": [
+    "/dist/*",
+    "/src/*",
+    "*.json",
+    "*.js"
+  ],
+  "engines": {
+    "node": ">= 4.0.0",
+    "npm": ">= 3.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gorkys/vue-draggable-resizable-gorkys.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gorkys/vue-draggable-resizable-gorkys/issues"
+  },
+  "homepage": "https://github.com/gorkys/vue-draggable-resizable-gorkys",
+  "keywords": [
+    "vue",
+    "component",
+    "dragabble",
+    "resizable"
+  ]
+}
