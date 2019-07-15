@@ -1,5 +1,6 @@
 <p align="center"><img src="https://rawgit.com/mauricius/vue-draggable-resizable/v1/docs/resources/logo.png" alt="logo"></p>
 <h1 align="center">VueDraggableResizable 2</h1>
+
 [![Latest Version on NPM](https://img.shields.io/npm/v/vue-draggable-resizable.svg?style=flat-square)](https://npmjs.com/package/vue-draggable-resizable)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![npm](https://img.shields.io/npm/dt/vue-draggable-resizable.svg?style=flat-square)](https://www.npmjs.com/package/vue-draggable-resizable)
