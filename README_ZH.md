@@ -34,7 +34,7 @@
 
 ### 在线演示
 
-有关组件的示例，请转到 [在线演示](https://mauricius.github.io/vue-draggable-resizable/)
+有关组件的示例，请转到 [在线演示](http://tingtas.com/vue-draggable-resizable-gorkys/)
 
 或者，您可以在自己的计算机上运行示例：
 

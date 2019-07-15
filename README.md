@@ -22,7 +22,7 @@
 
 ## 功能预览
 
-[英文版演示地址](https://mauricius.github.io/vue-draggable-resizable) | [中文版演示地址](http://tingtas.com/vue-draggable-resizable-gorkys)
+[英文版演示地址](https://mauricius.github.io/vue-draggable-resizable) | [中文版演示地址](http://tingtas.com/vue-draggable-resizable-gorkys/)
 
 > 注意：英文版为官方原版，没有新增功能的演示。**中文版**为google翻译版本，新增功能在**`高级`**目录下可查看
 
