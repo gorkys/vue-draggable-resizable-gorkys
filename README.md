@@ -31,7 +31,7 @@
 
 ## 新增Props
 
-**isConflictCheck**
+**isConflictCheck**<br/>
 类型: `Boolean`<br/>必需: `false`<br/>默认: `false`
 
 定义组件是否开启冲突检测。
@@ -40,7 +40,7 @@
 <vue-draggable-resizable :is-conflict-check="true">
 ```
 
-**snap**
+**snap**<br/>
 类型: `Boolean`<br/>
 必需: `false`<br/>
 默认: `false`
@@ -51,7 +51,7 @@
 <vue-draggable-resizable :snap="true">
 ```
 
-**snapTolerance**
+**snapTolerance**<br/>
 类型: `Number`<br/>
 必需: `false`<br/>
 默认: `5`
@@ -62,11 +62,11 @@
 <vue-draggable-resizable :snap="true" :snap-tolerance="20">
 ```
 
-> **其它属性请参考[vue-draggable-resizable](https://github.com/mauricius/vue-draggable-resizable)官方文档**
-
 ## 其它属性
 
 [英文版](https://github.com/mauricius/vue-draggable-resizable) | [中文版](./README_ZH.md)
+
+> 注意：英文版为官方原版，中文版为**google翻译版本**
 
 ## 安装使用
 
