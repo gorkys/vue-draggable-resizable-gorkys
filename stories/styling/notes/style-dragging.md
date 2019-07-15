@@ -1,6 +1,6 @@
-# Component with custom class name on dragging
+# 拖动时具有自定义类名的组件
 
-Component with a custom class name on dragging, provided with the prop <b>`class-name-dragging`</b>.
+在拖动时具有自定义类名的组件，由prop <b>`class-name-dragging` </b>提供。
 
 ~~~js
 <vue-draggable-resizable class-name-dragging="my-dragging-class" class-name="my-class">
@@ -22,3 +22,4 @@ Component with a custom class name on dragging, provided with the prop <b>`class
     border: 1px solid black;
 }
 ~~~
+

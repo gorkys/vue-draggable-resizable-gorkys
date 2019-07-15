@@ -14,11 +14,11 @@ import AspectRatioGridOffsetMin from './aspect-ratio-grid-with-offset-and-min'
 import AspectRatioGridParent from './aspect-ratio-with-grid-in-parent'
 
 export default {
-  'Basic Aspect Ratio' : withMarkdownNotes(AspectRatioNotes)(() => (new AspectRatio)),
-  'Costrained in Parent' : withMarkdownNotes(AspectRatioParentNotes)(() => (new AspectRatioParent)),
-  'With minHeight and minWidth' : withMarkdownNotes(AspectRatioMinWidthMinHeightNotes)(() => (new AspectRatioMinWidthMinHeight)),
-  'With maxWidth and maxHeight' : withMarkdownNotes(AspectRatioMaxWidthMaxHeightNotes)(() => (new AspectRatioMaxWidthMaxHeight)),
-  'Forced on grid' : withMarkdownNotes(AspectRatioGridNotes)(() => (new AspectRatioGrid)),
-  'Forced on grid with offset and min' : () => (new AspectRatioGridOffsetMin),
-  'Forced on grid in parent' : () => (new AspectRatioGridParent),
+  '基本纵横比' : withMarkdownNotes(AspectRatioNotes)(() => (new AspectRatio)),
+  '在父级中限制' : withMarkdownNotes(AspectRatioParentNotes)(() => (new AspectRatioParent)),
+  '使用minHeight和minWidth' : withMarkdownNotes(AspectRatioMinWidthMinHeightNotes)(() => (new AspectRatioMinWidthMinHeight)),
+  '使用maxWidth和maxHeight' : withMarkdownNotes(AspectRatioMaxWidthMaxHeightNotes)(() => (new AspectRatioMaxWidthMaxHeight)),
+  '强迫网格' : withMarkdownNotes(AspectRatioGridNotes)(() => (new AspectRatioGrid)),
+  '在偏移和最小值的网格上强制' : () => (new AspectRatioGridOffsetMin),
+  '在父级的网格上强制' : () => (new AspectRatioGridParent),
 }

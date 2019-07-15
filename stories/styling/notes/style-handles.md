@@ -1,8 +1,8 @@
-# Component with custom class name handles
+# 具有自定义类名称句柄的组件
 
-Component with a custom class for handle, provided with the prop <b>`class-name-handle`</b>. In this way you can style each handle separately.
+具有handle的自定义类的组件，随prop <b>`class-name-handle` </b>提供。 这样，您可以单独设置每个手柄的样式。
 
-__Remember to set `position: absolute` for the handle class__
+__记得为句柄类设置`position：absolute`__
 
 ~~~js
 <vue-draggable-resizable class-name-handle="my-handle-class">

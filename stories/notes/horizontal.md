@@ -1,6 +1,6 @@
-# Component costrained on x axis
+# 组件在x轴上限制
 
-Component that can be dragged and resized only on x axis. Drag constrain is defined using axis="x" prop, while resizing costrain can be achieved by defining only left and right handles :handles="['ml','mr']".
+只能在x轴上拖动和调整大小的组件。 使用`axis =“x”`prop定义拖动约束，而通过仅定义左右句柄来实现调整限制：handles =“['ml'，'mr']”`。
 
 ~~~js
 <vue-draggable-resizable :parent="true" axis="x" :handles="['ml','mr']">

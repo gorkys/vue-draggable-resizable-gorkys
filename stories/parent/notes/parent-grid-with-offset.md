@@ -1,6 +1,6 @@
-# Component costraind in parent and on a grid with 10x10 offset
+# 父级和网格上的组件约束，具有10x10偏移量
 
-Component attached to a grid with a small offset. Its starting position is not perfectly aligned with the top-left corner of the parent.
+组件附加到具有小偏移的网格。 它的起始位置与父级的左上角不完全对齐。
 
 ~~~js
 <div>

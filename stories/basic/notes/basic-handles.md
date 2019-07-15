@@ -1,6 +1,6 @@
-# Basic component with handles prop
+# 带手柄道具的基本组件
 
-You can choose what handles to provide to the component using the <b>`handles`</b> prop, which accepts an array of handles. For example, if you want to costrain resizing only on horizontal axis you can provide only left and right handles `:handles="['ml','mr']"`.
+您可以使用<b>`handles` </b> prop选择要为组件提供的句柄，它接受句柄数组。 例如，如果你想仅在横轴上进行成本调整，你只能提供左右句柄`：handles =“['ml'，'mr']”`。
 
 ~~~js
 <vue-draggable-resizable :prevent-deactivation="true" :handles="['tl','tm','tr','mr','br','bm','bl','ml']">

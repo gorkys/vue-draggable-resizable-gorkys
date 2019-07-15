@@ -1,6 +1,6 @@
-# Grid 20x20 pixels with 10x10 offset
+# 网格20x20像素，偏移量为10x10
 
-The grid is always calculated from the upper-left corner of the component. In this example you can see that it has an offset relative to the parent element. This is important for components costrained in parent elements.
+始终从组件的左上角计算网格。 在此示例中，您可以看到它相对于父元素具有偏移量。 这对于父元素中的成本要求很重要。
 
 ~~~js
 <vue-draggable-resizable :grid="[20,20]" :x="10" :y="10">

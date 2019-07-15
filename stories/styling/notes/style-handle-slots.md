@@ -1,6 +1,6 @@
-# Component with custom markup for handles
+# 具有句柄自定义标记的组件
 
-Component with custom markup for handles, provided by [VueJS named slots](https://vuejs.org/v2/guide/components-slots.html#Named-Slots) (e.g. `slot="tl"`).
+具有句柄自定义标记的组件，由[VueJS named slots](https://vuejs.org/v2/guide/components-slots.html#Named-Slots)提供（例如`slot =“tl”`）。
 
 ~~~js
 <vue-draggable-resizable class-name-handle="emoji-handles">
@@ -16,3 +16,4 @@ Component with custom markup for handles, provided by [VueJS named slots](https:
   <div slot="ml">😀</div>
 </vue-draggable-resizable>
 ~~~
+

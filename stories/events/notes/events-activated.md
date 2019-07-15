@@ -1,6 +1,6 @@
-# Activated and deactivated events
+# 已激活和已停用的活动
 
-The `activated()` event is emitted when the component gets activated. The `deactivated()` event is emitted when the component gets deactivated.
+当组件被激活时，会发出`activated()`事件。 当组件被停用时，会发出`deactivated()`事件。
 
 ~~~js
 <vue-draggable-resizable :w="200" :h="200" @activated="onActivated" @deactivated="onDeactivated">

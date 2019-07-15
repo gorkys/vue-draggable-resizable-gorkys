@@ -1,6 +1,6 @@
-# Dragging and dragstop events
+# 拖动并拖动事件
 
-The `dragging(x, y)` event is emitted when the component is dragged. The `dragstop(x, y)` event is emmitted when the dragging stops.
+拖动组件时会发出`dragging(x,y)`事件。 拖动停止时会发生`dragstop(x,y)`事件。
 
 ~~~js
 <vue-draggable-resizable :w="200" :h="200" @dragging="onDrag" @dragstop="onDragStop">

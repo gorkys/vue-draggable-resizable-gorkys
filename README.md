@@ -1,6 +1,5 @@
 <p align="center"><img src="http://tingtas.com/vue-draggable-resizable/resources/logo.png" alt="logo"></p>
 <h1 align="center">VueDraggableResizable 2</h1>
-
 [![Latest Version on NPM](https://img.shields.io/npm/v/vue-draggable-resizable.svg?style=flat-square)](https://npmjs.com/package/vue-draggable-resizable)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![npm](https://img.shields.io/npm/dt/vue-draggable-resizable.svg?style=flat-square)](https://www.npmjs.com/package/vue-draggable-resizable)
@@ -23,14 +22,16 @@
 
 ## 功能预览
 
+[英文版演示地址](https://mauricius.github.io/vue-draggable-resizable) | [中文版演示地址](http://tingtas.com/vue-draggable-resizable-gorkys)
+
+> 注意：英文版为官方原版，没有新增功能的演示。**中文版**为google翻译版本，新增功能在**`高级`**目录下可查看
+
 ![](https://cdn.jsdelivr.net/gh/gorkys/CDN-Blog@master/Project/vue-draggable-resizable/demo.gif)
 
 ## 新增Props
 
 **isConflictCheck**
-Type: `Boolean`
-Required: `false`
-Default: `false`
+类型: `Boolean`<br/>必需: `false`<br/>默认: `false`
 
 定义组件是否开启冲突检测。
 
@@ -39,9 +40,9 @@ Default: `false`
 ```
 
 **snap**
-Type: `Boolean`
-Required: `false`
-Default: `false`
+类型: `Boolean`<br/>
+必需: `false`<br/>
+默认: `false`
 
 定义组件是否开启元素对齐。
 
@@ -50,9 +51,9 @@ Default: `false`
 ```
 
 **snapTolerance**
-Type: `Number`
-Required: `false`
-Default: `5`
+类型: `Number`<br/>
+必需: `false`<br/>
+默认: `5`
 
 当调用`snap`时，定义组件与元素之间的对齐距离，以像素(px)为单位。
 
@@ -61,6 +62,10 @@ Default: `5`
 ```
 
 > **其它属性请参考[vue-draggable-resizable](https://github.com/mauricius/vue-draggable-resizable)官方文档**
+
+## 其它属性
+
+[英文版](https://github.com/mauricius/vue-draggable-resizable) | [中文版](./README_ZH.md)
 
 ## 安装使用
 

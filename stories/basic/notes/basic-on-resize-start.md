@@ -1,6 +1,6 @@
-# Basic component with onResizeStart callback
+# onResizeStart回调的基本组件
 
-A basic component, with <b>`onResizeStart`</b> prop that accepts a function that gets called when dragging starts (element is clicked or touched). If the function returns `false`, the action is cancelled. You can use this function to prevent bubbling of events.
+具有`onResizeStart `回调的基本组件，带有<b>`onResizeStart` </b> prop，它接受在拖动开始时调用的函数（单击或触摸元素）。 如果函数返回`false`，则取消操作。 您可以使用此功能来防止事件冒泡。
 
 ~~~js
 <vue-draggable-resizable :on-resize-start="onResizeStartCallback">

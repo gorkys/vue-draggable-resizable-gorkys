@@ -36,21 +36,21 @@ import BasicOnResizeStart from './basic-on-resize-start'
 import BasicOnResizeStartNotes from './notes/basic-on-resize-start.md'
 
 export default {
-  'Basic component' : withMarkdownNotes(BasicNotes)(() => (new Basic)),
-  'Basic component with minw and minh' : withMarkdownNotes(BasicMinWidthHeightNotes)(() => (new BasicMinWidthHeight)),
-  'Basic component with maxw and maxh' : withMarkdownNotes(BasicMaxWidthHeightNotes)(() => (new BasicMaxWidthHeight)),
-  'Basic component with form inside' : withMarkdownNotes(BasicWithFormNotes)(() => (new BasicWithForm)),
-  'Basic component with active prop' : withMarkdownNotes(BasicActiveNotes)(() => (new BasicActive)),
-  'Basic component with deactivation prevented' : withMarkdownNotes(BasicPreventDeactivationNotes)(() => (new BasicPreventDeactivation)),
-  'Basic component not draggable' : withMarkdownNotes(BasicNotDraggableNotes)(() => (new BasicNotDraggable)),
-  'Basic component not resizable' : withMarkdownNotes(BasicNotResizableNotes)(() => (new BasicNotResizable)),
-  'Basic component with native drag disabled' : withMarkdownNotes(BasicNativeDragEnabledNotes)(() => (new BasicNativeDragEnabled)),
-  'Basic controlled component' : withMarkdownNotes(BasicControlledNotes)(() => (new BasicControlled)),
-  'Basic component with drag handle' : withMarkdownNotes(BasicDragHandleNotes)(() => (new BasicDragHandle)),
-  'Basic component with drag cancel' : withMarkdownNotes(BasicCancelHandleNotes)(() => (new BasicCancelHandle)),
-  'Basic component with z-index prop' : withMarkdownNotes(BasicZIndexNotes)(() => (new BasicZIndex)),
-  'Basic component with handles prop' : withMarkdownNotes(BasicHandlesNotes)(() => (new BasicHandles)),
-  'Basic component with axis prop' : withMarkdownNotes(BasicAxisNotes)(() => (new BasicAxis)),
-  'Basic component with onDragStart callback' : withMarkdownNotes(BasicOnDragStartNotes)(() => (new BasicOnDragStart)),
-  'Basic component with onResizeStart callback' : withMarkdownNotes(BasicOnResizeStartNotes)(() => (new BasicOnResizeStart))
+  '基本组件' : withMarkdownNotes(BasicNotes)(() => (new Basic)),
+  'minw和minh的基本组件' : withMarkdownNotes(BasicMinWidthHeightNotes)(() => (new BasicMinWidthHeight)),
+  'maxw和maxh的基本组件' : withMarkdownNotes(BasicMaxWidthHeightNotes)(() => (new BasicMaxWidthHeight)),
+  '内部形式的基本组件' : withMarkdownNotes(BasicWithFormNotes)(() => (new BasicWithForm)),
+  '具有主动道具的基本组件' : withMarkdownNotes(BasicActiveNotes)(() => (new BasicActive)),
+  '禁止停用的基本组件' : withMarkdownNotes(BasicPreventDeactivationNotes)(() => (new BasicPreventDeactivation)),
+  '基本组件不可拖动' : withMarkdownNotes(BasicNotDraggableNotes)(() => (new BasicNotDraggable)),
+  '基本组件不可调整大小' : withMarkdownNotes(BasicNotResizableNotes)(() => (new BasicNotResizable)),
+  '禁用本机拖动的基本组件' : withMarkdownNotes(BasicNativeDragEnabledNotes)(() => (new BasicNativeDragEnabled)),
+  '基本控制组件' : withMarkdownNotes(BasicControlledNotes)(() => (new BasicControlled)),
+  '带拖动手柄的基本组件' : withMarkdownNotes(BasicDragHandleNotes)(() => (new BasicDragHandle)),
+  '拖动取消的基本组件' : withMarkdownNotes(BasicCancelHandleNotes)(() => (new BasicCancelHandle)),
+  '具有z-index的基本组件' : withMarkdownNotes(BasicZIndexNotes)(() => (new BasicZIndex)),
+  '带手柄道具的基本组件' : withMarkdownNotes(BasicHandlesNotes)(() => (new BasicHandles)),
+  '轴支撑的基本组件' : withMarkdownNotes(BasicAxisNotes)(() => (new BasicAxis)),
+  'onDragStart回调的基本组件' : withMarkdownNotes(BasicOnDragStartNotes)(() => (new BasicOnDragStart)),
+  'onResizeStart回调的基本组件' : withMarkdownNotes(BasicOnResizeStartNotes)(() => (new BasicOnResizeStart))
 }

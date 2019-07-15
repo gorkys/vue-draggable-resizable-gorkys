@@ -1,6 +1,6 @@
-# Component with grid costraind in parent with maxWidth and maxHeight
+# 具有网格限制的组件在父级中具有maxWidth和maxHeight
 
-Component attached to a grid, that cannot be dragged or resized outside its parent element, with <b>maxWidth</b> and <b>maxHeight</b> props to limit its size. __Notice__ that using `20` as `grid` prop for the <b>y axis</b>, the `maxHeight` of the element is `280` instead of `290`.
+附加到网格的组件，无法在其父元素之外拖动或调整大小，使用<b> maxWidth </b>和<b> maxHeight </b>来限制其大小。 __Notice__使用`20`作为`grid` prop为<b> y轴</b>，元素的`maxHeight`是`280`而不是`290`。
 
 ~~~js
 <div>
@@ -9,3 +9,4 @@ Component attached to a grid, that cannot be dragged or resized outside its pare
   </vue-draggable-resizable>
 </div>
 ~~~
+

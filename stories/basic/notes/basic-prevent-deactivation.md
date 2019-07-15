@@ -1,6 +1,6 @@
-# Prevent deactivation
+# 防止停用
 
-A basic component, with <b>`prevent-deactivation`</b> prop to avoid untoggling active state when clicking outside..
+一个基本组件，带有<b>`prevent-deactivation` </b> prop，以避免在外部点击时解除活动状态。
 
 ~~~js
 <vue-draggable-resizable :prevent-deactivation="true">

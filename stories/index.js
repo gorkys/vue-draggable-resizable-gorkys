@@ -12,36 +12,36 @@ import EventsStories from './events/index'
 import AdvancedStories from './advanced/index'
 
 for (var story in BasicStories) {
-  storiesOf('Basic', module)
+  storiesOf('基本', module)
     .add(story, BasicStories[story])
 }
 
 for (var story in GridStories) {
-  storiesOf('Grid', module)
+  storiesOf('网格', module)
     .add(story, GridStories[story])
 }
 
 for (var story in ParentStories) {
-  storiesOf('Parent', module)
+  storiesOf('父级', module)
     .add(story, ParentStories[story])
 }
 
 for (var story in AspectRatioStories) {
-  storiesOf('Aspect Ratio', module)
+  storiesOf('宽高比', module)
     .add(story, AspectRatioStories[story])
 }
 
 for (var story in StylingStories) {
-  storiesOf('Styling', module)
+  storiesOf('样式', module)
     .add(story, StylingStories[story])
 }
 
 for (var story in EventsStories) {
-  storiesOf('Events', module)
+  storiesOf('活动', module)
     .add(story, EventsStories[story])
 }
 
 for (var story in AdvancedStories) {
-  storiesOf('Advanced', module)
+  storiesOf('高级', module)
     .add(story, AdvancedStories[story])
 }

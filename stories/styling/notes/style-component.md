@@ -1,6 +1,6 @@
-# Component with custom class name
+# 具有自定义类名的组件
 
-Component with a custom class name, provided with the prop <b>`class-name`</b>.
+具有自定义类名的组件，由prop <b>`class-name` </b>提供。
 
 ~~~js
 <vue-draggable-resizable class-name="my-class">

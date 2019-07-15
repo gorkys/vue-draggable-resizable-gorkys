@@ -1,6 +1,6 @@
-# Component not draggable
+# 组件不可拖动
 
-A basic component, with <b>`draggable`</b> prop set to `false`, so it's not draggable.
+一个基本组件，<b>`draggable` </b> prop设置为`false`，因此它不可拖动。
 
 ~~~js
 <vue-draggable-resizable :draggable="false">

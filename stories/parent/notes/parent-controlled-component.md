@@ -1,6 +1,6 @@
-# Parent controlled Component with Grid
+# 父元素控制的组件与网格
 
-A basic parent controlled component, with <b>`x`</b>, <b>`y`</b>, <b>`w`</b> and <b>`h`</b> props to control the position and the size of the component. __Notice__ that using also the `grid` prop, the component will react only with a valid multiple of grid values.
+一个基本的父控制组件，<b>`x` </b>，<b>`y` </b>，<b>`w` </b>和<b>`h` </b> 用于控制组件位置和大小的道具。 __Notice__使用`grid` prop，组件只会对网格值的有效倍数作出反应。
 
 ~~~js
 <vue-draggable-resizable :parent="true" :grid=[20,20] :x="x" :y="y" :h="h" :w="w" @dragging="onDrag" @resizing="onResize">

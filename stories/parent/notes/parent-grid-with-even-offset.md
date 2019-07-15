@@ -1,6 +1,6 @@
-# Component costraind in parent and on a grid with an even 17x17 offset
+# 父级和网格上的组件限制，具有均匀的17x17偏移量
 
-Component attached to a grid with an even offset.
+组件连接到具有偶数偏移的网格。
 
 ~~~js
 <div>
@@ -9,3 +9,4 @@ Component attached to a grid with an even offset.
   </vue-draggable-resizable>
 </div>
 ~~~
+

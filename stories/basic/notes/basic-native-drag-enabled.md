@@ -1,6 +1,6 @@
-# Component with native drag enabled
+# 启用了本机拖动的组件
 
-A basic component, with <b>`enable-native-drag`</b> prop set to `true`, in order to allow native browser's drag behavior. You can see the difference by dragging each component using the ball. Default value is `false`.
+一个基本组件，<b>`enable-native-drag` </b> prop设置为`true`，以允许本机浏览器的拖动行为。 您可以通过使用球拖动每个组件来查看差异。 默认值为`false`。
 
 ~~~js
 <vue-draggable-resizable :enable-native-drag="true">

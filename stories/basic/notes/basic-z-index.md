@@ -1,6 +1,6 @@
-# Basic component with z-index control
+# 具有z-index控制的基本组件
 
-A basic component, with <b>`z-index`</b> prop to control the z-index from outside the component. If not provided it would take the value `auto`.
+一个基本组件，使用<b>`z-index` </b> prop来控制组件外部的`z-index`。 如果没有提供，它将采用值`auto`。
 
 ~~~js
 <vue-draggable-resizable :z-index="zindex">

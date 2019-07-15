@@ -1,59 +1,58 @@
 <p align="center"><img src="https://rawgit.com/mauricius/vue-draggable-resizable/v1/docs/resources/logo.png" alt="logo"></p>
 <h1 align="center">VueDraggableResizable 2</h1>
-
 [![Latest Version on NPM](https://img.shields.io/npm/v/vue-draggable-resizable.svg?style=flat-square)](https://npmjs.com/package/vue-draggable-resizable)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![npm](https://img.shields.io/npm/dt/vue-draggable-resizable.svg?style=flat-square)](https://www.npmjs.com/package/vue-draggable-resizable)
 
-> Vue2 Component for draggable and resizable elements.
+> Vue2组件，用于可拖动和可调整大小的元素。
 
-If you are looking for the version 1 of the component, it is available on the [v1 branch](https://github.com/mauricius/vue-draggable-resizable/tree/v1).
+如果您正在寻找组件的版本1，可以在[v1分支](https://github.com/mauricius/vue-draggable-resizable/tree/v1)上找到它。
 
-## Table of Contents
+## 目录
 
-* [Features](#features)
-* [Live Playground](#live-playground)
-* [Install and basic usage](#install-and-basic-usage)
+* [特征](#特征)
+* [在线演示](#在线演示)
+* [安装和基本用法](#安装和基本用法)
   * [Props](#props)
-  * [Events](#events)
+  * [事件](#事件)
   * [Styling](#styling)
-* [Contributing](#contributing)
+* [贡献](#贡献)
 * [License](#license)
 
-### Features
+### 特征
 
-* No dependencies
-* Use draggable, resizable or both
-* Define handles for resizing
-* Restrict size and movement to parent element or custom selector
-* Snap element to custom grid
-* Restrict drag to vertical or horizontal axis
-* Maintain aspect ratio
-* Touch enabled
-* Use your own classes
-* Provide your own markup for handles
+* 没有依赖
+ - 使用可拖动，可调整大小或两者兼备
+ - 定义用于调整大小的句柄
+ - 限制大小和移动到父元素或自定义选择器
+ - 将元素捕捉到自定义网格
+ - 将拖动限制为垂直或水平轴
+- 保持纵横比
+ - 启用触控功能
+ - 使用自己的样式
+ - 为句柄提供自己的样式
 
-### Live Playground
+### 在线演示
 
-For examples of the component go to the [live playground](https://mauricius.github.io/vue-draggable-resizable/)
+有关组件的示例，请转到 [在线演示](https://mauricius.github.io/vue-draggable-resizable/)
 
-Alternatively you can run the playground on your own computer:
+或者，您可以在自己的计算机上运行示例：
 
-* Clone this repository
+* 克隆此存储库
 * `npm install`
 * `npm run storybook`
-* Visit [http://localhost:9001/](http://localhost:9001/)
+* 访问 [http://localhost:9001/](http://localhost:9001/)
 
 ---
 
-## Install and basic usage
+## 安装和基本用法
 
 ```bash
 $ npm install --save vue-draggable-resizable
 ```
 
 
-Register the component
+全局注册组件
 
 ```js
 import Vue from 'vue'
@@ -65,7 +64,7 @@ import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
 Vue.component('vue-draggable-resizable', VueDraggableResizable)
 ```
 
-You may now use the component in your markup
+局部注册注册
 
 ```vue
 <template>
@@ -79,7 +78,7 @@ You may now use the component in your markup
 
 <script>
 import VueDraggableResizable from 'vue-draggable-resizable'
-
+import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
 export default {
   data: function () {
     return {
@@ -112,7 +111,7 @@ Type: `String`<br>
 Required: `false`<br>
 Default: `vdr`
 
-Used to set the custom `class` of a draggable-resizable component.
+用于设置可拖动可调整大小的组件的自定义`class`。
 
 ```html
 <vue-draggable-resizable class-name="my-class">
@@ -123,7 +122,7 @@ Type: `String`<br>
 Required: `false`<br>
 Default: `draggable`
 
-Used to set the custom `class` of a draggable-resizable component when `draggable` is enable.
+用于在启用`draggable`时设置可拖动可调整大小的组件的自定义`class`。
 
 ```html
 <vue-draggable-resizable class-name-draggable="my-draggable-class">
@@ -134,7 +133,7 @@ Type: `String`<br>
 Required: `false`<br>
 Default: `resizable`
 
-Used to set the custom `class` of a draggable-resizable component when `resizable` is enable.
+当启用`resizable`时，用于设置可拖动可调整大小的组件的自定义`class`。
 
 ```html
 <vue-draggable-resizable class-name-resizable="my-resizable-class">
@@ -145,7 +144,7 @@ Type: `String`<br>
 Required: `false`<br>
 Default: `dragging`
 
-Used to set the custom `class` of a draggable-resizable component when is dragging.
+用于在拖动时设置可拖动可调整大小的组件的自定义`class`。
 
 ```html
 <vue-draggable-resizable class-name-dragging="my-dragging-class">
@@ -156,7 +155,7 @@ Type: `String`<br>
 Required: `false`<br>
 Default: `resizing`
 
-Used to set the custom `class` of a draggable-resizable component when is resizing.
+用于在调整大小时设置可拖动可调整大小的组件的自定义`class`。
 
 ```html
 <vue-draggable-resizable class-name-resizing="my-resizing-class">
@@ -167,7 +166,7 @@ Type: `String`<br>
 Required: `false`<br>
 Default: `active`
 
-Used to set the custom `class` of a draggable-resizable component when is active.
+用于在活动时设置可拖动可调整大小的组件的自定义`class`。
 
 ```html
 <vue-draggable-resizable class-name-active="my-active-class">
@@ -178,15 +177,15 @@ Type: `String`<br>
 Required: `false`<br>
 Default: `handle`
 
-Used to set the custom common `class` of each handle element. This way you can style each handle individually using the selector `<your class>-<handle code>`, where `handle code` identifies one of the handles provided by the `handle` prop.
+用于设置每个句柄元素的自定义公共`class`。 这样你就可以使用选择器`<your class>  -  <handle code>`来单独设置每个句柄的样式，其中`handle code`标识`handle` prop提供的句柄之一。
 
-So for example, this component:
+例如，这个组件：
 
 ```html
 <vue-draggable-resizable class-name-handle="my-handle-class"></vue-draggable-resizable>
 ```
 
-renders the following:
+呈现以下内容：
 
 ```html
 <div ...>
@@ -202,7 +201,7 @@ Type: `Boolean`<br>
 Required: `false`<br>
 Default: `true`
 
-By default, the component adds the style declaration `'user-select:none'` to itself to prevent text selection during drag. You can disable this behaviour by setting this prop to `false`.
+默认情况下，组件将样式声明`user-select：none`添加到自身以防止在拖动期间选择文本。 您可以通过将此prop设置为`false`来禁用此行为。
 
 ```html
 <vue-draggable-resizable :disable-user-select="false">
@@ -213,7 +212,7 @@ Type: `Boolean`<br>
 Required: `false`<br>
 Default: `false`
 
-By default, the browser's native drag and drop funcionality (usually used for images and some other elements) is disabled, as it may conflict with the one provided by the component. If you need, for whatever reason, to have this functionality back you can set this prop to `true`.
+默认情况下，浏览器的本机拖放功能（通常用于图像和其他一些元素）被禁用，因为它可能与组件提供的功能冲突。 如果您因任何原因需要恢复此功能，则可以将此道具设置为`true`。
 
 ```html
 <vue-draggable-resizable :enable-native-drag="true">
@@ -224,18 +223,19 @@ Type: `Boolean`<br>
 Required: `false`<br>
 Default: `false`
 
-Determines if the component should be active or not. The prop reacts to changes and also can be used with the `sync`[modifier](https://vuejs.org/v2/guide/components.html#sync-Modifier) to keep the state in sync with the parent. You can use along with the `preventDeactivation` prop in order to fully control the active behavior from outside the component.
+确定组件是否应处于活动状态。 道具对变化作出反应，也可以与`sync` [modifier](https://vuejs.org/v2/guide/components.html#sync-Modifier)一起使用，以保持状态与父级同步。 您可以与`preventDeactivation` prop一起使用，以便完全控制组件外部的活动行为。
 
 ```html
 <vue-draggable-resizable :active="true">
 ```
 
 #### preventDeactivation
+
 Type: `Boolean`<br>
 Required: `false`<br>
 Default: `false`
 
-Determines if the component should be deactivated when the user clicks/taps outside it.
+确定当用户在其外部单击/点击时是否应停用该组件。
 
 ```html
 <vue-draggable-resizable :prevent-deactivation="true">
@@ -246,7 +246,7 @@ Type: `Boolean`<br>
 Required: `false`<br>
 Default: `true`
 
-Defines it the component should be draggable or not.
+定义组件应该是否可拖动。
 
 ```html
 <vue-draggable-resizable :draggable="false">
@@ -257,7 +257,7 @@ Type: `Boolean`<br>
 Required: `false`<br>
 Default: `true`
 
-Defines it the component should be resizable or not.
+定义组件应该可以调整大小。
 
 ```html
 <vue-draggable-resizable :resizable="false">
@@ -268,7 +268,7 @@ Type: `Number`<br>
 Required: `false`<br>
 Default: `200`
 
-Define the initial width of the element.
+定义元素的初始宽度。
 
 ```html
 <vue-draggable-resizable :w="200">
@@ -279,7 +279,7 @@ Type: `Number`<br>
 Required: `false`<br>
 Default: `200`
 
-Define the initial height of the element.
+定义元素的初始高度。
 
 ```html
 <vue-draggable-resizable :h="200">
@@ -290,7 +290,7 @@ Type: `Number`<br>
 Required: `false`<br>
 Default: `50`
 
-Define the minimal width of the element.
+定义元素的最小宽度。
 
 ```html
 <vue-draggable-resizable :min-width="50">
@@ -301,7 +301,7 @@ Type: `Number`<br>
 Required: `false`<br>
 Default: `50`
 
-Define the minimal height of the element.
+定义元素的最小高度。
 
 ```html
 <vue-draggable-resizable :min-height="50">
@@ -312,7 +312,7 @@ Type: `Number`<br>
 Required: `false`<br>
 Default: `null`
 
-Define the maximum width of the element.
+定义元素的最大宽度。
 
 ```html
 <vue-draggable-resizable :max-width="400">
@@ -323,7 +323,7 @@ Type: `Number`<br>
 Required: `false`<br>
 Default: `null`
 
-Define the maximum height of the element.
+定义元素的最大高度。
 
 ```html
 <vue-draggable-resizable :max-height="50">
@@ -334,7 +334,7 @@ Type: `Number`<br>
 Required: `false`<br>
 Default: `0`
 
-Define the initial x position of the element.
+定义元素的初始`x`位置。
 
 ```html
 <vue-draggable-resizable :x="0">
@@ -345,7 +345,7 @@ Type: `Number`<br>
 Required: `false`<br>
 Default: `0`
 
-Define the initial y position of the element.
+定义元素的初始`y`位置。
 
 ```html
 <vue-draggable-resizable :y="0">
@@ -356,7 +356,7 @@ Type: `Number|String`<br>
 Required: `false`<br>
 Default: `auto`
 
-Define the zIndex of the element.
+定义元素的`zIndex`。
 
 ```html
 <vue-draggable-resizable :z="999">
@@ -367,15 +367,15 @@ Type: `Array`<br>
 Required: `false`<br>
 Default: `['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml']`
 
-Define the array of handles to restrict the element resizing:
-* `tl` - Top left
-* `tm` - Top middle
-* `tr` - Top right
-* `mr` - Middle right
-* `br` - Bottom right
-* `bm` - Bottom middle
-* `bl` - Bottom left
-* `ml` - Middle left
+定义句柄数组以限制元素大小调整：
+* `tl` - 左上角
+* `tm` - 上方中间
+ - `tr`  - 右上角
+ - `mr`  - 右中角
+ - `br`  - 右下角
+ - `bm`  - 底部中间
+ - `bl`  - 左下角
+ - `ml`  - 左中角
 
 ```html
 <vue-draggable-resizable :handles="['tm','bm','ml','mr']">
@@ -386,7 +386,7 @@ Type: `String`<br>
 Required: `false`<br>
 Default: `both`
 
-Define the axis on which the element is draggable. Available values are `x`, `y` or `both`.
+定义元素可拖动的轴。 可用值为`x`，`y`或`both`。
 
 ```html
 <vue-draggable-resizable axis="x">
@@ -397,7 +397,7 @@ Type: `Array`<br>
 Required: `false`<br>
 Default: `[1,1]`
 
-Define the grid on which the element is snapped.
+定义捕捉元素的网格。
 
 ```html
 <vue-draggable-resizable :grid="[1,1]">
@@ -408,7 +408,7 @@ Type: `Boolean | String`<br>
 Required: `false`<br>
 Default: `false`
 
-Restricts the movement and the dimensions of the component to the parent (if `true` is provided), or to an element identified by a valid CSS selector.
+将组件的移动和尺寸限制为父组件（如果提供了就设置`true`），或者限制为由有效`CSS`选择器标识的元素。
 
 ```html
 <vue-draggable-resizable :parent="true">
@@ -422,7 +422,7 @@ Restricts the movement and the dimensions of the component to the parent (if `tr
 Type: `String`<br>
 Required: `false`
 
-Defines the selector that should be used to drag the component.
+定义应该用于拖动组件的选择器。
 
 ```html
 <vue-draggable-resizable drag-handle=".drag">
@@ -432,7 +432,7 @@ Defines the selector that should be used to drag the component.
 Type: `String`<br>
 Required: `false`
 
-Defines a selector that should be used to prevent drag initialization.
+定义应该用于防止拖动初始化的选择器。
 
 ```html
 <vue-draggable-resizable drag-cancel=".drag">
@@ -443,7 +443,7 @@ Type: `Boolean`<br>
 Required: `false`<br>
 Default: `false`
 
-The `lockAspectRatio` property is used to lock aspect ratio. This property doesn't play well with `grid`, so make sure to use only one at a time.
+`lockAspectRatio`属性用于锁定宽高比。 此属性与`grid`不兼容，因此请确保一次只使用一个。
 
 ```html
 <vue-draggable-resizable :lock-aspect-ratio="true">
@@ -454,7 +454,7 @@ Type: `Function`<br>
 Required: `false`<br>
 Default: `null`
 
-Called when dragging starts (element is clicked or touched). If `false` is returned by any handler, the action will cancel. You can use this function to prevent bubbling of events.
+拖动开始时调用（单击或触摸元素）。 如果任何处理程序返回`false`，则操作将取消。 您可以使用此功能来防止事件冒泡。
 
 ```html
 <vue-draggable-resizable :onDragStart="onDragStartCallback">
@@ -473,7 +473,7 @@ Type: `Function`<br>
 Required: `false`<br>
 Default: `null`
 
-Called when resizing starts (handle is clicked or touched). If `false` is returned by any handler, the action will cancel.
+调整大小时启动（单击或触摸手柄）。 如果任何处理程序返回`false`，则操作将取消。
 
 ```html
 <vue-draggable-resizable :onResizeStart="onResizeStartCallback">
@@ -488,13 +488,13 @@ function onResizeStartCallback(handle, ev){
 ```
 ---
 
-### Events
+### 事件
 
 #### activated
 
-Parameters: `-`
+参数: `-`
 
-Called whenever the component gets clicked, in order to show handles.
+单击组件时调用，以显示句柄。
 
 ```html
 <vue-draggable-resizable @activated="onActivated">
@@ -502,9 +502,9 @@ Called whenever the component gets clicked, in order to show handles.
 
 #### deactivated
 
-Parameters: `-`
+参数: `-`
 
-Called whenever the user clicks anywhere outside the component, in order to deactivate it.
+每当用户单击组件外的任何位置时调用，以便停用它。
 
 ```html
 <vue-draggable-resizable @deactivated="onDeactivated">
@@ -512,13 +512,13 @@ Called whenever the user clicks anywhere outside the component, in order to deac
 
 #### resizing
 
-Parameters:
-* `left` the X position of the element
-* `top` the Y position of the element
-* `width` the width of the element
-* `height` the height of the element
+参数:
+* `left`元素的X位置
+ - `top`元素的Y位置
+ - `width`元素的宽度
+ - `height`元素的高度
 
-Called whenever the component gets resized.
+每当组件调整大小时调用。
 
 ```html
 <vue-draggable-resizable @resizing="onResizing">
@@ -526,13 +526,13 @@ Called whenever the component gets resized.
 
 #### resizestop
 
-Parameters:
-* `left` the X position of the element
-* `top` the Y position of the element
-* `width` the width of the element
-* `height` the height of the element
+参数:
+* `left`元素的X位置
+ - `top`元素的Y位置
+ - `width`元素的宽度
+ - `height`元素的高度
 
-Called whenever the component stops getting resized.
+每当组件停止调整大小时调用。
 
 ```html
 <vue-draggable-resizable @resizestop="onResizstop">
@@ -540,11 +540,11 @@ Called whenever the component stops getting resized.
 
 #### dragging
 
-Parameters:
-* `left` the X position of the element
-* `top` the Y position of the element
+参数:
+* `left` 元素的X位置
+* `top` 元素的Y位置
 
-Called whenever the component gets dragged.
+每当拖动组件时调用。
 
 ```html
 <vue-draggable-resizable @dragging="onDragging">
@@ -552,11 +552,11 @@ Called whenever the component gets dragged.
 
 #### dragstop
 
-Parameters:
-* `left` the X position of the element
-* `top` the Y position of the element
+参数:
+* `left`元素的X位置
+* `top` 元素的Y位置
 
-Called whenever the component stops getting dragged.
+每当组件停止拖动时调用。
 
 ```html
 <vue-draggable-resizable @dragstop="onDragstop">
@@ -566,21 +566,21 @@ Called whenever the component stops getting dragged.
 
 ### Styling
 
-You can style the component using appropriate class names passed as props to the component. Moreover you can replace the default styles for the handles, provided in the source file `vue-draggable-resizable.css`, but you should take care to define position and size for them. The default classes for handles are `handle` and `handle-tl`, `handle-br` and so on.
+您可以使用作为props传递给组件的适当类名来设置组件的样式。 此外，您可以替换源文件`vue-draggable-resizable.css`中提供的句柄的默认样式，但您应该注意为它们定义位置和大小。 句柄的默认类是`handle`和`handle-tl`，`handle-br`等等。
 
-The component also provides [named slots](https://vuejs.org/v2/guide/components-slots.html#Named-Slots) for each handle, so you can use your markup inside each one.
+该组件还为每个句柄提供[named slots](https://vuejs.org/v2/guide/components-slots.html#Named-Slots)，因此您可以在每个句柄中使用您的标记。
 
-## Thanks
+## 鸣谢
 
-Thanks to @kirillmurashov for his work on [vue-drag-resize](https://github.com/kirillmurashov/vue-drag-resize) component.
+感谢 @kirillmurashov 在 [vue-drag-resize](https://github.com/kirillmurashov/vue-drag-resize)组件上所做的工作。
 
-## Security
+## 安全
 
-If you discover any security related issues, please email maurizio.bonani@gmail.com instead of using the issue tracker.
+如果您发现任何与安全相关的问题，请发送电子邮件至maurizio.bonani@gmail.com，而不是使用问题跟踪器。
 
-## Contributing
+## 贡献
 
-Any contribution to the code or any part of the documentation and any idea and/or suggestion are very welcome.
+任何对代码或文档任何部分的贡献以及任何想法和/或建议都是非常受欢迎的。
 
 ``` bash
 # serve with hot reload at localhost:8080

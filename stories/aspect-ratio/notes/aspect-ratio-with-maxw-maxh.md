@@ -1,6 +1,6 @@
-# Component with Aspect Ratio and maxWidth, maxHeight
+# 让组件具有宽高比和maxWidth，maxHeight
 
-A component, with <b>`lock-aspect-ratio`</b> prop and <b>maxWidth</b> set to `300` and <b>maxHeight</b> set to `250`. Notice that locking the aspect ratio also forces the max width to be 250.
+一个组件，<b>`lock-aspect-ratio` </b> prop和<b> maxWidth </b>设置为`300`，<b> maxHeight </b>设置为`250`。 请注意，锁定纵横比也会强制最大宽度为`250`。
 
 ~~~js
 <vue-draggable-resizable :lock-aspect-ratio="true" :maxWidth="300" :maxHeight="250" @resizing="onResizing">

@@ -1,6 +1,6 @@
-# Component with custom class name on resizing
+# 调整大小时具有自定义类名的组件
 
-Component with a custom class name on resizing, provided with the prop <b>`class-name-resizing`</b>.
+调整大小时具有自定义类名的组件，由prop <b>`class-name-resizing` </ b>提供。
 
 ~~~js
 <vue-draggable-resizable class-name-resizing="my-resizing-class" class-name="my-class">
@@ -23,3 +23,4 @@ Component with a custom class name on resizing, provided with the prop <b>`class
     color: white;
 }
 ~~~
+

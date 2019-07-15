@@ -1,3 +1,4 @@
-# Basic component with form
+# 表单的基本组件
 
-A basic component, with a form inside. The input should be focusable and the button should be clickable.
+一个基本组件，内部有一个表单。 输入应该是可聚焦的，按钮应该是可点击的。
+

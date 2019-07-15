@@ -1,6 +1,6 @@
-# Component with custom class name on active state
+# 活动状态下具有自定义类名的组件
 
-Component with a custom class name on active state, provided with the prop <b>`class-name-active`</b>.
+在活动状态下具有自定义类名的组件，由prop <b>`class-name-active` </b>提供。
 
 ~~~js
 <vue-draggable-resizable class-name-active="my-active-class" class-name="my-class">
@@ -24,3 +24,4 @@ Component with a custom class name on active state, provided with the prop <b>`c
     box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
 }
 ~~~
+

@@ -8,7 +8,7 @@ import EventsResizing from './events-resizing'
 import EventsResizingNotes from './notes/events-resizing.md'
 
 export default {
-  'Activated' : withMarkdownNotes(EventsActivatedNotes)(() => (new EventsActivated)),
-  'Dragging' : withMarkdownNotes(EventsDraggingNotes)(() => (new EventsDragging)),
-  'Resizing' : withMarkdownNotes(EventsResizingNotes)(() => (new EventsResizing))
+  '激活' : withMarkdownNotes(EventsActivatedNotes)(() => (new EventsActivated)),
+  '拖动' : withMarkdownNotes(EventsDraggingNotes)(() => (new EventsDragging)),
+  '调整' : withMarkdownNotes(EventsResizingNotes)(() => (new EventsResizing))
 }

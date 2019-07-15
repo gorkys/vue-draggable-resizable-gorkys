@@ -1,6 +1,6 @@
-# Resizing and resizestop events
+# 调整大小和调整事件的大小
 
-The `resizing(x, y, width, height)` event is emitted when the component is resized. The `resizestop(x, y, width, height)` event is emmitted when the resizing stops.
+调整组件大小时会发出`resizing(x,y,width,height)`事件。 调整大小停止时会发出`resizestop(x,y,width,height)`事件。
 
 ~~~js
 <vue-draggable-resizable :w="200" :h="200" :x="0" :y="0" @resizing="onResize" @resizestop="onResizeStop">

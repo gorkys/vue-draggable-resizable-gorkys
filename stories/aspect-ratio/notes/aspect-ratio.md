@@ -1,6 +1,6 @@
-# Component with Aspect Ratio
+# 具有宽高比的组件
 
-A component, with <b>`lock-aspect-ratio`</b> prop to keep the aspect ratio of the component during resize.
+具有<b>`lock-aspect-ratio` </b> prop的组件，用于在调整大小期间保持组件的宽高比。
 
 ~~~js
 <vue-draggable-resizable :lock-aspect-ratio="true">

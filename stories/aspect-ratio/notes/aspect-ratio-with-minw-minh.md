@@ -1,6 +1,6 @@
-# Component with Aspect Ratio and minHeight, minWidth
+# 让组件具有宽高比和minHeight，minWidth
 
-A component, with <b>`lock-aspect-ratio`</b> prop and Min Height set to 100 and Min Width set to 50. Notice that locking the aspect ratio also forces the Min Width to be 100 (Factor: 1 / 1).
+一个组件，<b>`lock-aspect-ratio` </b> prop和最小高度设置为`100`，最小宽度设置为`50`.请注意，锁定纵横比也会强制最小宽度为100（条件：1 / 1）。
 
 ~~~js
 <vue-draggable-resizable :lock-aspect-ratio="true" :minHeight="100" :minWidth="50">

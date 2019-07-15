@@ -14,10 +14,10 @@ import StyleHandleSlots from './style-handle-slots'
 import StyleHandleSlotsNotes from './notes/style-handle-slots.md'
 
 export default {
-  'Style Component' : withMarkdownNotes(StyleComponentNotes)(() => (new StyleComponent)),
-  'Style Dragging' : withMarkdownNotes(StyleDraggingNotes)(() => (new StyleDragging)),
-  'Style Resizing' : withMarkdownNotes(StyleResizingNotes)(() => (new StyleResizing)),
-  'Style Active' : withMarkdownNotes(StyleActiveNotes)(() => (new StyleActive)),
-  'Style Handles' : withMarkdownNotes(StyleHandlesNotes)(() => (new StyleHandles)),
-  'Style Handles With Slots' : withMarkdownNotes(StyleHandleSlotsNotes)(() => (new StyleHandleSlots)),
+  'Style组件' : withMarkdownNotes(StyleComponentNotes)(() => (new StyleComponent)),
+  'Style拖动' : withMarkdownNotes(StyleDraggingNotes)(() => (new StyleDragging)),
+  'Style调整大小' : withMarkdownNotes(StyleResizingNotes)(() => (new StyleResizing)),
+  'Style活跃' : withMarkdownNotes(StyleActiveNotes)(() => (new StyleActive)),
+  'Style句柄' : withMarkdownNotes(StyleHandlesNotes)(() => (new StyleHandles)),
+  'Style处理插槽' : withMarkdownNotes(StyleHandleSlotsNotes)(() => (new StyleHandleSlots)),
 }

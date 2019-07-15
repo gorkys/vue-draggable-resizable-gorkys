@@ -1,6 +1,6 @@
-# Grid 20x40 pixels with 10x10 offset and minHeight, minWidth values
+# 网格20x40像素，具有10x10偏移和minHeight，minWidth值
 
-If you provide `minHeight` and `minWidth` values that are lower than the respective grid values, you can notice that resizing stops to the lowest suitable value. For example on the `x` axis the lowest valid value that respects `minWidth` and `grid[x]` constraint is 40. The same applies for the `y` axis.
+如果您提供的`minHeight`和`minWidth`值低于相应的网格值，您可以注意到调整大小会停止到最低的合适值。 例如，在`x`轴上，尊重`minWidth`和`grid [x]`约束的最低有效值是40.同样适用于`y`轴。
 
 ~~~js
 <vue-draggable-resizable :grid="[20,40]" :x="10" :y="20" :minHeight="30" :minWidth="30">
