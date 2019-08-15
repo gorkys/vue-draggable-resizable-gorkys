@@ -610,7 +610,7 @@ export default {
       this.$emit('resizing', this.left, this.top, this.width, this.height)
     },
     // 从控制柄松开
-    handleUp (e) {
+    async handleUp (e) {
       this.handle = null
 
       this.rawTop = this.top
@@ -620,12 +620,12 @@ export default {
 
       if (this.resizing) {
         this.resizing = false
-        this.conflictCheck()
+        await this.conflictCheck()
         this.$emit('resizestop', this.left, this.top, this.width, this.height)
       }
       if (this.dragging) {
         this.dragging = false
-        this.conflictCheck()
+        await this.conflictCheck()
         this.$emit('dragstop', this.left, this.top)
       }
       this.resetBoundsAndMouseState()
