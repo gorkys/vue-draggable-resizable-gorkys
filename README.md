@@ -30,6 +30,16 @@
 ![](https://cdn.jsdelivr.net/gh/gorkys/CDN-Blog@master/Project/vue-draggable-resizable/demo.gif)
 
 ## 新增Props
+**scaleRatio**<br/>
+类型: `Number`<br/>必需: `false`<br/>默认: `1`
+
+当使用`transform:scale()`进行缩放操作后，用来修复操作组件时鼠标指针与移动缩放位置有所偏移的情况
+
+详见:[Issues](https://github.com/gorkys/vue-draggable-resizable/issues/6)
+
+```vue
+<vue-draggable-resizable :scale-ratio="0.6">
+```
 
 **isConflictCheck**<br/>
 类型: `Boolean`<br/>必需: `false`<br/>默认: `false`

@@ -217,6 +217,12 @@ export default {
       validator: function (val) {
         return typeof val === 'number'
       }
+    },
+    // 缩放比例
+    scaleRatio: {
+      type: Number,
+      default: 1,
+      validator: (val) => typeof val === 'number'
     }
   },
 
@@ -636,7 +642,8 @@ export default {
       const x = Math.round(pendingX / grid[0]) * grid[0]
       const y = Math.round(pendingY / grid[1]) * grid[1]
 
-      return [x, y]
+      // return [x, y]
+      return [Math.floor(x / this.scaleRatio), Math.floor(y / this.scaleRatio)]
     },
     // 新增方法 ↓↓↓
     // 设置冲突检测
