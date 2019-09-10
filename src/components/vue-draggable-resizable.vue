@@ -191,7 +191,7 @@ export default {
       default: () => [1, 1]
     },
     parent: {
-      type: Boolean,
+      type: [Boolean, String],
       default: false
     },
     onDragStart: {
@@ -329,13 +329,19 @@ export default {
     },
     // 获取父元素大小
     getParentSize () {
-      if (this.parent) {
+      if (this.parent === true) {
         const style = window.getComputedStyle(this.$el.parentNode, null)
-
         return [
           parseInt(style.getPropertyValue('width'), 10),
           parseInt(style.getPropertyValue('height'), 10)
         ]
+      }
+      if (typeof this.parent === 'string') {
+        const parentNode = document.querySelector(this.parent)
+        if (!(parentNode instanceof HTMLElement)) {
+          throw new Error(`The selector ${this.parent} does not match any element`)
+        }
+        return [parentNode.offsetWidth, parentNode.offsetHeight]
       }
 
       return [null, null]
@@ -578,8 +584,6 @@ export default {
 
       const [deltaX, deltaY] = this.snapToGrid(this.grid, tmpDeltaX, tmpDeltaY)
 
-      if (!deltaX && !deltaY) return
-
       this.rawTop = mouseClickPosition.top - deltaY
       this.rawBottom = mouseClickPosition.bottom + deltaY
       this.rawLeft = mouseClickPosition.left - deltaX
@@ -598,8 +602,6 @@ export default {
       const tmpDeltaY = mouseClickPosition.mouseY - (e.touches ? e.touches[0].pageY : e.pageY)
 
       const [deltaX, deltaY] = this.snapToGrid(this.grid, tmpDeltaX, tmpDeltaY)
-
-      if (!deltaX && !deltaY) return
 
       if (handle.includes('b')) {
         this.rawBottom = mouseClickPosition.bottom + deltaY
@@ -671,38 +673,38 @@ export default {
               let tl = p[i].offsetLeft
               let tt = p[i].offsetTop
               // 如果冲突，就将回退到移动前的位置
-              if (top >= tt && left >= tl && tt + th > top && tl + tw > left ||
-                top <= tt && left < tl && top + height > tt && left + width > tl) { /* 左上角与右下角重叠 */
+              if ((top >= tt && left >= tl && tt + th > top && tl + tw > left) ||
+                (top <= tt && left < tl && top + height > tt && left + width > tl)) { /* 左上角与右下角重叠 */
                 this.rawTop = this.mouseClickPosition.top
                 this.rawLeft = this.mouseClickPosition.left
                 this.rawRight = this.mouseClickPosition.right
                 this.rawBottom = this.mouseClickPosition.bottom
-              } else if (left <= tl && top >= tt && left + width > tl && top < tt + th ||
-                top < tt && left > tl && top + height > tt && left < tl + tw) { /* 右上角与左下角重叠 */
+              } else if ((left <= tl && top >= tt && left + width > tl && top < tt + th) ||
+                (top < tt && left > tl && top + height > tt && left < tl + tw)) { /* 右上角与左下角重叠 */
                 this.rawTop = this.mouseClickPosition.top
                 this.rawLeft = this.mouseClickPosition.left
                 this.rawRight = this.mouseClickPosition.right
                 this.rawBottom = this.mouseClickPosition.bottom
-              } else if (top < tt && left <= tl && top + height > tt && left + width > tl ||
-                top > tt && left >= tl && top < tt + th && left < tl + tw) { /* 下边与上边重叠 */
+              } else if ((top < tt && left <= tl && top + height > tt && left + width > tl) ||
+                (top > tt && left >= tl && top < tt + th && left < tl + tw)) { /* 下边与上边重叠 */
                 this.rawTop = this.mouseClickPosition.top
                 this.rawLeft = this.mouseClickPosition.left
                 this.rawRight = this.mouseClickPosition.right
                 this.rawBottom = this.mouseClickPosition.bottom
-              } else if (top <= tt && left >= tl && top + height > tt && left < tl + tw ||
-                top >= tt && left <= tl && top < tt + th && left > tl + tw) { /* 上边与下边重叠（宽度不一样） */
+              } else if ((top <= tt && left >= tl && top + height > tt && left < tl + tw) ||
+                (top >= tt && left <= tl && top < tt + th && left > tl + tw)) { /* 上边与下边重叠（宽度不一样） */
                 this.rawTop = this.mouseClickPosition.top
                 this.rawLeft = this.mouseClickPosition.left
                 this.rawRight = this.mouseClickPosition.right
                 this.rawBottom = this.mouseClickPosition.bottom
-              } else if (left >= tl && top >= tt && left < tl + tw && top < tt + th ||
-                top > tt && left <= tl && left + width > tl && top < tt + th) { /* 左边与右边重叠 */
+              } else if ((left >= tl && top >= tt && left < tl + tw && top < tt + th) ||
+                (top > tt && left <= tl && left + width > tl && top < tt + th)) { /* 左边与右边重叠 */
                 this.rawTop = this.mouseClickPosition.top
                 this.rawLeft = this.mouseClickPosition.left
                 this.rawRight = this.mouseClickPosition.right
                 this.rawBottom = this.mouseClickPosition.bottom
-              } else if (top <= tt && left >= tl && top + height > tt && left < tl + tw ||
-                top >= tt && left <= tl && top < tt + th && left + width > tl) { /* 左边与右边重叠（高度不一样） */
+              } else if ((top <= tt && left >= tl && top + height > tt && left < tl + tw) ||
+                (top >= tt && left <= tl && top < tt + th && left + width > tl)) { /* 左边与右边重叠（高度不一样） */
                 this.rawTop = this.mouseClickPosition.top
                 this.rawLeft = this.mouseClickPosition.left
                 this.rawRight = this.mouseClickPosition.right
@@ -764,7 +766,7 @@ export default {
           }
         }
       }
-    },
+    }
   },
   computed: {
     style () {

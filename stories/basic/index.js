@@ -1,5 +1,3 @@
-import { withMarkdownNotes } from '@storybook/addon-notes';
-
 import Basic from './basic'
 import BasicNotes from './notes/basic.md'
 import BasicMinWidthHeight from './basic-min-width-height'
@@ -36,21 +34,21 @@ import BasicOnResizeStart from './basic-on-resize-start'
 import BasicOnResizeStartNotes from './notes/basic-on-resize-start.md'
 
 export default {
-  '基本组件' : withMarkdownNotes(BasicNotes)(() => (new Basic)),
-  'minw和minh的基本组件' : withMarkdownNotes(BasicMinWidthHeightNotes)(() => (new BasicMinWidthHeight)),
-  'maxw和maxh的基本组件' : withMarkdownNotes(BasicMaxWidthHeightNotes)(() => (new BasicMaxWidthHeight)),
-  '内部形式的基本组件' : withMarkdownNotes(BasicWithFormNotes)(() => (new BasicWithForm)),
-  '具有主动道具的基本组件' : withMarkdownNotes(BasicActiveNotes)(() => (new BasicActive)),
-  '禁止停用的基本组件' : withMarkdownNotes(BasicPreventDeactivationNotes)(() => (new BasicPreventDeactivation)),
-  '基本组件不可拖动' : withMarkdownNotes(BasicNotDraggableNotes)(() => (new BasicNotDraggable)),
-  '基本组件不可调整大小' : withMarkdownNotes(BasicNotResizableNotes)(() => (new BasicNotResizable)),
-  '禁用本机拖动的基本组件' : withMarkdownNotes(BasicNativeDragEnabledNotes)(() => (new BasicNativeDragEnabled)),
-  '基本控制组件' : withMarkdownNotes(BasicControlledNotes)(() => (new BasicControlled)),
-  '带拖动手柄的基本组件' : withMarkdownNotes(BasicDragHandleNotes)(() => (new BasicDragHandle)),
-  '拖动取消的基本组件' : withMarkdownNotes(BasicCancelHandleNotes)(() => (new BasicCancelHandle)),
-  '具有z-index的基本组件' : withMarkdownNotes(BasicZIndexNotes)(() => (new BasicZIndex)),
-  '带手柄道具的基本组件' : withMarkdownNotes(BasicHandlesNotes)(() => (new BasicHandles)),
-  '轴支撑的基本组件' : withMarkdownNotes(BasicAxisNotes)(() => (new BasicAxis)),
-  'onDragStart回调的基本组件' : withMarkdownNotes(BasicOnDragStartNotes)(() => (new BasicOnDragStart)),
-  'onResizeStart回调的基本组件' : withMarkdownNotes(BasicOnResizeStartNotes)(() => (new BasicOnResizeStart))
+  '基本组件' : [() => new Basic, BasicNotes],
+  'minw和minh的基本组件' : [() => new BasicMinWidthHeight, BasicMinWidthHeightNotes],
+  'maxw和maxh的基本组件' : [() => new BasicMaxWidthHeight, BasicMaxWidthHeightNotes],
+  '内部形式的基本组件' : [() => new BasicWithForm, BasicWithFormNotes],
+  '具有主动道具的基本组件' : [() => new BasicActive, BasicActiveNotes],
+  '禁止停用的基本组件' : [() => new BasicPreventDeactivation, BasicPreventDeactivationNotes],
+  '基本组件不可拖动' : [() => new BasicNotDraggable, BasicNotDraggableNotes],
+  '基本组件不可调整大小' : [() => new BasicNotResizable, BasicNotResizableNotes],
+  '禁用本机拖动的基本组件' : [() => new BasicNativeDragEnabled, BasicNativeDragEnabledNotes],
+  '基本控制组件' : [() => new BasicControlled, BasicControlledNotes],
+  '带拖动手柄的基本组件' : [() => new BasicDragHandle, BasicDragHandleNotes],
+  '拖动取消的基本组件' : [() => new BasicCancelHandle, BasicCancelHandleNotes],
+  '具有z-index的基本组件' : [() => new BasicZIndex, BasicZIndexNotes],
+  '带手柄道具的基本组件' : [() => new BasicHandles, BasicHandlesNotes],
+  '轴支撑的基本组件' : [() => new BasicAxis, BasicAxisNotes],
+  'onDragStart回调的基本组件' : [() => new BasicOnDragStart, BasicOnDragStartNotes],
+  'onResizeStart回调的基本组件' : [() => new BasicOnResizeStart, BasicOnResizeStartNotes],
 }
