@@ -34,7 +34,6 @@
     "babel-plugin-istanbul": "^5.2.0",
     "babel-preset-vue": "^2.0.2",
     "chai": "^4.1.2",
-    "core-js": "^2.6.9",
     "cross-env": "^5.2.1",
     "git-directory-deploy": "^1.5.1",
     "karma": "^4.3.0",
