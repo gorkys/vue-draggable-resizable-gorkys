@@ -223,6 +223,10 @@ export default {
       type: Number,
       default: 1,
       validator: (val) => typeof val === 'number'
+    },
+    isRefLine: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -277,8 +281,7 @@ export default {
     this.rawRight = this.parentWidth - this.rawWidth - this.rawLeft
     this.rawBottom = this.parentHeight - this.rawHeight - this.rawTop
 
-    this.setSnap()
-    this.setConflictCheck()
+    this.settingAttribute()
 
     addEvent(document.documentElement, 'mousedown', this.deselect)
     addEvent(document.documentElement, 'touchend touchcancel', this.deselect)
@@ -648,123 +651,92 @@ export default {
       return [Math.floor(x / this.scaleRatio), Math.floor(y / this.scaleRatio)]
     },
     // 新增方法 ↓↓↓
-    // 设置冲突检测
-    setConflictCheck: function () {
-      if (this.isConflictCheck) {
-        this.$el.setAttribute('data-is-check', 'true')
-      } else {
-        this.$el.setAttribute('data-is-check', 'false')
-      }
+    // 设置属性
+    settingAttribute () {
+      // 设置冲突检测
+      this.isConflictCheck ? this.$el.setAttribute('data-is-check', 'true') : this.$el.setAttribute('data-is-check', 'false')
+      // 设置对齐元素
+      this.snap ? this.$el.setAttribute('data-is-snap', 'true') : this.$el.setAttribute('data-is-snap', 'false')
     },
     // 冲突检测
-    conflictCheck: function () {
+    conflictCheck () {
       let top = this.rawTop
       let left = this.rawLeft
       let width = this.width
       let height = this.height
 
       if (this.isConflictCheck) {
-        let p = this.$el.parentNode.childNodes // 获取当前父节点下所有子节点
-        if (p.length > 1) {
-          for (let i = 0; i < p.length; i++) {
-            if (p[i] !== this.$el && p[i].className !== undefined && p[i].getAttribute('data-is-check') !== 'false') {
-              let tw = p[i].offsetWidth
-              let th = p[i].offsetHeight
-              let tl = p[i].offsetLeft
-              let tt = p[i].offsetTop
-              // 如果冲突，就将回退到移动前的位置
-              if ((top >= tt && left >= tl && tt + th > top && tl + tw > left) ||
-                (top <= tt && left < tl && top + height > tt && left + width > tl)) { /* 左上角与右下角重叠 */
-                this.rawTop = this.mouseClickPosition.top
-                this.rawLeft = this.mouseClickPosition.left
-                this.rawRight = this.mouseClickPosition.right
-                this.rawBottom = this.mouseClickPosition.bottom
-              } else if ((left <= tl && top >= tt && left + width > tl && top < tt + th) ||
-                (top < tt && left > tl && top + height > tt && left < tl + tw)) { /* 右上角与左下角重叠 */
-                this.rawTop = this.mouseClickPosition.top
-                this.rawLeft = this.mouseClickPosition.left
-                this.rawRight = this.mouseClickPosition.right
-                this.rawBottom = this.mouseClickPosition.bottom
-              } else if ((top < tt && left <= tl && top + height > tt && left + width > tl) ||
-                (top > tt && left >= tl && top < tt + th && left < tl + tw)) { /* 下边与上边重叠 */
-                this.rawTop = this.mouseClickPosition.top
-                this.rawLeft = this.mouseClickPosition.left
-                this.rawRight = this.mouseClickPosition.right
-                this.rawBottom = this.mouseClickPosition.bottom
-              } else if ((top <= tt && left >= tl && top + height > tt && left < tl + tw) ||
-                (top >= tt && left <= tl && top < tt + th && left > tl + tw)) { /* 上边与下边重叠（宽度不一样） */
-                this.rawTop = this.mouseClickPosition.top
-                this.rawLeft = this.mouseClickPosition.left
-                this.rawRight = this.mouseClickPosition.right
-                this.rawBottom = this.mouseClickPosition.bottom
-              } else if ((left >= tl && top >= tt && left < tl + tw && top < tt + th) ||
-                (top > tt && left <= tl && left + width > tl && top < tt + th)) { /* 左边与右边重叠 */
-                this.rawTop = this.mouseClickPosition.top
-                this.rawLeft = this.mouseClickPosition.left
-                this.rawRight = this.mouseClickPosition.right
-                this.rawBottom = this.mouseClickPosition.bottom
-              } else if ((top <= tt && left >= tl && top + height > tt && left < tl + tw) ||
-                (top >= tt && left <= tl && top < tt + th && left + width > tl)) { /* 左边与右边重叠（高度不一样） */
-                this.rawTop = this.mouseClickPosition.top
-                this.rawLeft = this.mouseClickPosition.left
-                this.rawRight = this.mouseClickPosition.right
-                this.rawBottom = this.mouseClickPosition.bottom
-              }
+        let nodes = this.$el.parentNode.childNodes // 获取当前父节点下所有子节点
+        nodes.forEach(item=>{
+          if (item !== this.$el && item.className !== undefined && item.getAttribute('data-is-check') !==null && item.getAttribute('data-is-check') !== 'false') {
+            let tw = item.offsetWidth
+            let th = item.offsetHeight
+            let tl = item.offsetLeft
+            let tt = item.offsetTop
+            // 左上角与右下角重叠
+            const tfAndBr = (top >= tt && left >= tl && tt + th > top && tl + tw > left) || (top <= tt && left < tl && top + height > tt && left + width > tl)
+            // 右上角与左下角重叠
+            const brAndTf = (left <= tl && top >= tt && left + width > tl && top < tt + th) || (top < tt && left > tl && top + height > tt && left < tl + tw)
+            // 下边与上边重叠
+            const bAndT = (top <= tt && left >= tl && top + height > tt && left < tl + tw) || (top >= tt && left <= tl && top < tt + th && left > tl + tw)
+            // 上边与下边重叠（宽度不一样）
+            const tAndB = (top <= tt && left >= tl && top + height > tt && left < tl + tw) || (top >= tt && left <= tl && top < tt + th && left > tl + tw)
+            // 左边与右边重叠
+            const lAndR = (left >= tl && top >= tt && left < tl + tw && top < tt + th) || (top > tt && left <= tl && left + width > tl && top < tt + th)
+            // 左边与右边重叠（高度不一样）
+            const rAndL = (top <= tt && left >= tl && top + height > tt && left < tl + tw) || (top >= tt && left <= tl && top < tt + th && left + width > tl)
+
+            // 如果冲突，就将回退到移动前的位置
+            if (tfAndBr || brAndTf || bAndT || tAndB || lAndR || rAndL) {
+              this.rawTop = this.mouseClickPosition.top
+              this.rawLeft = this.mouseClickPosition.left
+              this.rawRight = this.mouseClickPosition.right
+              this.rawBottom = this.mouseClickPosition.bottom
             }
           }
-        }
-      }
-    },
-    // 设置对齐元素
-    setSnap: function () {
-      if (this.snap) {
-        this.$el.setAttribute('data-is-snap', 'true')
-      } else {
-        this.$el.setAttribute('data-is-snap', 'false')
+        })
       }
     },
     // 检测对齐元素
-    snapCheck: function () {
+    snapCheck () {
       let width = this.width
       let height = this.height
       if (this.snap) {
-        let p = this.$el.parentNode.childNodes // 获取当前父节点下所有子节点
-        if (p.length > 1) {
-          let x1 = this.rawLeft
-          let x2 = this.rawLeft + width
-          let y1 = this.rawTop
-          let y2 = this.rawTop + height
+        let activeLeft = this.rawLeft
+        let activeRight = this.rawLeft + width
+        let activeTop = this.rawTop
+        let activeBottom = this.rawTop + height
 
-          for (let i = 0; i < p.length; i++) {
-            if (p[i] !== this.$el && p[i].className !== undefined && p[i].getAttribute('data-is-snap') !== 'false') {
-              let l = p[i].offsetLeft // 对齐目标的left
-              let r = l + p[i].offsetWidth // 对齐目标右侧距离窗口的left
-              let t = p[i].offsetTop// 对齐目标的top
-              let b = t + p[i].offsetHeight // 对齐目标右侧距离窗口的top
+        let nodes = this.$el.parentNode.childNodes // 获取当前父节点下所有子节点
+        nodes.forEach(item=>{
+          if (item !== this.$el && item.className !== undefined && item.getAttribute('data-is-snap') !== null && item.getAttribute('data-is-snap') !== 'false') {
+            let l = item.offsetLeft // 对齐目标的left
+            let r = l + item.offsetWidth // 对齐目标right
+            let t = item.offsetTop// 对齐目标的top
+            let b = t + item.offsetHeight // 对齐目标的bottom
 
-              let ts = Math.abs(t - y2) <= this.snapTolerance
-              let bs = Math.abs(b - y1) <= this.snapTolerance
-              let ls = Math.abs(l - x2) <= this.snapTolerance
-              let rs = Math.abs(r - x1) <= this.snapTolerance
-              if (ts) {
-                this.rawTop = t - height
-                this.rawBottom = this.parentHeight - this.rawTop - height
-              }
-              if (bs) {
-                this.rawTop = b
-                this.rawBottom = this.parentHeight - this.rawTop - height
-              }
-              if (ls) {
-                this.rawLeft = l - width
-                this.rawRight = this.parentWidth - this.rawLeft - width
-              }
-              if (rs) {
-                this.rawLeft = r
-                this.rawRight = this.parentWidth - this.rawLeft - width
-              }
+            let ts = Math.abs(t - activeBottom) <= this.snapTolerance
+            let bs = Math.abs(b - activeTop) <= this.snapTolerance
+            let ls = Math.abs(l - activeRight) <= this.snapTolerance
+            let rs = Math.abs(r - activeLeft) <= this.snapTolerance
+            if (ts) { // 从上向下
+              this.rawTop = t - height
+              this.rawBottom = this.parentHeight - this.rawTop - height
+            }
+            if (bs) { // 从下向上
+              this.rawTop = b
+              this.rawBottom = this.parentHeight - this.rawTop - height
+            }
+            if (ls) { // 从左向右
+              this.rawLeft = l - width
+              this.rawRight = this.parentWidth - this.rawLeft - width
+            }
+            if (rs) { // 从右向左
+              this.rawLeft = r
+              this.rawRight = this.parentWidth - this.rawLeft - width
             }
           }
-        }
+        })
       }
     }
   },
