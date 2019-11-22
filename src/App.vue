@@ -10,7 +10,7 @@
         :min-height="200"
         :isConflictCheck="true"
         :snap="true"
-        :snapTolerance="20"
+        :snapTolerance="5"
         class="test1">
       </vue-draggable-resizable>
       <vue-draggable-resizable
@@ -23,7 +23,7 @@
         :min-height="200"
         :isConflictCheck="true"
         :snap="true"
-        :snapTolerance="20"
+        :snapTolerance="5"
         class="test2">
       </vue-draggable-resizable>
       <vue-draggable-resizable
@@ -36,7 +36,7 @@
         :min-height="200"
         :isConflictCheck="true"
         :snap="true"
-        :snapTolerance="20"
+        :snapTolerance="5"
         class="test3">
       </vue-draggable-resizable>
     </div>

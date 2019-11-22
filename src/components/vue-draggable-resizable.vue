@@ -667,8 +667,8 @@ export default {
 
       if (this.isConflictCheck) {
         let nodes = this.$el.parentNode.childNodes // 获取当前父节点下所有子节点
-        nodes.forEach(item=>{
-          if (item !== this.$el && item.className !== undefined && item.getAttribute('data-is-check') !==null && item.getAttribute('data-is-check') !== 'false') {
+        nodes.forEach(item => {
+          if (item !== this.$el && item.className !== undefined && item.getAttribute('data-is-check') !== null && item.getAttribute('data-is-check') !== 'false') {
             let tw = item.offsetWidth
             let th = item.offsetHeight
             let tl = item.offsetLeft
@@ -707,34 +707,61 @@ export default {
         let activeTop = this.rawTop
         let activeBottom = this.rawTop + height
 
-        let nodes = this.$el.parentNode.childNodes // 获取当前父节点下所有子节点
-        nodes.forEach(item=>{
-          if (item !== this.$el && item.className !== undefined && item.getAttribute('data-is-snap') !== null && item.getAttribute('data-is-snap') !== 'false') {
-            let l = item.offsetLeft // 对齐目标的left
-            let r = l + item.offsetWidth // 对齐目标right
-            let t = item.offsetTop// 对齐目标的top
-            let b = t + item.offsetHeight // 对齐目标的bottom
+        let levelArray = []
+        let verticalArray = []
 
-            let ts = Math.abs(t - activeBottom) <= this.snapTolerance
-            let bs = Math.abs(b - activeTop) <= this.snapTolerance
-            let ls = Math.abs(l - activeRight) <= this.snapTolerance
-            let rs = Math.abs(r - activeLeft) <= this.snapTolerance
-            if (ts) { // 从上向下
-              this.rawTop = t - height
+        let nodes = this.$el.parentNode.childNodes // 获取当前父节点下所有子节点
+        nodes.forEach(item => {
+          if (item !== this.$el && item.className !== undefined && item.getAttribute('data-is-snap') !== null && item.getAttribute('data-is-snap') !== 'false') {
+            const w = item.offsetWidth
+            const h = item.offsetHeight
+            const l = item.offsetLeft // 对齐目标的left
+            const r = l + w // 对齐目标right
+            const t = item.offsetTop// 对齐目标的top
+            const b = t + h // 对齐目标的bottom
+
+            const hc = Math.abs((activeTop + height / 2) - (t + h / 2)) <= this.snapTolerance // 水平中线
+            const vc = Math.abs((activeLeft + width / 2) - (l + w / 2)) <= this.snapTolerance // 垂直中线
+
+            if (hc) {
+              this.rawTop = t + h / 2 - height / 2
               this.rawBottom = this.parentHeight - this.rawTop - height
             }
-            if (bs) { // 从下向上
-              this.rawTop = b
-              this.rawBottom = this.parentHeight - this.rawTop - height
-            }
-            if (ls) { // 从左向右
-              this.rawLeft = l - width
+            if (vc) {
+              this.rawLeft = l + w / 2 - width / 2
               this.rawRight = this.parentWidth - this.rawLeft - width
             }
-            if (rs) { // 从右向左
-              this.rawLeft = r
-              this.rawRight = this.parentWidth - this.rawLeft - width
-            }
+
+            // 水平方向平行horizontal对齐
+            levelArray.push(t, b)
+            levelArray.forEach((level) => {
+              const ts = Math.abs(level - activeBottom) <= this.snapTolerance // 从上到下
+              const bs = Math.abs(level - activeTop) <= this.snapTolerance // 从下到上
+
+              if (ts) {
+                this.rawTop = level - height
+                this.rawBottom = this.parentHeight - this.rawTop - height
+              }
+              if (bs) {
+                this.rawTop = level
+                this.rawBottom = this.parentHeight - this.rawTop - height
+              }
+            })
+            // 竖直方向垂直vertical对齐
+            verticalArray.push(l, r)
+            verticalArray.forEach((vertical) => {
+              const ls = Math.abs(vertical - activeRight) <= this.snapTolerance // 外左
+              const rs = Math.abs(vertical - activeLeft) <= this.snapTolerance // 外右
+
+              if (ls) {
+                this.rawLeft = vertical - width
+                this.rawRight = this.parentWidth - this.rawLeft - width
+              }
+              if (rs) {
+                this.rawLeft = vertical
+                this.rawRight = this.parentWidth - this.rawLeft - width
+              }
+            })
           }
         })
       }
