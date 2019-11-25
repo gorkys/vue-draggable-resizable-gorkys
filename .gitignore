@@ -3,6 +3,7 @@ node_modules
 /dist
 /tests/unit/coverage/*
 /docs
+package-lock.json
 
 # local env files
 .env.local
