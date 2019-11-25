@@ -1,6 +1,11 @@
-<template>
-  <div id="app">
-    <div style="height: 800px; width: 1200px; border: 1px solid red; position: relative;margin: 0 auto">
+/*
+ Created by Gorky on 2019/11/25
+*/
+import Vue from 'vue'
+
+export default () => ({
+  template: `
+    <div style="position: relative;margin: 0 auto">
       <vue-draggable-resizable
         :w="200"
         :h="200"
@@ -12,7 +17,7 @@
         :snap="true"
         :snapTolerance="10"
         @refLineParams="getRefLineParams"
-        class="test1">
+        style="background-color: rgb(174, 213, 129);">
       </vue-draggable-resizable>
       <vue-draggable-resizable
         :w="200"
@@ -26,7 +31,7 @@
         :snap="true"
         :snapTolerance="10"
         @refLineParams="getRefLineParams"
-        class="test2">
+        style="background-color: rgb(129, 212, 250);">
       </vue-draggable-resizable>
       <vue-draggable-resizable
         :w="200"
@@ -40,7 +45,7 @@
         :snap="true"
         :snapTolerance="10"
         @refLineParams="getRefLineParams"
-        class="test3">
+        style="background-color: rgb(239, 154, 154);">
       </vue-draggable-resizable>
       <span class="ref-line v-line"
             v-for="item in vLine"
@@ -53,18 +58,7 @@
             :style="{ top: item.position, left: item.origin, width: item.lineLength}"
        />
     </div>
-  </div>
-</template>
-
-<script>
-import VueDraggableResizable from './components/vue-draggable-resizable'
-import './components/vue-draggable-resizable.css'
-
-export default {
-  name: 'app',
-  components: {
-    VueDraggableResizable
-  },
+  `,
   data () {
     return {
       vLine: [],
@@ -78,17 +72,4 @@ export default {
       this.hLine = hLine
     }
   }
-}
-</script>
-
-<style>
-  .test1 {
-    background-color: rgb(239, 154, 154);
-  }
-  .test2{
-    background-color: rgb(129, 212, 250);
-  }
-  .test3{
-    background-color: rgb(174, 213, 129);
-  }
-</style>
+})

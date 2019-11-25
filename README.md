@@ -17,6 +17,8 @@
 
 **新增特征**
 
+- 辅助线(新)
+- 元素对齐(新)
 - 冲突检测
 - 吸附对齐
 - 默认样式优化
@@ -25,7 +27,7 @@
 
 [英文版演示地址](https://mauricius.github.io/vue-draggable-resizable) | [中文版演示地址](http://tingtas.com/vue-draggable-resizable-gorkys/)
 
-> 注意：英文版为官方原版，没有新增功能的演示。**中文版**为google翻译版本，新增功能在**`高级`**目录下可查看
+> 注意：英文版为官方原版，没有新增功能的演示。**中文版**为google翻译版本，新增功能在**高级**目录下可查看
 
 ![](https://cdn.jsdelivr.net/gh/gorkys/CDN-Blog@master/Project/vue-draggable-resizable/demo.gif)
 
@@ -38,7 +40,7 @@
 详见:[Issues](https://github.com/gorkys/vue-draggable-resizable/issues/6)
 
 ```vue
-<vue-draggable-resizable :scale-ratio="0.6">
+<vue-draggable-resizable :scale-ratio="0.6" />
 ```
 
 **isConflictCheck**<br/>
@@ -47,7 +49,7 @@
 定义组件是否开启冲突检测。
 
 ```vue
-<vue-draggable-resizable :is-conflict-check="true">
+<vue-draggable-resizable :is-conflict-check="true" />
 ```
 
 **snap**<br/>
@@ -58,7 +60,7 @@
 定义组件是否开启元素对齐。
 
 ```vue
-<vue-draggable-resizable :snap="true">
+<vue-draggable-resizable :snap="true" />
 ```
 
 **snapTolerance**<br/>
@@ -69,8 +71,58 @@
 当调用`snap`时，定义组件与元素之间的对齐距离，以像素(px)为单位。
 
 ```vue
-<vue-draggable-resizable :snap="true" :snap-tolerance="20">
+<vue-draggable-resizable :snap="true" :snap-tolerance="20" />
 ```
+## 新增Events
+**refLineParams**<br/>
+参数: params<br/>
+
+返回参数是一个Object,里面包含`vLine`与`hLine`，具体使用参考下面代码。  
+
+```vue
+<div>
+  <vue-draggable-resizable :snap="true" :snap-tolerance="20" @refLineParams="getRefLineParams" />
+  <vue-draggable-resizable :snap="true" :snap-tolerance="20" @refLineParams="getRefLineParams" />
+  <span class="ref-line v-line"
+      v-for="item in vLine"
+      v-show="item.display"
+      :style="{ left: item.position, top: item.origin, height: item.lineLength}"
+  />
+  <span class="ref-line h-line"
+      v-for="item in hLine"
+      v-show="item.display"
+      :style="{ top: item.position, left: item.origin, width: item.lineLength}"
+  />
+</div>
+
+<script>
+import VueDraggableResizable from 'vue-draggable-resizable'
+import 'vue-draggable-resizable-gorkys/dist/VueDraggableResizable.css'
+
+export default {
+  name: 'app',
+  components: {
+    VueDraggableResizable
+  },
+  data () {
+    return {
+      vLine: [],
+      hLine: []
+    }
+  },
+  methods: {
+    getRefLineParams (params) {
+      const { vLine, hLine } = params
+      this.vLine = vLine
+      this.hLine = hLine
+    }
+  }
+}
+</script>
+
+```
+
+
 
 ## 其它属性
 

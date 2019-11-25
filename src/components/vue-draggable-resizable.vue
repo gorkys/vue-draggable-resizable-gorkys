@@ -223,10 +223,6 @@ export default {
       type: Number,
       default: 1,
       validator: (val) => typeof val === 'number'
-    },
-    isRefLine: {
-      type: Boolean,
-      default: false
     }
   },
 
@@ -628,15 +624,59 @@ export default {
       this.rawBottom = this.bottom
       this.rawLeft = this.left
       this.rawRight = this.right
+      const refLine = {
+        vLine: [
+          {
+            display: false,
+            position: '',
+            origin: '',
+            lineLength: ''
+          },
+          {
+            display: false,
+            position: '',
+            origin: '',
+            lineLength: ''
+          },
+          {
+            display: false,
+            position: '',
+            origin: '',
+            lineLength: ''
+          }
+        ],
+        hLine: [
+          {
+            display: false,
+            position: '',
+            origin: '',
+            lineLength: ''
+          },
+          {
+            display: false,
+            position: '',
+            origin: '',
+            lineLength: ''
+          },
+          {
+            display: false,
+            position: '',
+            origin: '',
+            lineLength: ''
+          }
+        ]
+      }
 
       if (this.resizing) {
         this.resizing = false
         await this.conflictCheck()
+        this.$emit('refLineParams', refLine)
         this.$emit('resizestop', this.left, this.top, this.width, this.height)
       }
       if (this.dragging) {
         this.dragging = false
         await this.conflictCheck()
+        this.$emit('refLineParams', refLine)
         this.$emit('dragstop', this.left, this.top)
       }
       this.resetBoundsAndMouseState()
@@ -660,19 +700,19 @@ export default {
     },
     // 冲突检测
     conflictCheck () {
-      let top = this.rawTop
-      let left = this.rawLeft
-      let width = this.width
-      let height = this.height
+      const top = this.rawTop
+      const left = this.rawLeft
+      const width = this.width
+      const height = this.height
 
       if (this.isConflictCheck) {
-        let nodes = this.$el.parentNode.childNodes // 获取当前父节点下所有子节点
+        const nodes = this.$el.parentNode.childNodes // 获取当前父节点下所有子节点
         nodes.forEach(item => {
           if (item !== this.$el && item.className !== undefined && item.getAttribute('data-is-check') !== null && item.getAttribute('data-is-check') !== 'false') {
-            let tw = item.offsetWidth
-            let th = item.offsetHeight
-            let tl = item.offsetLeft
-            let tt = item.offsetTop
+            const tw = item.offsetWidth
+            const th = item.offsetHeight
+            const tl = item.offsetLeft
+            const tt = item.offsetTop
             // 左上角与右下角重叠
             const tfAndBr = (top >= tt && left >= tl && tt + th > top && tl + tw > left) || (top <= tt && left < tl && top + height > tt && left + width > tl)
             // 右上角与左下角重叠
@@ -699,18 +739,61 @@ export default {
     },
     // 检测对齐元素
     snapCheck () {
-      let width = this.width
-      let height = this.height
+      const width = this.width
+      const height = this.height
       if (this.snap) {
-        let activeLeft = this.rawLeft
-        let activeRight = this.rawLeft + width
-        let activeTop = this.rawTop
-        let activeBottom = this.rawTop + height
+        const activeLeft = this.rawLeft
+        const activeRight = this.rawLeft + width
+        const activeTop = this.rawTop
+        const activeBottom = this.rawTop + height
 
-        let levelArray = []
-        let verticalArray = []
+        // let horizontalArray = []
+        // let verticalArray = []
 
-        let nodes = this.$el.parentNode.childNodes // 获取当前父节点下所有子节点
+        const refLine = {
+          vLine: [
+              {
+              display: false,
+              position: '',
+              origin: '',
+              lineLength: ''
+            },
+              {
+                display: false,
+                position: '',
+                origin: '',
+                lineLength: ''
+              },
+              {
+                display: false,
+                position: '',
+                origin: '',
+                lineLength: ''
+              }
+          ],
+          hLine: [
+            {
+              display: false,
+              position: '',
+              origin: '',
+              lineLength: ''
+            },
+            {
+              display: false,
+              position: '',
+              origin: '',
+              lineLength: ''
+            },
+            {
+              display: false,
+              position: '',
+              origin: '',
+              lineLength: ''
+            }
+          ]
+        }
+
+        const nodes = this.$el.parentNode.childNodes // 获取当前父节点下所有子节点
         nodes.forEach(item => {
           if (item !== this.$el && item.className !== undefined && item.getAttribute('data-is-snap') !== null && item.getAttribute('data-is-snap') !== 'false') {
             const w = item.offsetWidth
@@ -720,48 +803,164 @@ export default {
             const t = item.offsetTop// 对齐目标的top
             const b = t + h // 对齐目标的bottom
 
+            const direValues = {
+              x: [t, b, activeTop, activeBottom],
+              y: [l, r, activeLeft, activeRight],
+            }
+
+            const xMin = Math.min(...direValues['x']) + 'px'
+            const xSpacing = Math.max(...direValues['x']) - Math.min(...direValues['x'])  + 'px'
+
+            const yMin = Math.min(...direValues['y']) + 'px'
+            const ySpacing = Math.max(...direValues['y']) - Math.min(...direValues['y'])  + 'px'
+
             const hc = Math.abs((activeTop + height / 2) - (t + h / 2)) <= this.snapTolerance // 水平中线
             const vc = Math.abs((activeLeft + width / 2) - (l + w / 2)) <= this.snapTolerance // 垂直中线
+
+            const ts = Math.abs(t - activeBottom) <= this.snapTolerance // 从上到下
+            const TS = Math.abs(b - activeBottom) <= this.snapTolerance // 从上到下
+            const bs = Math.abs(t - activeTop) <= this.snapTolerance // 从下到上
+            const BS = Math.abs(b - activeTop) <= this.snapTolerance // 从下到上
+
+            const ls = Math.abs(l - activeRight) <= this.snapTolerance // 外左
+            const LS = Math.abs(r - activeRight) <= this.snapTolerance // 外左
+            const rs = Math.abs(l - activeLeft) <= this.snapTolerance // 外右
+            const RS = Math.abs(r - activeLeft) <= this.snapTolerance // 外右
+
+            if (ts) {
+              this.rawTop = t - height
+              this.rawBottom = this.parentHeight - this.rawTop - height
+              refLine.hLine[0].display = true
+              refLine.hLine[0].position = t + 'px'
+              refLine.hLine[0].origin = yMin
+              refLine.hLine[0].lineLength = ySpacing
+            }
+            if (bs) {
+              this.rawTop = t
+              this.rawBottom = this.parentHeight - this.rawTop - height
+              refLine.hLine[2].display = true
+              refLine.hLine[2].position = t + 'px'
+              refLine.hLine[2].origin = yMin
+              refLine.hLine[2].lineLength = ySpacing
+            }
+            if (TS) {
+              this.rawTop = b - height
+              this.rawBottom = this.parentHeight - this.rawTop - height
+              refLine.hLine[0].display = true
+              refLine.hLine[0].position = b + 'px'
+              refLine.hLine[0].origin = yMin
+              refLine.hLine[0].lineLength = ySpacing
+            }
+            if (BS) {
+              this.rawTop = b
+              this.rawBottom = this.parentHeight - this.rawTop - height
+              refLine.hLine[2].display = true
+              refLine.hLine[2].position = b + 'px'
+              refLine.hLine[2].origin = yMin
+              refLine.hLine[2].lineLength = ySpacing
+            }
+
+            if (ls) {
+              this.rawLeft = l - width
+              this.rawRight = this.parentWidth - this.rawLeft - width
+              refLine.vLine[0].display = true
+              refLine.vLine[0].position = l + 'px'
+              refLine.vLine[0].origin = xMin
+              refLine.vLine[0].lineLength = xSpacing
+            }
+            if (rs) {
+              this.rawLeft = l
+              this.rawRight = this.parentWidth - this.rawLeft - width
+              refLine.vLine[2].display = true
+              refLine.vLine[2].position = l + 'px'
+              refLine.vLine[2].origin = xMin
+              refLine.vLine[2].lineLength = xSpacing
+            }
+            if (LS) {
+              this.rawLeft = r - width
+              this.rawRight = this.parentWidth - this.rawLeft - width
+              refLine.vLine[0].display = true
+              refLine.vLine[0].position = r + 'px'
+              refLine.vLine[0].origin = xMin
+              refLine.vLine[0].lineLength = xSpacing
+            }
+            if (RS) {
+              this.rawLeft = r
+              this.rawRight = this.parentWidth - this.rawLeft - width
+              refLine.vLine[2].display = true
+              refLine.vLine[2].position = r + 'px'
+              refLine.vLine[2].origin = xMin
+              refLine.vLine[2].lineLength = xSpacing
+            }
 
             if (hc) {
               this.rawTop = t + h / 2 - height / 2
               this.rawBottom = this.parentHeight - this.rawTop - height
+
+              refLine.hLine[1].display = true
+              refLine.hLine[1].position = t + h / 2 + 'px'
+              refLine.hLine[1].origin = yMin
+              refLine.hLine[1].lineLength = ySpacing
             }
             if (vc) {
               this.rawLeft = l + w / 2 - width / 2
               this.rawRight = this.parentWidth - this.rawLeft - width
+
+              refLine.vLine[1].display = true
+              refLine.vLine[1].position = l + w / 2 + 'px'
+              refLine.vLine[1].origin = xMin
+              refLine.vLine[1].lineLength = xSpacing
             }
 
+          /*  horizontalArray.push(t, b)
+            verticalArray.push(l, r)
             // 水平方向平行horizontal对齐
-            levelArray.push(t, b)
-            levelArray.forEach((level) => {
-              const ts = Math.abs(level - activeBottom) <= this.snapTolerance // 从上到下
-              const bs = Math.abs(level - activeTop) <= this.snapTolerance // 从下到上
+            horizontalArray.forEach(horizontal => {
+              const ts = Math.abs(horizontal - activeBottom) <= this.snapTolerance // 从上到下
+              const bs = Math.abs(horizontal - activeTop) <= this.snapTolerance // 从下到上
 
               if (ts) {
-                this.rawTop = level - height
+                this.rawTop = horizontal - height
                 this.rawBottom = this.parentHeight - this.rawTop - height
+                refLine.hLine[0].display = true
+                refLine.hLine[0].position = horizontal + 'px'
+                refLine.hLine[0].origin = yMin
+                refLine.hLine[0].lineLength = ySpacing
               }
               if (bs) {
-                this.rawTop = level
+                this.rawTop = horizontal
                 this.rawBottom = this.parentHeight - this.rawTop - height
+                refLine.hLine[2].display = true
+                refLine.hLine[2].position = horizontal + 'px'
+                refLine.hLine[2].origin = yMin
+                refLine.hLine[2].lineLength = ySpacing
               }
+
             })
             // 竖直方向垂直vertical对齐
-            verticalArray.push(l, r)
-            verticalArray.forEach((vertical) => {
+            verticalArray.forEach(vertical => {
               const ls = Math.abs(vertical - activeRight) <= this.snapTolerance // 外左
               const rs = Math.abs(vertical - activeLeft) <= this.snapTolerance // 外右
 
               if (ls) {
                 this.rawLeft = vertical - width
                 this.rawRight = this.parentWidth - this.rawLeft - width
+                refLine.vLine[0].display = true
+                refLine.vLine[0].position = vertical + 'px'
+                refLine.vLine[0].origin = xMin
+                refLine.vLine[0].lineLength = xSpacing
               }
               if (rs) {
                 this.rawLeft = vertical
                 this.rawRight = this.parentWidth - this.rawLeft - width
+                refLine.vLine[2].display = true
+                refLine.vLine[2].position = vertical + 'px'
+                refLine.vLine[2].origin = xMin
+                refLine.vLine[2].lineLength = xSpacing
               }
-            })
+            })*/
+
+            this.$emit('refLineParams', refLine)
           }
         })
       }
