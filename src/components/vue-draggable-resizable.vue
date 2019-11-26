@@ -753,11 +753,11 @@ export default {
         const refLine = {
           vLine: [
               {
-              display: false,
-              position: '',
-              origin: '',
-              lineLength: ''
-            },
+                display: false,
+                position: '',
+                origin: '',
+                lineLength: ''
+              },
               {
                 display: false,
                 position: '',
@@ -805,14 +805,14 @@ export default {
 
             const direValues = {
               x: [t, b, activeTop, activeBottom],
-              y: [l, r, activeLeft, activeRight],
+              y: [l, r, activeLeft, activeRight]
             }
 
             const xMin = Math.min(...direValues['x']) + 'px'
-            const xSpacing = Math.max(...direValues['x']) - Math.min(...direValues['x'])  + 'px'
+            const xSpacing = Math.max(...direValues['x']) - Math.min(...direValues['x']) + 'px'
 
             const yMin = Math.min(...direValues['y']) + 'px'
-            const ySpacing = Math.max(...direValues['y']) - Math.min(...direValues['y'])  + 'px'
+            const ySpacing = Math.max(...direValues['y']) - Math.min(...direValues['y']) + 'px'
 
             const hc = Math.abs((activeTop + height / 2) - (t + h / 2)) <= this.snapTolerance // 水平中线
             const vc = Math.abs((activeLeft + width / 2) - (l + w / 2)) <= this.snapTolerance // 垂直中线
