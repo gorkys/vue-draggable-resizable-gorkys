@@ -5,7 +5,15 @@
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![npm](https://img.shields.io/npm/dt/vue-draggable-resizable.svg?style=flat-square)](https://www.npmjs.com/package/vue-draggable-resizable-gorkys)
 
-## 前言
+## 新增特征✨
+
+- 辅助线(新)
+- 元素对齐(新)
+- 冲突检测
+- 吸附对齐
+- 默认样式优化
+
+## 说明
 
 > 说明：组件基于[vue-draggable-resizable](https://github.com/mauricius/vue-draggable-resizable)进行二次开发
 
@@ -14,14 +22,6 @@
 虽然之前适配过旧版组件，但是因为2.0版本原作者对代码进行了重构，原来修改的代码照搬是不可能的了。
 
 所以也就一直没有将**冲突检测**以及**吸附对齐**功能适配到2.0版本，最近正好有时间就适配一下。
-
-**新增特征**
-
-- 辅助线(新)
-- 元素对齐(新)
-- 冲突检测
-- 吸附对齐
-- 默认样式优化
 
 ## 功能预览
 

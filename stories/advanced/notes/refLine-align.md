@@ -1,3 +1,8 @@
+# 元素对齐辅助线
+
+返回参数是一个Object,里面包含`vLine`与`hLine`，具体使用参考下面代码。
+
+~~~js
 <template>
   <div id="app">
     <div style="height: 800px; width: 1200px; border: 1px solid red; position: relative;margin: 0 auto">
@@ -95,3 +100,6 @@ export default {
     background-color: rgb(174, 213, 129);
   }
 </style>
+
+~~~
+
