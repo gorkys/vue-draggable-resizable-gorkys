@@ -707,7 +707,7 @@ export default {
 
       if (this.isConflictCheck) {
         const nodes = this.$el.parentNode.childNodes // 获取当前父节点下所有子节点
-        nodes.forEach(item => {
+        for (let item of nodes){
           if (item !== this.$el && item.className !== undefined && item.getAttribute('data-is-check') !== null && item.getAttribute('data-is-check') !== 'false') {
             const tw = item.offsetWidth
             const th = item.offsetHeight
@@ -734,11 +734,11 @@ export default {
               this.rawBottom = this.mouseClickPosition.bottom
             }
           }
-        })
+        }
       }
     },
     // 检测对齐元素
-    snapCheck () {
+    async snapCheck () {
       const width = this.width
       const height = this.height
       if (this.snap) {
@@ -794,7 +794,10 @@ export default {
         }
 
         const nodes = this.$el.parentNode.childNodes // 获取当前父节点下所有子节点
-        nodes.forEach(item => {
+        // 获取距离达到阔值的所有组件结果
+        let { XArray, YArray } = await this.getResult(nodes,{ width, height, activeLeft, activeRight, activeTop, activeBottom })
+
+        for (let item of nodes){
           if (item !== this.$el && item.className !== undefined && item.getAttribute('data-is-snap') !== null && item.getAttribute('data-is-snap') !== 'false') {
             const w = item.offsetWidth
             const h = item.offsetHeight
@@ -803,16 +806,11 @@ export default {
             const t = item.offsetTop// 对齐目标的top
             const b = t + h // 对齐目标的bottom
 
-            const direValues = {
-              x: [t, b, activeTop, activeBottom],
-              y: [l, r, activeLeft, activeRight]
-            }
+            const xMin = Math.min(...XArray) + 'px'
+            const xSpacing = Math.max(...XArray) - Math.min(...XArray) + 'px'
 
-            const xMin = Math.min(...direValues['x']) + 'px'
-            const xSpacing = Math.max(...direValues['x']) - Math.min(...direValues['x']) + 'px'
-
-            const yMin = Math.min(...direValues['y']) + 'px'
-            const ySpacing = Math.max(...direValues['y']) - Math.min(...direValues['y']) + 'px'
+            const yMin = Math.min(...YArray) + 'px'
+            const ySpacing = Math.max(...YArray) - Math.min(...YArray) + 'px'
 
             const hc = Math.abs((activeTop + height / 2) - (t + h / 2)) <= this.snapTolerance // 水平中线
             const vc = Math.abs((activeLeft + width / 2) - (l + w / 2)) <= this.snapTolerance // 垂直中线
@@ -911,59 +909,48 @@ export default {
               refLine.vLine[1].origin = xMin
               refLine.vLine[1].lineLength = xSpacing
             }
-
-          /*  horizontalArray.push(t, b)
-            verticalArray.push(l, r)
-            // 水平方向平行horizontal对齐
-            horizontalArray.forEach(horizontal => {
-              const ts = Math.abs(horizontal - activeBottom) <= this.snapTolerance // 从上到下
-              const bs = Math.abs(horizontal - activeTop) <= this.snapTolerance // 从下到上
-
-              if (ts) {
-                this.rawTop = horizontal - height
-                this.rawBottom = this.parentHeight - this.rawTop - height
-                refLine.hLine[0].display = true
-                refLine.hLine[0].position = horizontal + 'px'
-                refLine.hLine[0].origin = yMin
-                refLine.hLine[0].lineLength = ySpacing
-              }
-              if (bs) {
-                this.rawTop = horizontal
-                this.rawBottom = this.parentHeight - this.rawTop - height
-                refLine.hLine[2].display = true
-                refLine.hLine[2].position = horizontal + 'px'
-                refLine.hLine[2].origin = yMin
-                refLine.hLine[2].lineLength = ySpacing
-              }
-
-            })
-            // 竖直方向垂直vertical对齐
-            verticalArray.forEach(vertical => {
-              const ls = Math.abs(vertical - activeRight) <= this.snapTolerance // 外左
-              const rs = Math.abs(vertical - activeLeft) <= this.snapTolerance // 外右
-
-              if (ls) {
-                this.rawLeft = vertical - width
-                this.rawRight = this.parentWidth - this.rawLeft - width
-                refLine.vLine[0].display = true
-                refLine.vLine[0].position = vertical + 'px'
-                refLine.vLine[0].origin = xMin
-                refLine.vLine[0].lineLength = xSpacing
-              }
-              if (rs) {
-                this.rawLeft = vertical
-                this.rawRight = this.parentWidth - this.rawLeft - width
-                refLine.vLine[2].display = true
-                refLine.vLine[2].position = vertical + 'px'
-                refLine.vLine[2].origin = xMin
-                refLine.vLine[2].lineLength = xSpacing
-              }
-            })*/
-
-            this.$emit('refLineParams', refLine)
           }
-        })
+        }
+        this.$emit('refLineParams', refLine)
       }
+    },
+    getResult(nodes, actives) {
+      return new Promise(resolve => {
+        let { width, height, activeLeft, activeRight, activeTop, activeBottom } = actives
+        const TEM = {
+          XArray: [],
+          YArray: []
+        }
+        for (let item of nodes){
+          if (item !== this.$el && item.className !== undefined && item.getAttribute('data-is-snap') !== null && item.getAttribute('data-is-snap') !== 'false') {
+            const w = item.offsetWidth
+            const h = item.offsetHeight
+            const l = item.offsetLeft
+            const r = l + w
+            const t = item.offsetTop
+            const b = t + h
+
+            const hc = Math.abs((activeTop + height / 2) - (t + h / 2)) <= this.snapTolerance // 水平中线
+            const vc = Math.abs((activeLeft + width / 2) - (l + w / 2)) <= this.snapTolerance // 垂直中线
+
+            const ts = Math.abs(t - activeBottom) <= this.snapTolerance // 从上到下
+            const TS = Math.abs(b - activeBottom) <= this.snapTolerance // 从上到下
+            const bs = Math.abs(t - activeTop) <= this.snapTolerance // 从下到上
+            const BS = Math.abs(b - activeTop) <= this.snapTolerance // 从下到上
+
+            const ls = Math.abs(l - activeRight) <= this.snapTolerance // 外左
+            const LS = Math.abs(r - activeRight) <= this.snapTolerance // 外左
+            const rs = Math.abs(l - activeLeft) <= this.snapTolerance // 外右
+            const RS = Math.abs(r - activeLeft) <= this.snapTolerance // 外右
+
+            if (hc || vc || ts || TS || bs || BS || ls || LS || rs|| RS){
+              TEM.XArray.push(t, b, activeTop, activeBottom)
+              TEM.YArray.push(l, r, activeLeft, activeRight)
+            }
+          }
+        }
+        resolve(TEM)
+      })
     }
   },
   computed: {
