@@ -708,7 +708,7 @@ export default {
       if (this.isConflictCheck) {
         const nodes = this.$el.parentNode.childNodes // 获取当前父节点下所有子节点
         for (let item of nodes){
-          if (item !== this.$el && item.className !== undefined && item.getAttribute('data-is-check') !== null && item.getAttribute('data-is-check') !== 'false') {
+          if (!item.className.includes(this.classNameActive) && item.className !== undefined && item.getAttribute('data-is-check') !== null && item.getAttribute('data-is-check') !== 'false') {
             const tw = item.offsetWidth
             const th = item.offsetHeight
             const tl = item.offsetLeft
@@ -747,55 +747,17 @@ export default {
         const activeTop = this.rawTop
         const activeBottom = this.rawTop + height
 
-        // let horizontalArray = []
-        // let verticalArray = []
+        // 初始化辅助线数据
+        const temArr = new Array(3).fill({ display: false, position: '', origin: '', lineLength: '' })
+        const refLine = { vLine: [], hLine: [] }
+        for(let i in refLine){ refLine[i] = JSON.parse(JSON.stringify(temArr)) }
 
-        const refLine = {
-          vLine: [
-              {
-                display: false,
-                position: '',
-                origin: '',
-                lineLength: ''
-              },
-              {
-                display: false,
-                position: '',
-                origin: '',
-                lineLength: ''
-              },
-              {
-                display: false,
-                position: '',
-                origin: '',
-                lineLength: ''
-              }
-          ],
-          hLine: [
-            {
-              display: false,
-              position: '',
-              origin: '',
-              lineLength: ''
-            },
-            {
-              display: false,
-              position: '',
-              origin: '',
-              lineLength: ''
-            },
-            {
-              display: false,
-              position: '',
-              origin: '',
-              lineLength: ''
-            }
-          ]
-        }
+        // 获取当前父节点下所有子节点
+        const nodes = this.$el.parentNode.childNodes
 
-        const nodes = this.$el.parentNode.childNodes // 获取当前父节点下所有子节点
-        // 获取距离达到阔值的所有组件结果
-        let { XArray, YArray } = await this.getResult(nodes,{ width, height, activeLeft, activeRight, activeTop, activeBottom })
+        // 获取距离达到阔值的所有组件
+        const active = { width, height, activeLeft, activeRight, activeTop, activeBottom }
+        let { XArray, YArray } = await this.getResult(nodes, active)
 
         for (let item of nodes){
           if (item !== this.$el && item.className !== undefined && item.getAttribute('data-is-snap') !== null && item.getAttribute('data-is-snap') !== 'false') {
@@ -917,10 +879,7 @@ export default {
     getResult(nodes, actives) {
       return new Promise(resolve => {
         let { width, height, activeLeft, activeRight, activeTop, activeBottom } = actives
-        const TEM = {
-          XArray: [],
-          YArray: []
-        }
+        const XArray= [], YArray= []
         for (let item of nodes){
           if (item !== this.$el && item.className !== undefined && item.getAttribute('data-is-snap') !== null && item.getAttribute('data-is-snap') !== 'false') {
             const w = item.offsetWidth
@@ -944,12 +903,12 @@ export default {
             const RS = Math.abs(r - activeLeft) <= this.snapTolerance // 外右
 
             if (hc || vc || ts || TS || bs || BS || ls || LS || rs|| RS){
-              TEM.XArray.push(t, b, activeTop, activeBottom)
-              TEM.YArray.push(l, r, activeLeft, activeRight)
+              XArray.push(t, b, activeTop, activeBottom)
+              YArray.push(l, r, activeLeft, activeRight)
             }
           }
         }
-        resolve(TEM)
+        resolve({XArray, YArray})
       })
     }
   },
