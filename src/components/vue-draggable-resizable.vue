@@ -832,7 +832,7 @@ export default {
               if(i < 6){
                 if(tem.display[i]){
                   const {origin , length} = this.calcLineValues(tem.value[0])
-                  const j = Math.round(i / 2.5)
+                  const j = Math.round(i / 2.5) // 重置Index为[0,0,1,1,2,2]
                   refLine.hLine[j].display = tem.display[i]
                   refLine.hLine[j].position = tem.position[i] + 'px'
                   refLine.hLine[j].origin = origin
