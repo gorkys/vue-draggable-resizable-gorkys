@@ -670,7 +670,7 @@ export default {
       if (this.isConflictCheck) {
         const nodes = this.$el.parentNode.childNodes // 获取当前父节点下所有子节点
         for (let item of nodes){
-          if (!item.className.includes(this.classNameActive) && item.className !== undefined && item.getAttribute('data-is-check') !== null && item.getAttribute('data-is-check') !== 'false') {
+          if (item !== this.$el && item.className !== undefined && item.getAttribute('data-is-check') !== null && item.getAttribute('data-is-check') !== 'false') {
             const tw = item.offsetWidth
             const th = item.offsetHeight
             const tl = item.offsetLeft
@@ -718,7 +718,7 @@ export default {
         const nodes = this.$el.parentNode.childNodes
 
         let tem = {
-          value: [[],[]],
+          value: { x: [[],[],[]], y: [[],[],[]]},
           display: [],
           position: []
         }
@@ -732,7 +732,7 @@ export default {
           activeBottom = groupTop + groupHeight
         }
         for (let item of nodes){
-          if (!item.className.includes(this.classNameActive) && item.className !== undefined && item.getAttribute('data-is-snap') !== null && item.getAttribute('data-is-snap') !== 'false') {
+          if (item.className !== undefined && !item.className.includes(this.classNameActive) && item.getAttribute('data-is-snap') !== null && item.getAttribute('data-is-snap') !== 'false') {
             const w = item.offsetWidth
             const h = item.offsetHeight
             const l = item.offsetLeft // 对齐目标的left
@@ -761,28 +761,28 @@ export default {
                this.rawTop = t - height
                this.rawBottom = this.parentHeight - this.rawTop - height
               }
-              tem.value[0].push(l, r, activeLeft, activeRight)
+              tem.value.y[0].push(l, r, activeLeft, activeRight)
             }
             if (bs) {
               if(AllLength === 1){
                this.rawTop = t
                this.rawBottom = this.parentHeight - this.rawTop - height
               }
-              tem.value[0].push(l, r, activeLeft, activeRight)
+              tem.value.y[0].push(l, r, activeLeft, activeRight)
             }
             if (TS) {
               if(AllLength === 1){
                this.rawTop = b - height
                this.rawBottom = this.parentHeight - this.rawTop - height
               }
-              tem.value[0].push(l, r, activeLeft, activeRight)
+              tem.value.y[1].push(l, r, activeLeft, activeRight)
             }
             if (BS) {
               if(AllLength === 1){
                this.rawTop = b
                this.rawBottom = this.parentHeight - this.rawTop - height
               }
-              tem.value[0].push(l, r, activeLeft, activeRight)
+              tem.value.y[1].push(l, r, activeLeft, activeRight)
             }
 
             if (ls) {
@@ -790,28 +790,28 @@ export default {
                this.rawLeft = l - width
                this.rawRight = this.parentWidth - this.rawLeft - width
               }
-              tem.value[1].push(t, b, activeTop, activeBottom)
+              tem.value.x[0].push(t, b, activeTop, activeBottom)
             }
             if (rs) {
               if(AllLength === 1){
                this.rawLeft = l
                this.rawRight = this.parentWidth - this.rawLeft - width
               }
-              tem.value[1].push(t, b, activeTop, activeBottom)
+              tem.value.x[0].push(t, b, activeTop, activeBottom)
             }
             if (LS) {
               if(AllLength === 1){
                this.rawLeft = r - width
                this.rawRight = this.parentWidth - this.rawLeft - width
               }
-              tem.value[1].push(t, b, activeTop, activeBottom)
+              tem.value.x[1].push(t, b, activeTop, activeBottom)
             }
             if (RS) {
               if(AllLength === 1){
                this.rawLeft = r
                this.rawRight = this.parentWidth - this.rawLeft - width
               }
-              tem.value[1].push(t, b, activeTop, activeBottom)
+              tem.value.x[1].push(t, b, activeTop, activeBottom)
             }
 
             if (hc) {
@@ -819,20 +819,20 @@ export default {
                this.rawTop = t + h / 2 - height / 2
                this.rawBottom = this.parentHeight - this.rawTop - height
               }
-              tem.value[0].push(l, r, activeLeft, activeRight)
+              tem.value.y[2].push(l, r, activeLeft, activeRight)
             }
             if (vc) {
               if(AllLength === 1){
                this.rawLeft = l + w / 2 - width / 2
                this.rawRight = this.parentWidth - this.rawLeft - width
               }
-              tem.value[1].push(t, b, activeTop, activeBottom)
+              tem.value.x[2].push(t, b, activeTop, activeBottom)
             }
             for (let i = 0; i <= tem.display.length; i++) {
               if(i < 6){
                 if(tem.display[i]){
-                  const {origin , length} = this.calcLineValues(tem.value[0])
                   const j = Math.round(i / 2.5) // 重置Index为[0,0,1,1,2,2]
+                  const { origin , length } = this.calcLineValues(tem.value.y[j])
                   refLine.hLine[j].display = tem.display[i]
                   refLine.hLine[j].position = tem.position[i] + 'px'
                   refLine.hLine[j].origin = origin
@@ -840,8 +840,8 @@ export default {
                 }
               }else{
                 if(tem.display[i]){
-                  const {origin , length} = this.calcLineValues(tem.value[1])
                   const j = Math.round((i - 6) / 2.5)
+                  const { origin , length } = this.calcLineValues(tem.value.x[j])
                   refLine.vLine[j].display = tem.display[i]
                   refLine.vLine[j].position = tem.position[i] + 'px'
                   refLine.vLine[j].origin = origin
@@ -864,7 +864,7 @@ export default {
       const activeAll = [], XArray = [], YArray = []
       let groupWidth = 0, groupHeight = 0, groupLeft = 0, groupTop = 0
       for (let item of nodes){
-        if(item.className.includes(this.classNameActive)){
+        if(item.className !== undefined && item.className.includes(this.classNameActive)){
           activeAll.push(item)
         }
       }
