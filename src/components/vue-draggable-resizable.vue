@@ -701,13 +701,13 @@ export default {
     },
     // 检测对齐元素
     async snapCheck () {
-      const width = this.width
-      const height = this.height
+      let width = this.width
+      let height = this.height
       if (this.snap) {
-        const activeLeft = this.rawLeft
-        const activeRight = this.rawLeft + width
-        const activeTop = this.rawTop
-        const activeBottom = this.rawTop + height
+        let activeLeft = this.rawLeft
+        let activeRight = this.rawLeft + width
+        let activeTop = this.rawTop
+        let activeBottom = this.rawTop + height
 
         // 初始化辅助线数据
         const temArr = new Array(3).fill({ display: false, position: '', origin: '', lineLength: '' })
@@ -717,15 +717,22 @@ export default {
         // 获取当前父节点下所有子节点
         const nodes = this.$el.parentNode.childNodes
 
-        // 获取距离达到阔值的所有组件
-        const active = { activeLeft, activeRight, activeTop, activeBottom }
         let tem = {
           value: [[],[]],
           display: [],
           position: []
         }
+        const { groupWidth, groupHeight, groupLeft, groupTop, AllLength } = await this.getActiveAll(nodes)
+        if(!(AllLength === 1)){
+          width = groupWidth
+          height = groupHeight
+          activeLeft = groupLeft
+          activeRight = groupLeft + groupWidth
+          activeTop = groupTop
+          activeBottom = groupTop + groupHeight
+        }
         for (let item of nodes){
-          if (item !== this.$el && item.className !== undefined && item.getAttribute('data-is-snap') !== null && item.getAttribute('data-is-snap') !== 'false') {
+          if (!item.className.includes(this.classNameActive) && item.className !== undefined && item.getAttribute('data-is-snap') !== null && item.getAttribute('data-is-snap') !== 'false') {
             const w = item.offsetWidth
             const h = item.offsetHeight
             const l = item.offsetLeft // 对齐目标的left
@@ -750,58 +757,78 @@ export default {
             tem['position'] = [t, b, t, b, t + h / 2, t + h / 2, l, r, l, r, l + w / 2, l + w / 2]
 
             if (ts) {
-              this.rawTop = t - height
-              this.rawBottom = this.parentHeight - this.rawTop - height
+              if(AllLength === 1){
+               this.rawTop = t - height
+               this.rawBottom = this.parentHeight - this.rawTop - height
+              }
               tem.value[0].push(l, r, activeLeft, activeRight)
             }
             if (bs) {
-              this.rawTop = t
-              this.rawBottom = this.parentHeight - this.rawTop - height
+              if(AllLength === 1){
+               this.rawTop = t
+               this.rawBottom = this.parentHeight - this.rawTop - height
+              }
               tem.value[0].push(l, r, activeLeft, activeRight)
             }
             if (TS) {
-              this.rawTop = b - height
-              this.rawBottom = this.parentHeight - this.rawTop - height
+              if(AllLength === 1){
+               this.rawTop = b - height
+               this.rawBottom = this.parentHeight - this.rawTop - height
+              }
               tem.value[0].push(l, r, activeLeft, activeRight)
             }
             if (BS) {
-              this.rawTop = b
-              this.rawBottom = this.parentHeight - this.rawTop - height
+              if(AllLength === 1){
+               this.rawTop = b
+               this.rawBottom = this.parentHeight - this.rawTop - height
+              }
               tem.value[0].push(l, r, activeLeft, activeRight)
             }
 
             if (ls) {
-              this.rawLeft = l - width
-              this.rawRight = this.parentWidth - this.rawLeft - width
+              if(AllLength === 1){
+               this.rawLeft = l - width
+               this.rawRight = this.parentWidth - this.rawLeft - width
+              }
               tem.value[1].push(t, b, activeTop, activeBottom)
             }
             if (rs) {
-              this.rawLeft = l
-              this.rawRight = this.parentWidth - this.rawLeft - width
+              if(AllLength === 1){
+               this.rawLeft = l
+               this.rawRight = this.parentWidth - this.rawLeft - width
+              }
               tem.value[1].push(t, b, activeTop, activeBottom)
             }
             if (LS) {
-              this.rawLeft = r - width
-              this.rawRight = this.parentWidth - this.rawLeft - width
+              if(AllLength === 1){
+               this.rawLeft = r - width
+               this.rawRight = this.parentWidth - this.rawLeft - width
+              }
               tem.value[1].push(t, b, activeTop, activeBottom)
             }
             if (RS) {
-              this.rawLeft = r
-              this.rawRight = this.parentWidth - this.rawLeft - width
+              if(AllLength === 1){
+               this.rawLeft = r
+               this.rawRight = this.parentWidth - this.rawLeft - width
+              }
               tem.value[1].push(t, b, activeTop, activeBottom)
             }
 
             if (hc) {
-              this.rawTop = t + h / 2 - height / 2
-              this.rawBottom = this.parentHeight - this.rawTop - height
+              if(AllLength === 1){
+               this.rawTop = t + h / 2 - height / 2
+               this.rawBottom = this.parentHeight - this.rawTop - height
+              }
               tem.value[0].push(l, r, activeLeft, activeRight)
             }
             if (vc) {
-              this.rawLeft = l + w / 2 - width / 2
-              this.rawRight = this.parentWidth - this.rawLeft - width
+              if(AllLength === 1){
+               this.rawLeft = l + w / 2 - width / 2
+               this.rawRight = this.parentWidth - this.rawLeft - width
+              }
               tem.value[1].push(t, b, activeTop, activeBottom)
             }
-            for (let i = 0; i <= 11; i++) {
+            for (let i = 0; i <= tem.display.length; i++) {
               if(i < 6){
                 if(tem.display[i]){
                   const {origin , length} = this.calcLineValues(tem.value[0])
@@ -832,6 +859,31 @@ export default {
       const length = Math.max(...arr) - Math.min(...arr) + 'px'
       const origin = Math.min(...arr) + 'px'
       return { length, origin }
+    },
+    async getActiveAll(nodes) {
+      const activeAll = [], XArray = [], YArray = []
+      let groupWidth = 0, groupHeight = 0, groupLeft = 0, groupTop = 0
+      for (let item of nodes){
+        if(item.className.includes(this.classNameActive)){
+          activeAll.push(item)
+        }
+      }
+      const AllLength = activeAll.length
+      if(AllLength > 1){
+        for (let i of activeAll){
+          const l = i.offsetLeft
+          const r = l + i.offsetWidth
+          const t = i.offsetTop
+          const b = t + i.offsetHeight
+          XArray.push(t, b)
+          YArray.push(l, r)
+        }
+        groupWidth = Math.max(...YArray) - Math.min(...YArray)
+        groupHeight = Math.max(...XArray) - Math.min(...XArray)
+        groupLeft = Math.min(...YArray)
+        groupTop = Math.min(...XArray)
+      }
+      return { groupWidth, groupHeight, groupLeft, groupTop , AllLength }
     }
   },
   computed: {
