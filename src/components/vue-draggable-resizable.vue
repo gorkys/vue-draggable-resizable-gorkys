@@ -624,48 +624,10 @@ export default {
       this.rawBottom = this.bottom
       this.rawLeft = this.left
       this.rawRight = this.right
-      const refLine = {
-        vLine: [
-          {
-            display: false,
-            position: '',
-            origin: '',
-            lineLength: ''
-          },
-          {
-            display: false,
-            position: '',
-            origin: '',
-            lineLength: ''
-          },
-          {
-            display: false,
-            position: '',
-            origin: '',
-            lineLength: ''
-          }
-        ],
-        hLine: [
-          {
-            display: false,
-            position: '',
-            origin: '',
-            lineLength: ''
-          },
-          {
-            display: false,
-            position: '',
-            origin: '',
-            lineLength: ''
-          },
-          {
-            display: false,
-            position: '',
-            origin: '',
-            lineLength: ''
-          }
-        ]
-      }
+      // 初始化辅助线数据
+      const temArr = new Array(3).fill({ display: false, position: '', origin: '', lineLength: '' })
+      const refLine = { vLine: [], hLine: [] }
+      for(let i in refLine){ refLine[i] = JSON.parse(JSON.stringify(temArr)) }
 
       if (this.resizing) {
         this.resizing = false
@@ -756,9 +718,12 @@ export default {
         const nodes = this.$el.parentNode.childNodes
 
         // 获取距离达到阔值的所有组件
-        const active = { width, height, activeLeft, activeRight, activeTop, activeBottom }
-        let { XArray, YArray } = await this.getResult(nodes, active)
-
+        const active = { activeLeft, activeRight, activeTop, activeBottom }
+        let tem = {
+          value: [[],[]],
+          display: [],
+          position: []
+        }
         for (let item of nodes){
           if (item !== this.$el && item.className !== undefined && item.getAttribute('data-is-snap') !== null && item.getAttribute('data-is-snap') !== 'false') {
             const w = item.offsetWidth
@@ -768,12 +733,6 @@ export default {
             const t = item.offsetTop// 对齐目标的top
             const b = t + h // 对齐目标的bottom
 
-            const xMin = Math.min(...XArray) + 'px'
-            const xSpacing = Math.max(...XArray) - Math.min(...XArray) + 'px'
-
-            const yMin = Math.min(...YArray) + 'px'
-            const ySpacing = Math.max(...YArray) - Math.min(...YArray) + 'px'
-
             const hc = Math.abs((activeTop + height / 2) - (t + h / 2)) <= this.snapTolerance // 水平中线
             const vc = Math.abs((activeLeft + width / 2) - (l + w / 2)) <= this.snapTolerance // 垂直中线
 
@@ -787,129 +746,92 @@ export default {
             const rs = Math.abs(l - activeLeft) <= this.snapTolerance // 外右
             const RS = Math.abs(r - activeLeft) <= this.snapTolerance // 外右
 
+            tem['display'] = [ts ,TS , bs, BS, hc, hc, ls , LS, rs, RS, vc, vc]
+            tem['position'] = [t, b, t, b, t + h / 2, t + h / 2, l, r, l, r, l + w / 2, l + w / 2]
+
             if (ts) {
               this.rawTop = t - height
               this.rawBottom = this.parentHeight - this.rawTop - height
-              refLine.hLine[0].display = true
-              refLine.hLine[0].position = t + 'px'
-              refLine.hLine[0].origin = yMin
-              refLine.hLine[0].lineLength = ySpacing
+              tem.value[0].push(l, r, activeLeft, activeRight)
             }
             if (bs) {
               this.rawTop = t
               this.rawBottom = this.parentHeight - this.rawTop - height
-              refLine.hLine[2].display = true
-              refLine.hLine[2].position = t + 'px'
-              refLine.hLine[2].origin = yMin
-              refLine.hLine[2].lineLength = ySpacing
+              tem.value[0].push(l, r, activeLeft, activeRight)
             }
             if (TS) {
               this.rawTop = b - height
               this.rawBottom = this.parentHeight - this.rawTop - height
-              refLine.hLine[0].display = true
-              refLine.hLine[0].position = b + 'px'
-              refLine.hLine[0].origin = yMin
-              refLine.hLine[0].lineLength = ySpacing
+              tem.value[0].push(l, r, activeLeft, activeRight)
             }
             if (BS) {
               this.rawTop = b
               this.rawBottom = this.parentHeight - this.rawTop - height
-              refLine.hLine[2].display = true
-              refLine.hLine[2].position = b + 'px'
-              refLine.hLine[2].origin = yMin
-              refLine.hLine[2].lineLength = ySpacing
+              tem.value[0].push(l, r, activeLeft, activeRight)
             }
 
             if (ls) {
               this.rawLeft = l - width
               this.rawRight = this.parentWidth - this.rawLeft - width
-              refLine.vLine[0].display = true
-              refLine.vLine[0].position = l + 'px'
-              refLine.vLine[0].origin = xMin
-              refLine.vLine[0].lineLength = xSpacing
+              tem.value[1].push(t, b, activeTop, activeBottom)
             }
             if (rs) {
               this.rawLeft = l
               this.rawRight = this.parentWidth - this.rawLeft - width
-              refLine.vLine[2].display = true
-              refLine.vLine[2].position = l + 'px'
-              refLine.vLine[2].origin = xMin
-              refLine.vLine[2].lineLength = xSpacing
+              tem.value[1].push(t, b, activeTop, activeBottom)
             }
             if (LS) {
               this.rawLeft = r - width
               this.rawRight = this.parentWidth - this.rawLeft - width
-              refLine.vLine[0].display = true
-              refLine.vLine[0].position = r + 'px'
-              refLine.vLine[0].origin = xMin
-              refLine.vLine[0].lineLength = xSpacing
+              tem.value[1].push(t, b, activeTop, activeBottom)
             }
             if (RS) {
               this.rawLeft = r
               this.rawRight = this.parentWidth - this.rawLeft - width
-              refLine.vLine[2].display = true
-              refLine.vLine[2].position = r + 'px'
-              refLine.vLine[2].origin = xMin
-              refLine.vLine[2].lineLength = xSpacing
+              tem.value[1].push(t, b, activeTop, activeBottom)
             }
 
             if (hc) {
               this.rawTop = t + h / 2 - height / 2
               this.rawBottom = this.parentHeight - this.rawTop - height
-
-              refLine.hLine[1].display = true
-              refLine.hLine[1].position = t + h / 2 + 'px'
-              refLine.hLine[1].origin = yMin
-              refLine.hLine[1].lineLength = ySpacing
+              tem.value[0].push(l, r, activeLeft, activeRight)
             }
             if (vc) {
               this.rawLeft = l + w / 2 - width / 2
               this.rawRight = this.parentWidth - this.rawLeft - width
-
-              refLine.vLine[1].display = true
-              refLine.vLine[1].position = l + w / 2 + 'px'
-              refLine.vLine[1].origin = xMin
-              refLine.vLine[1].lineLength = xSpacing
+              tem.value[1].push(t, b, activeTop, activeBottom)
+            }
+            for (let i = 0; i <= 11; i++) {
+              if(i < 6){
+                if(tem.display[i]){
+                  const {origin , length} = this.calcLineValues(tem.value[0])
+                  const j = Math.round(i / 2.5)
+                  refLine.hLine[j].display = tem.display[i]
+                  refLine.hLine[j].position = tem.position[i] + 'px'
+                  refLine.hLine[j].origin = origin
+                  refLine.hLine[j].lineLength = length
+                }
+              }else{
+                if(tem.display[i]){
+                  const {origin , length} = this.calcLineValues(tem.value[1])
+                  const j = Math.round((i - 6) / 2.5)
+                  refLine.vLine[j].display = tem.display[i]
+                  refLine.vLine[j].position = tem.position[i] + 'px'
+                  refLine.vLine[j].origin = origin
+                  refLine.vLine[j].lineLength = length
+                }
+              }
             }
           }
+
         }
         this.$emit('refLineParams', refLine)
       }
     },
-    getResult(nodes, actives) {
-      return new Promise(resolve => {
-        let { width, height, activeLeft, activeRight, activeTop, activeBottom } = actives
-        const XArray= [], YArray= []
-        for (let item of nodes){
-          if (item !== this.$el && item.className !== undefined && item.getAttribute('data-is-snap') !== null && item.getAttribute('data-is-snap') !== 'false') {
-            const w = item.offsetWidth
-            const h = item.offsetHeight
-            const l = item.offsetLeft
-            const r = l + w
-            const t = item.offsetTop
-            const b = t + h
-
-            const hc = Math.abs((activeTop + height / 2) - (t + h / 2)) <= this.snapTolerance // 水平中线
-            const vc = Math.abs((activeLeft + width / 2) - (l + w / 2)) <= this.snapTolerance // 垂直中线
-
-            const ts = Math.abs(t - activeBottom) <= this.snapTolerance // 从上到下
-            const TS = Math.abs(b - activeBottom) <= this.snapTolerance // 从上到下
-            const bs = Math.abs(t - activeTop) <= this.snapTolerance // 从下到上
-            const BS = Math.abs(b - activeTop) <= this.snapTolerance // 从下到上
-
-            const ls = Math.abs(l - activeRight) <= this.snapTolerance // 外左
-            const LS = Math.abs(r - activeRight) <= this.snapTolerance // 外左
-            const rs = Math.abs(l - activeLeft) <= this.snapTolerance // 外右
-            const RS = Math.abs(r - activeLeft) <= this.snapTolerance // 外右
-
-            if (hc || vc || ts || TS || bs || BS || ls || LS || rs|| RS){
-              XArray.push(t, b, activeTop, activeBottom)
-              YArray.push(l, r, activeLeft, activeRight)
-            }
-          }
-        }
-        resolve({XArray, YArray})
-      })
+    calcLineValues(arr) {
+      const length = Math.max(...arr) - Math.min(...arr) + 'px'
+      const origin = Math.min(...arr) + 'px'
+      return { length, origin }
     }
   },
   computed: {
