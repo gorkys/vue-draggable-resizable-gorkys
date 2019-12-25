@@ -718,7 +718,7 @@ export default {
         const nodes = this.$el.parentNode.childNodes
 
         let tem = {
-          value: { x: [], y: [] },
+          value: { x: [[] ,[], []], y: [[], [], []] },
           display: [],
           position: []
         }
