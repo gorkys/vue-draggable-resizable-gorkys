@@ -670,7 +670,7 @@ export default {
       if (this.isConflictCheck) {
         const nodes = this.$el.parentNode.childNodes // 获取当前父节点下所有子节点
         for (let item of nodes) {
-          if (item.className !== undefined && !item.className.includes(this.classNameActive)&& item.getAttribute('data-is-check') !== null && item.getAttribute('data-is-check') !== 'false') {
+          if (item.className !== undefined && !item.className.includes(this.classNameActive) && item.getAttribute('data-is-check') !== null && item.getAttribute('data-is-check') !== 'false') {
             const tw = item.offsetWidth
             const th = item.offsetHeight
             const tl = item.offsetLeft
@@ -718,7 +718,7 @@ export default {
         const nodes = this.$el.parentNode.childNodes
 
         let tem = {
-          value: { x: [[] ,[], []], y: [[], [], []] },
+          value: { x: [[], [], []], y: [[], [], []] },
           display: [],
           position: []
         }
