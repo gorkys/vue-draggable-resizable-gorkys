@@ -722,8 +722,8 @@ export default {
           display: [],
           position: []
         }
-        const { groupWidth, groupHeight, groupLeft, groupTop, AllLength } = await this.getActiveAll(nodes)
-        if(!(AllLength === 1)){
+        const { groupWidth, groupHeight, groupLeft, groupTop, bln } = await this.getActiveAll(nodes)
+        if(!bln){
           width = groupWidth
           height = groupHeight
           activeLeft = groupLeft
@@ -757,28 +757,28 @@ export default {
             tem['position'] = [t, b, t, b, t + h / 2, t + h / 2, l, r, l, r, l + w / 2, l + w / 2]
 
             if (ts) {
-              if(AllLength === 1){
+              if(bln){
                this.rawTop = t - height
                this.rawBottom = this.parentHeight - this.rawTop - height
               }
               tem.value.y[0].push(l, r, activeLeft, activeRight)
             }
             if (bs) {
-              if(AllLength === 1){
+              if(bln){
                this.rawTop = t
                this.rawBottom = this.parentHeight - this.rawTop - height
               }
               tem.value.y[0].push(l, r, activeLeft, activeRight)
             }
             if (TS) {
-              if(AllLength === 1){
+              if(bln){
                this.rawTop = b - height
                this.rawBottom = this.parentHeight - this.rawTop - height
               }
               tem.value.y[1].push(l, r, activeLeft, activeRight)
             }
             if (BS) {
-              if(AllLength === 1){
+              if(bln){
                this.rawTop = b
                this.rawBottom = this.parentHeight - this.rawTop - height
               }
@@ -786,28 +786,28 @@ export default {
             }
 
             if (ls) {
-              if(AllLength === 1){
+              if(bln){
                this.rawLeft = l - width
                this.rawRight = this.parentWidth - this.rawLeft - width
               }
               tem.value.x[0].push(t, b, activeTop, activeBottom)
             }
             if (rs) {
-              if(AllLength === 1){
+              if(bln){
                this.rawLeft = l
                this.rawRight = this.parentWidth - this.rawLeft - width
               }
               tem.value.x[0].push(t, b, activeTop, activeBottom)
             }
             if (LS) {
-              if(AllLength === 1){
+              if(bln){
                this.rawLeft = r - width
                this.rawRight = this.parentWidth - this.rawLeft - width
               }
               tem.value.x[1].push(t, b, activeTop, activeBottom)
             }
             if (RS) {
-              if(AllLength === 1){
+              if(bln){
                this.rawLeft = r
                this.rawRight = this.parentWidth - this.rawLeft - width
               }
@@ -815,38 +815,31 @@ export default {
             }
 
             if (hc) {
-              if(AllLength === 1){
+              if(bln){
                this.rawTop = t + h / 2 - height / 2
                this.rawBottom = this.parentHeight - this.rawTop - height
               }
               tem.value.y[2].push(l, r, activeLeft, activeRight)
             }
             if (vc) {
-              if(AllLength === 1){
+              if(bln){
                this.rawLeft = l + w / 2 - width / 2
                this.rawRight = this.parentWidth - this.rawLeft - width
               }
               tem.value.x[2].push(t, b, activeTop, activeBottom)
             }
-            for (let i = 0; i <= tem.display.length; i++) {
-              if(i < 6){
-                if(tem.display[i]){
-                  const j = Math.round(i / 2.5) // 重置Index为[0,0,1,1,2,2]
-                  const { origin , length } = this.calcLineValues(tem.value.y[j])
-                  refLine.hLine[j].display = tem.display[i]
-                  refLine.hLine[j].position = tem.position[i] + 'px'
-                  refLine.hLine[j].origin = origin
-                  refLine.hLine[j].lineLength = length
-                }
-              }else{
-                if(tem.display[i]){
-                  const j = Math.round((i - 6) / 2.5)
-                  const { origin , length } = this.calcLineValues(tem.value.x[j])
-                  refLine.vLine[j].display = tem.display[i]
-                  refLine.vLine[j].position = tem.position[i] + 'px'
-                  refLine.vLine[j].origin = origin
-                  refLine.vLine[j].lineLength = length
-                }
+            // 辅助线坐标与是否显示(display)对应的数组,易于循环遍历
+            const arrTem =[0, 1, 0, 1, 2, 2, 0, 1, 0, 1, 2, 2]
+            for (let i = 0; i <= arrTem.length; i++) {
+              // 前6为Y辅助线,后6为X辅助线
+              const xory = i < 6 ? 'y' : 'x'
+              const horv = i < 6 ? 'hLine' : 'vLine'
+              if(tem.display[i]){
+                const { origin , length } = this.calcLineValues(tem.value[xory][arrTem[i]])
+                refLine[horv][arrTem[i]].display = tem.display[i]
+                refLine[horv][arrTem[i]].position = tem.position[i] + 'px'
+                refLine[horv][arrTem[i]].origin = origin
+                refLine[horv][arrTem[i]].lineLength = length
               }
             }
           }
@@ -883,7 +876,8 @@ export default {
         groupLeft = Math.min(...YArray)
         groupTop = Math.min(...XArray)
       }
-      return { groupWidth, groupHeight, groupLeft, groupTop , AllLength }
+      const bln = AllLength === 1
+      return { groupWidth, groupHeight, groupLeft, groupTop , bln }
     }
   },
   computed: {
