@@ -627,7 +627,7 @@ export default {
       // 初始化辅助线数据
       const temArr = new Array(3).fill({ display: false, position: '', origin: '', lineLength: '' })
       const refLine = { vLine: [], hLine: [] }
-      for(let i in refLine){ refLine[i] = JSON.parse(JSON.stringify(temArr)) }
+      for (let i in refLine) { refLine[i] = JSON.parse(JSON.stringify(temArr)) }
 
       if (this.resizing) {
         this.resizing = false
@@ -669,8 +669,8 @@ export default {
 
       if (this.isConflictCheck) {
         const nodes = this.$el.parentNode.childNodes // 获取当前父节点下所有子节点
-        for (let item of nodes){
-          if (item !== this.$el && item.className !== undefined && item.getAttribute('data-is-check') !== null && item.getAttribute('data-is-check') !== 'false') {
+        for (let item of nodes) {
+          if (item.className !== undefined && !item.className.includes(this.classNameActive)&& item.getAttribute('data-is-check') !== null && item.getAttribute('data-is-check') !== 'false') {
             const tw = item.offsetWidth
             const th = item.offsetHeight
             const tl = item.offsetLeft
@@ -712,18 +712,18 @@ export default {
         // 初始化辅助线数据
         const temArr = new Array(3).fill({ display: false, position: '', origin: '', lineLength: '' })
         const refLine = { vLine: [], hLine: [] }
-        for(let i in refLine){ refLine[i] = JSON.parse(JSON.stringify(temArr)) }
+        for (let i in refLine) { refLine[i] = JSON.parse(JSON.stringify(temArr)) }
 
         // 获取当前父节点下所有子节点
         const nodes = this.$el.parentNode.childNodes
 
         let tem = {
-          value: { x: [[],[],[]], y: [[],[],[]]},
+          value: { x: [], y: [] },
           display: [],
           position: []
         }
         const { groupWidth, groupHeight, groupLeft, groupTop, bln } = await this.getActiveAll(nodes)
-        if(!bln){
+        if (!bln) {
           width = groupWidth
           height = groupHeight
           activeLeft = groupLeft
@@ -731,7 +731,7 @@ export default {
           activeTop = groupTop
           activeBottom = groupTop + groupHeight
         }
-        for (let item of nodes){
+        for (let item of nodes) {
           if (item.className !== undefined && !item.className.includes(this.classNameActive) && item.getAttribute('data-is-snap') !== null && item.getAttribute('data-is-snap') !== 'false') {
             const w = item.offsetWidth
             const h = item.offsetHeight
@@ -753,89 +753,89 @@ export default {
             const rs = Math.abs(l - activeLeft) <= this.snapTolerance // 外右
             const RS = Math.abs(r - activeLeft) <= this.snapTolerance // 外右
 
-            tem['display'] = [ts ,TS , bs, BS, hc, hc, ls , LS, rs, RS, vc, vc]
+            tem['display'] = [ts, TS, bs, BS, hc, hc, ls, LS, rs, RS, vc, vc]
             tem['position'] = [t, b, t, b, t + h / 2, t + h / 2, l, r, l, r, l + w / 2, l + w / 2]
 
             if (ts) {
-              if(bln){
-               this.rawTop = t - height
-               this.rawBottom = this.parentHeight - this.rawTop - height
+              if (bln) {
+                this.rawTop = t - height
+                this.rawBottom = this.parentHeight - this.rawTop - height
               }
               tem.value.y[0].push(l, r, activeLeft, activeRight)
             }
             if (bs) {
-              if(bln){
-               this.rawTop = t
-               this.rawBottom = this.parentHeight - this.rawTop - height
+              if (bln) {
+                this.rawTop = t
+                this.rawBottom = this.parentHeight - this.rawTop - height
               }
               tem.value.y[0].push(l, r, activeLeft, activeRight)
             }
             if (TS) {
-              if(bln){
-               this.rawTop = b - height
-               this.rawBottom = this.parentHeight - this.rawTop - height
+              if (bln) {
+                this.rawTop = b - height
+                this.rawBottom = this.parentHeight - this.rawTop - height
               }
               tem.value.y[1].push(l, r, activeLeft, activeRight)
             }
             if (BS) {
-              if(bln){
-               this.rawTop = b
-               this.rawBottom = this.parentHeight - this.rawTop - height
+              if (bln) {
+                this.rawTop = b
+                this.rawBottom = this.parentHeight - this.rawTop - height
               }
               tem.value.y[1].push(l, r, activeLeft, activeRight)
             }
 
             if (ls) {
-              if(bln){
-               this.rawLeft = l - width
-               this.rawRight = this.parentWidth - this.rawLeft - width
+              if (bln) {
+                this.rawLeft = l - width
+                this.rawRight = this.parentWidth - this.rawLeft - width
               }
               tem.value.x[0].push(t, b, activeTop, activeBottom)
             }
             if (rs) {
-              if(bln){
-               this.rawLeft = l
-               this.rawRight = this.parentWidth - this.rawLeft - width
+              if (bln) {
+                this.rawLeft = l
+                this.rawRight = this.parentWidth - this.rawLeft - width
               }
               tem.value.x[0].push(t, b, activeTop, activeBottom)
             }
             if (LS) {
-              if(bln){
-               this.rawLeft = r - width
-               this.rawRight = this.parentWidth - this.rawLeft - width
+              if (bln) {
+                this.rawLeft = r - width
+                this.rawRight = this.parentWidth - this.rawLeft - width
               }
               tem.value.x[1].push(t, b, activeTop, activeBottom)
             }
             if (RS) {
-              if(bln){
-               this.rawLeft = r
-               this.rawRight = this.parentWidth - this.rawLeft - width
+              if (bln) {
+                this.rawLeft = r
+                this.rawRight = this.parentWidth - this.rawLeft - width
               }
               tem.value.x[1].push(t, b, activeTop, activeBottom)
             }
 
             if (hc) {
-              if(bln){
-               this.rawTop = t + h / 2 - height / 2
-               this.rawBottom = this.parentHeight - this.rawTop - height
+              if (bln) {
+                this.rawTop = t + h / 2 - height / 2
+                this.rawBottom = this.parentHeight - this.rawTop - height
               }
               tem.value.y[2].push(l, r, activeLeft, activeRight)
             }
             if (vc) {
-              if(bln){
-               this.rawLeft = l + w / 2 - width / 2
-               this.rawRight = this.parentWidth - this.rawLeft - width
+              if (bln) {
+                this.rawLeft = l + w / 2 - width / 2
+                this.rawRight = this.parentWidth - this.rawLeft - width
               }
               tem.value.x[2].push(t, b, activeTop, activeBottom)
             }
             // 辅助线坐标与是否显示(display)对应的数组,易于循环遍历
-            const arrTem =[0, 1, 0, 1, 2, 2, 0, 1, 0, 1, 2, 2]
+            const arrTem = [0, 1, 0, 1, 2, 2, 0, 1, 0, 1, 2, 2]
             for (let i = 0; i <= arrTem.length; i++) {
               // 前6为Y辅助线,后6为X辅助线
               const xory = i < 6 ? 'y' : 'x'
               const horv = i < 6 ? 'hLine' : 'vLine'
-              if(tem.display[i]){
-                const { origin , length } = this.calcLineValues(tem.value[xory][arrTem[i]])
+              if (tem.display[i]) {
+                const { origin, length } = this.calcLineValues(tem.value[xory][arrTem[i]])
                 refLine[horv][arrTem[i]].display = tem.display[i]
                 refLine[horv][arrTem[i]].position = tem.position[i] + 'px'
                 refLine[horv][arrTem[i]].origin = origin
@@ -843,27 +843,31 @@ export default {
               }
             }
           }
-
         }
         this.$emit('refLineParams', refLine)
       }
     },
-    calcLineValues(arr) {
+    calcLineValues (arr) {
       const length = Math.max(...arr) - Math.min(...arr) + 'px'
       const origin = Math.min(...arr) + 'px'
       return { length, origin }
     },
-    async getActiveAll(nodes) {
-      const activeAll = [], XArray = [], YArray = []
-      let groupWidth = 0, groupHeight = 0, groupLeft = 0, groupTop = 0
-      for (let item of nodes){
-        if(item.className !== undefined && item.className.includes(this.classNameActive)){
+    async getActiveAll (nodes) {
+      const activeAll = []
+      const XArray = []
+      const YArray = []
+      let groupWidth = 0
+      let groupHeight = 0
+      let groupLeft = 0
+      let groupTop = 0
+      for (let item of nodes) {
+        if (item.className !== undefined && item.className.includes(this.classNameActive)) {
           activeAll.push(item)
         }
       }
       const AllLength = activeAll.length
-      if(AllLength > 1){
-        for (let i of activeAll){
+      if (AllLength > 1) {
+        for (let i of activeAll) {
           const l = i.offsetLeft
           const r = l + i.offsetWidth
           const t = i.offsetTop
@@ -877,7 +881,7 @@ export default {
         groupTop = Math.min(...XArray)
       }
       const bln = AllLength === 1
-      return { groupWidth, groupHeight, groupLeft, groupTop , bln }
+      return { groupWidth, groupHeight, groupLeft, groupTop, bln }
     }
   },
   computed: {
