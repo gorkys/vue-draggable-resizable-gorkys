@@ -13,6 +13,8 @@
 - 吸附对齐
 - 默认样式优化
 
+> Q交流群：138146781
+
 ## 说明
 
 > 说明：组件基于[vue-draggable-resizable](https://github.com/mauricius/vue-draggable-resizable)进行二次开发
