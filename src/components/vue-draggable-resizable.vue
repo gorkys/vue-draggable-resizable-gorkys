@@ -218,6 +218,10 @@ export default {
         return typeof val === 'number'
       }
     },
+    snapToTargets: {
+      type: String,
+      default: null
+    },
     // 缩放比例
     scaleRatio: {
       type: Number,
@@ -715,7 +719,12 @@ export default {
         for (let i in refLine) { refLine[i] = JSON.parse(JSON.stringify(temArr)) }
 
         // 获取当前父节点下所有子节点
-        const nodes = this.$el.parentNode.childNodes
+        const nodes = Array.from(this.$el.parentNode.childNodes)
+
+        if (this.snapToTargets) {
+          const targets = document.querySelectorAll(this.snapToTargets)
+          if (targets.length) nodes.push(Array.from(targets))
+        }
 
         let tem = {
           value: { x: [[], [], []], y: [[], [], []] },
