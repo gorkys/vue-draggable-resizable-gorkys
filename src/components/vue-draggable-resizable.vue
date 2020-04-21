@@ -741,7 +741,14 @@ export default {
           activeBottom = groupTop + groupHeight
         }
         for (let item of nodes) {
-          if (item.className !== undefined && !item.className.includes(this.classNameActive) && item.getAttribute('data-is-snap') !== null && item.getAttribute('data-is-snap') !== 'false') {
+          const className = item.className
+          if (className === undefined) continue
+          const snapIgnore = item.getAttribute('data-is-snap')
+          item.isGuideLine = className.includes(this.snapToTarget)
+          if (item.isGuideLine) {
+            item.isVGuideLine = className.includes('line-v')
+          }
+          if (!className.includes(this.classNameActive) && snapIgnore !== null && snapIgnore !== 'false') {
             const w = item.offsetWidth
             const h = item.offsetHeight
             const l = item.offsetLeft // 对齐目标的left
@@ -870,35 +877,17 @@ export default {
       let groupLeft = 0
       let groupTop = 0
       for (let item of nodes) {
-        const className = item.className
-        if (className === undefined) continue;
-        item.isVDRWrapper = className.includes(this.classNameActive)
-        item.isGuideLine = className.includes(this.snapToTarget)
-        if (item.isVDRWrapper || item.isGuideLine) {
-          if (item.isGuideLine) {
-            item.isVGuideLine = className.includes('line-v')
-          }
+        if (item.className !== undefined && item.className.includes(this.classNameActive)) {
           activeAll.push(item)
         }
       }
       const AllLength = activeAll.length
       if (AllLength > 1) {
         for (let i of activeAll) {
-          let l, r, t, b
-          if (i.isVDRWrapper) {
-            l = i.offsetLeft
-            r = l + i.offsetWidth
-            t = i.offsetTop
-            b = t + i.offsetHeight
-          } else if (i.isGuideLine) {
-            if (i.isVGuideLine) {
-              l = r = i.offsetLeft
-              t = b = 0
-            } else {
-              l = r = 0
-              t = b = i.offsetTop
-            }
-          }
+          const l = i.offsetLeft
+          const r = l + i.offsetWidth
+          const t = i.offsetTop
+          const b = t + i.offsetHeight
           XArray.push(t, b)
           YArray.push(l, r)
         }
