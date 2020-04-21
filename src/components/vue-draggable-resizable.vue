@@ -218,7 +218,7 @@ export default {
         return typeof val === 'number'
       }
     },
-    snapToTargets: {
+    snapToTarget: {
       type: String,
       default: null
     },
@@ -721,9 +721,9 @@ export default {
         // 获取当前父节点下所有子节点
         const nodes = Array.from(this.$el.parentNode.childNodes)
 
-        if (this.snapToTargets) {
-          const targets = document.querySelectorAll(this.snapToTargets)
-          if (targets.length) nodes.push(Array.from(targets))
+        if (this.snapToTarget) {
+          const targets = document.querySelectorAll('.' + this.snapToTarget)
+          if (targets.length) nodes.push(...Array.from(targets))
         }
 
         let tem = {
@@ -870,7 +870,8 @@ export default {
       let groupLeft = 0
       let groupTop = 0
       for (let item of nodes) {
-        if (item.className !== undefined && item.className.includes(this.classNameActive)) {
+        const className = item.className
+        if (className !== undefined && (className.includes(this.classNameActive) || className.includes(this.snapToTarget))) {
           activeAll.push(item)
         }
       }
