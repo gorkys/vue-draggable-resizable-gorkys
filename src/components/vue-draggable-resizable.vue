@@ -723,7 +723,7 @@ export default {
 
         if (this.snapToTarget) {
           const targets = document.querySelectorAll('.' + this.snapToTarget)
-          if (targets.length) nodes.push(...Array.from(targets))
+          if (targets.length) nodes.push(...targets)
         }
 
         let tem = {
@@ -871,17 +871,34 @@ export default {
       let groupTop = 0
       for (let item of nodes) {
         const className = item.className
-        if (className !== undefined && (className.includes(this.classNameActive) || className.includes(this.snapToTarget))) {
+        if (className === undefined) continue;
+        item.isVDRWrapper = className.includes(this.classNameActive)
+        item.isGuideLine = className.includes(this.snapToTarget)
+        if (item.isVDRWrapper || item.isGuideLine) {
+          if (item.isGuideLine) {
+            item.isVGuideLine = className.includes('line-v')
+          }
           activeAll.push(item)
         }
       }
       const AllLength = activeAll.length
       if (AllLength > 1) {
         for (let i of activeAll) {
-          const l = i.offsetLeft
-          const r = l + i.offsetWidth
-          const t = i.offsetTop
-          const b = t + i.offsetHeight
+          let l, r, t, b
+          if (i.isVDRWrapper) {
+            l = i.offsetLeft
+            r = l + i.offsetWidth
+            t = i.offsetTop
+            b = t + i.offsetHeight
+          } else if (i.isGuideLine) {
+            if (i.isVGuideLine) {
+              l = r = i.offsetLeft
+              t = b = 0
+            } else {
+              l = r = 0
+              t = b = i.offsetTop
+            }
+          }
           XArray.push(t, b)
           YArray.push(l, r)
         }
