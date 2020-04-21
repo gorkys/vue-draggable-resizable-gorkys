@@ -748,9 +748,16 @@ export default {
           if (item.isGuideLine) {
             item.isVGuideLine = className.includes('line-v')
           }
-          if (!className.includes(this.classNameActive) && snapIgnore !== null && snapIgnore !== 'false') {
-            const w = item.offsetWidth
-            const h = item.offsetHeight
+          if (!className.includes(this.classNameActive) && (snapIgnore !== null || item.isGuideLine) && snapIgnore !== 'false') {
+            let w = item.offsetWidth
+            let h = item.offsetHeight
+            if (item.isGuideLine) {
+              if (item.isVGuideLine) {
+                w = 0
+              } else {
+                h = 0
+              }
+            }
             const l = item.offsetLeft // 对齐目标的left
             const r = l + w // 对齐目标right
             const t = item.offsetTop// 对齐目标的top
