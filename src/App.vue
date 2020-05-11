@@ -1,9 +1,14 @@
 <template>
   <div id="app">
-    <div style="height: 800px; width: 1200px; border: 1px solid red; position: relative;margin: 0 auto">
+	  <div style="margin: 0 auto;width:400px;display: flex;justify-content: space-between">
+		  <input v-model="scale.current" type="range" min="0.2" max="2" step="0.1" style="width: 320px">
+		  <span style="margin-left: 20px">{{scale.current*100}}%</span>
+	  </div>
+    <div :style="{transform: `scale(${scale.current})`}" style="height: 700px; width: 1200px; border: 1px solid red; position: relative;margin: 0 auto">
       <vue-draggable-resizable
         :w="200"
         :h="200"
+        :scaleRatio="scale.current"
         :parent="true"
         :debug="false"
         :min-width="200"
@@ -17,6 +22,7 @@
       <vue-draggable-resizable
         :w="200"
         :h="200"
+        :scaleRatio="scale.current"
         :parent="true"
         :x="210"
         :debug="false"
@@ -31,6 +37,7 @@
       <vue-draggable-resizable
         :w="200"
         :h="200"
+        :scaleRatio="scale.current"
         :parent="true"
         :x="420"
         :debug="false"
@@ -68,6 +75,12 @@
     },
     data () {
       return {
+        scale: {
+          current: 0.6,
+          min: 0.2,
+          max: 2,
+          step: .2
+        },
         vLine: [],
         hLine: []
       }
@@ -78,7 +91,20 @@
         const { vLine, hLine } = params
         this.vLine = vLine
         this.hLine = hLine
+      },
+      handleWheelEvent(e) {
+        if (e.wheelDeltaY > 0 && this.scale.current + this.scale.step < this.scale.max) {
+          this.scale.current += this.scale.step
+        } else if (e.wheelDeltaY < 0 && this.scale.current - this.scale.step > this.scale.min) {
+          this.scale.current -= this.scale.step
+        }
       }
+    },
+	mounted() {
+	  document.addEventListener("wheel", this.handleWheelEvent, false)
+	},
+    beforeDestroy() {
+      document.removeEventListener("wheel", this.handleWheelEvent, false)
     }
   }
 </script>
