@@ -15,7 +15,7 @@
       v-for="handle in actualHandles"
       :key="handle"
       :class="[classNameHandle, classNameHandle + '-' + handle]"
-      :style="{display: enabled ? 'block' : 'none'}"
+      :style="handleStyle(handle)"
       @mousedown.stop.prevent="handleDown(handle, $event)"
       @touchstart.stop.prevent="handleTouchDown(handle, $event)"
     >
@@ -28,6 +28,7 @@
 <script>
 import { matchesSelectorToParentElements, addEvent, removeEvent } from '../utils/dom'
 
+const stickSize = 8;
 const events = {
   mouse: {
     start: 'mousedown',
@@ -885,6 +886,32 @@ export default {
     }
   },
   computed: {
+    // 计算把手的新位置
+    handleStyle(){
+      console.log(`handleStyle...`)
+      return (stick)=>{
+        const styleMapping = {
+          y: {
+            t: 'top',
+            m: 'marginTop',
+            b: 'bottom',
+          },
+          x: {
+            l: 'left',
+            m: 'marginLeft',
+            r: 'right',
+          }
+        }
+        const stickStyle = {
+          width: `${stickSize / this.scaleRatio}px`,
+          height: `${stickSize / this.scaleRatio}px`,
+        };
+        stickStyle[styleMapping.y[stick[0]]] = `${stickSize / this.scaleRatio / -2}px`;
+        stickStyle[styleMapping.x[stick[1]]] = `${stickSize / this.scaleRatio / -2}px`;
+        stickStyle.display = this.enabled ? 'block': 'none'
+        return stickStyle;
+      }
+    },
     style () {
       return {
         position: 'absolute',
