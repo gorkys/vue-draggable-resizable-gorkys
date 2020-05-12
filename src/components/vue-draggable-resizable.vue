@@ -358,6 +358,10 @@ export default {
     },
     // 元素按下
     elementDown (e) {
+      if (e.which !== 1) {
+        return
+      }
+
       const target = e.target || e.srcElement
 
       if (this.$el.contains(target)) {
@@ -438,6 +442,10 @@ export default {
     },
     // 控制柄按下
     handleDown (handle, e) {
+      if (e.which !== 1) {
+        return
+      }
+
       if (this.onResizeStart && this.onResizeStart(handle, e) === false) {
         return
       }
