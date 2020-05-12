@@ -373,6 +373,8 @@ export default {
           (this.dragHandle && !matchesSelectorToParentElements(target, this.dragHandle, this.$el)) ||
           (this.dragCancel && matchesSelectorToParentElements(target, this.dragCancel, this.$el))
         ) {
+          this.dragging = false
+
           return
         }
 
