@@ -20,8 +20,8 @@
 }
 .handle-tm {
   top: -5px;
-  left: 50%;
-  margin-left: -5px;
+  left: calc(50% - 4px);
+  /*margin-left: -5px;*/
   cursor: n-resize;
 }
 .handle-tr {
@@ -30,14 +30,14 @@
   cursor: ne-resize;
 }
 .handle-ml {
-  top: 50%;
-  margin-top: -5px;
+  top: calc(50% - 4px);
+  /*margin-top: -5px;*/
   left: -5px;
   cursor: w-resize;
 }
 .handle-mr {
-  top: 50%;
-  margin-top: -5px;
+  top: calc(50% - 4px);
+  /*margin-top: -5px;*/
   right: -5px;
   cursor: e-resize;
 }
@@ -48,8 +48,8 @@
 }
 .handle-bm {
   bottom: -5px;
-  left: 50%;
-  margin-left: -5px;
+  left: calc(50% - 4px);
+  /*margin-left: -5px;*/
   cursor: s-resize;
 }
 .handle-br {
