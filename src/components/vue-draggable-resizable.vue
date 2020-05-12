@@ -358,7 +358,7 @@ export default {
     },
     // 元素按下
     elementDown (e) {
-      if (e.which !== 1) {
+      if (e instanceof MouseEvent && e.which !== 1) {
         return
       }
 
@@ -444,7 +444,7 @@ export default {
     },
     // 控制柄按下
     handleDown (handle, e) {
-      if (e.which !== 1) {
+      if (e instanceof MouseEvent && e.which !== 1) {
         return
       }
 
