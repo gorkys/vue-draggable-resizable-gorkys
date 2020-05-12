@@ -8,7 +8,7 @@
       [classNameDraggable]: draggable,
       [classNameResizable]: resizable
     }, className]"
-    @mousedown="elementDown"
+    @mousedown="elementMouseDown"
     @touchstart="elementTouchDown"
   >
     <div
@@ -354,6 +354,10 @@ export default {
     elementTouchDown (e) {
       eventsFor = events.touch
 
+      this.elementDown(e)
+    },
+    elementMouseDown (e) {
+      eventsFor = events.mouse
       this.elementDown(e)
     },
     // 元素按下
