@@ -265,22 +265,22 @@ Default: `true`
 ```
 
 #### w
-Type: `Number`<br>
+Type: `Number|String`<br>
 Required: `false`<br>
 Default: `200`
 
-定义元素的初始宽度。
+定义元素的初始宽度。它还支持`auto`，但是当您开始调整大小时，该值将退回到一个数字。
 
 ```html
 <vue-draggable-resizable :w="200">
 ```
 
 #### h
-Type: `Number`<br>
+Type: `Number|String`<br>
 Required: `false`<br>
 Default: `200`
 
-定义元素的初始高度。
+定义元素的初始高度。它还支持`auto`，但是当您开始调整大小时，该值将退回到一个数字。
 
 ```html
 <vue-draggable-resizable :h="200">
@@ -468,6 +468,24 @@ function onDragStartCallback(ev){
 }
 ```
 
+#### onDrag
+Type: `Function`<br>
+Required: `false`<br>
+Default: `null`
+
+在拖动元素之前调用。该函数接收x和y的下一个值。如果任何处理程序返回了“ false”，则该操作将取消。
+
+```html
+<vue-draggable-resizable :onDrag="onDragCallback">
+```
+
+```js
+function onDragStartCallback(x, y){
+   ...
+   // return false; — for cancel
+}
+```
+
 
 #### onResizeStart
 Type: `Function`<br>
@@ -483,6 +501,24 @@ Default: `null`
 ```js
 
 function onResizeStartCallback(handle, ev){
+   ...
+   // return false; — for cancel
+}
+```
+
+#### onResize
+Type: `Function`<br>
+Required: `false`<br>
+Default: `null`
+
+在调整元素大小之前调用。该函数接收句柄和下一个值“ x”，“ y”，“ width”和“ height”。如果任何处理程序返回了“ false”，则该操作将取消。
+
+```html
+<vue-draggable-resizable :onResize="onResizeCallback">
+```
+
+```js
+function onResizeStartCallback(handle, x, y, width, height){
    ...
    // return false; — for cancel
 }

@@ -1,6 +1,6 @@
 {
   "name": "vue-draggable-resizable-gorkys",
-  "version": "2.3.6",
+  "version": "2.4.0",
   "author": "Maurizio Bonani <maurizio.bonani@gmail.com>",
   "main": "dist/VueDraggableResizable.umd.min.js",
   "unpkg": "dist/VueDraggableResizable.umd.min.js",
@@ -14,8 +14,11 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "build-bundle": "vue-cli-service build --target lib --name VueDraggableResizable ./src/index.js",
-    "unit": "cross-env BABEL_ENV=test node_modules/karma/bin/karma start tests/unit/karma.conf.js --single-run",
-    "unit-watch": "cross-env BABEL_ENV=test node_modules/karma/bin/karma start tests/unit/karma.conf.js",
+    "unit": "cross-env BABEL_ENV=test mocha-webpack --webpack-config=webpack.test.js tests/unit/specs/**/*.js",
+    "unit-watch": "cross-env BABEL_ENV=test mocha-webpack --watch --webpack-config=webpack.test.js tests/unit/specs/**/*.js",
+    "feature": "cross-env BABEL_ENV=test node_modules/karma/bin/karma start tests/feature/karma.conf.js --single-run",
+    "feature-watch": "cross-env BABEL_ENV=test node_modules/karma/bin/karma start tests/feature/karma.conf.js",
+    "test": "npm run unit && npm run feature",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "gh-pages:clean": "rm -rf docs",
     "gh-pages:build": "build-storybook -c .storybook -o docs",
@@ -28,7 +31,7 @@
     "@storybook/vue": "^5.1.11",
     "@vue/cli-plugin-babel": "^3.11.0",
     "@vue/cli-plugin-eslint": "^3.11.0",
-    "@vue/cli-service": "^3.11.0",
+    "@vue/cli-service": "^4.3.1",
     "@vue/eslint-config-standard": "^4.0.0",
     "@vue/test-utils": "^1.0.0-beta.29",
     "babel-plugin-istanbul": "^5.2.0",
@@ -36,7 +39,7 @@
     "chai": "^4.1.2",
     "cross-env": "^5.2.1",
     "git-directory-deploy": "^1.5.1",
-    "karma": "^4.3.0",
+    "karma": "^5.0.1",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^3.1.0",
     "karma-coverage": "^2.0.1",
@@ -46,11 +49,13 @@
     "karma-spec-reporter": "0.0.32",
     "karma-webpack": "^4.0.2",
     "mocha": "^6.2.0",
+    "mocha-webpack": "^2.0.0-beta.0",
     "sinon": "^7.4.2",
     "style-loader": "^1.0.0",
     "syn": "^0.14.1",
     "vue": "^2.5.21",
-    "vue-template-compiler": "^2.5.21"
+    "vue-template-compiler": "^2.5.21",
+    "webpack": "^4.42.1"
   },
   "files": [
     "/dist/*",
@@ -76,5 +81,8 @@
     "component",
     "dragabble",
     "resizable"
-  ]
+  ],
+  "dependencies": {
+    "core-js": "^2.6.11"
+  }
 }

@@ -45,11 +45,13 @@
       <!--辅助线-->
       <span class="ref-line v-line"
             v-for="item in vLine"
+            :key="item"
             v-show="item.display"
             :style="{ left: item.position, top: item.origin, height: item.lineLength}"
       />
       <span class="ref-line h-line"
             v-for="item in hLine"
+            :key="item"
             v-show="item.display"
             :style="{ top: item.position, left: item.origin, width: item.lineLength}"
       />
@@ -59,28 +61,28 @@
 </template>
 
 <script>
-  import VueDraggableResizable from './components/vue-draggable-resizable'
-  import './components/vue-draggable-resizable.css'
-  export default {
-    name: 'app',
-    components: {
-      VueDraggableResizable
-    },
-    data () {
-      return {
-        vLine: [],
-        hLine: []
-      }
-    },
-    methods: {
-      // 辅助线回调事件
-      getRefLineParams (params) {
-        const { vLine, hLine } = params
-        this.vLine = vLine
-        this.hLine = hLine
-      }
+import VueDraggableResizable from './components/vue-draggable-resizable'
+import './components/vue-draggable-resizable.css'
+export default {
+  name: 'app',
+  components: {
+    VueDraggableResizable
+  },
+  data () {
+    return {
+      vLine: [],
+      hLine: []
+    }
+  },
+  methods: {
+    // 辅助线回调事件
+    getRefLineParams (params) {
+      const { vLine, hLine } = params
+      this.vLine = vLine
+      this.hLine = hLine
     }
   }
+}
 </script>
 
 <style>
