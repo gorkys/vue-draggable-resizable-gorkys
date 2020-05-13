@@ -12,7 +12,7 @@ __记得为句柄类设置`position：absolute`__
 
 ~~~css
 .my-handle-class {
-    position: absolute.
+    position: absolute;
     background-color: pink;
     border: 1px solid black;
     border-radius: 50%;

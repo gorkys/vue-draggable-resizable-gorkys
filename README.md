@@ -34,10 +34,24 @@
 ![](https://cdn.jsdelivr.net/gh/gorkys/CDN-Blog@master/Project/vue-draggable-resizable/demo.gif)
 
 ## 新增Props
+**handleInfo**<br/>
+类型: `Object`<br/>必需: `false`<br/>默认: `{
+                                                size: 8,
+                                                offset: -5,
+                                                switch: true
+                                              }`
+
+当使用`transform:scale()`进行缩放操作时，其中`switch`为是否让handle始终保持视觉效果不变,`size`为handle的大小(宽高相同),
+`offset`为handle的位置偏移，通常在自定义handle样式时需要设置。
+
+```vue
+<vue-draggable-resizable :handle-info="{size: 14,offset: -5,switch: true}" />
+```
+
 **scaleRatio**<br/>
 类型: `Number`<br/>必需: `false`<br/>默认: `1`
 
-当使用`transform:scale()`进行缩放操作后，用来修复操作组件时鼠标指针与移动缩放位置有所偏移的情况
+当使用`transform:scale()`进行缩放操作时，用来修复操作组件时鼠标指针与移动缩放位置有所偏移的情况
 
 详见:[Issues](https://github.com/gorkys/vue-draggable-resizable/issues/6)
 

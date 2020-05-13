@@ -15,7 +15,7 @@
       v-for="handle in actualHandles"
       :key="handle"
       :class="[classNameHandle, classNameHandle + '-' + handle]"
-      :style="{display: enabled ? 'block' : 'none'}"
+      :style="handleStyle(handle)"
       @mousedown.stop.prevent="handleDown(handle, $event)"
       @touchstart.stop.prevent="handleTouchDown(handle, $event)"
     >
@@ -240,6 +240,17 @@ export default {
       type: Number,
       default: 1,
       validator: (val) => typeof val === 'number'
+    },
+    // handle是否缩放
+    handleInfo: {
+      type: Object,
+      default: () => {
+        return {
+          size: 8,
+          offset: -5,
+          switch: true
+        }
+      }
     }
   },
 
@@ -1013,6 +1024,60 @@ export default {
     }
   },
   computed: {
+    handleStyle () {
+      return (stick) => {
+        if (!this.handleInfo.switch) return { display: this.enabled ? 'block' : 'none' }
+
+        const size = (this.handleInfo.size / this.scaleRatio).toFixed(2)
+        const offset = (this.handleInfo.offset / this.scaleRatio).toFixed(2)
+        const center = (size / 2).toFixed(2)
+
+        const styleMap = {
+          tl: {
+            top: `${offset}px`,
+            left: `${offset}px`
+          },
+          tm: {
+            top: `${offset}px`,
+            left: `calc(50% - ${center}px)`
+          },
+          tr: {
+            top: `${offset}px`,
+            right: `${offset}px`
+          },
+          mr: {
+            top: `calc(50% - ${center}px)`,
+            right: `${offset}px`
+          },
+          br: {
+            bottom: `${offset}px`,
+            right: `${offset}px`
+          },
+          bm: {
+            bottom: `${offset}px`,
+            right: `calc(50% - ${center}px)`
+          },
+          bl: {
+            bottom: `${offset}px`,
+            left: `${offset}px`
+          },
+          ml: {
+            top: `calc(50% - ${center}px)`,
+            left: `${offset}px`
+          }
+        }
+        const stickStyle = {
+          width: `${size}px`,
+          height: `${size}px`,
+          top: styleMap[stick].top,
+          left: styleMap[stick].left,
+          right: styleMap[stick].right,
+          bottom: styleMap[stick].bottom
+        }
+        stickStyle.display = this.enabled ? 'block' : 'none'
+        return stickStyle
+      }
+    },
     style () {
       return {
         transform: `translate(${this.left}px, ${this.top}px)`,
