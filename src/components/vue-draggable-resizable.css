@@ -14,47 +14,47 @@
   box-shadow: 0 0 2px #bbb;
 }
 .handle-tl {
-  top: -5px;
-  left: -5px;
+  /*top: -5px;*/
+  /*left: -5px;*/
   cursor: nw-resize;
 }
 .handle-tm {
-  top: -5px;
+  /*top: -5px;*/
   left: 50%;
-  margin-left: -5px;
+  /*margin-left: -5px;*/
   cursor: n-resize;
 }
 .handle-tr {
-  top: -5px;
-  right: -5px;
+  /*top: -5px;*/
+  /*right: -5px;*/
   cursor: ne-resize;
 }
 .handle-ml {
   top: 50%;
-  margin-top: -5px;
-  left: -5px;
+  /*margin-top: -5px;*/
+  /*left: -5px;*/
   cursor: w-resize;
 }
 .handle-mr {
   top: 50%;
-  margin-top: -5px;
-  right: -5px;
+  /*margin-top: -5px;*/
+  /*right: -5px;*/
   cursor: e-resize;
 }
 .handle-bl {
-  bottom: -5px;
-  left: -5px;
+  /*bottom: -5px;*/
+  /*left: -5px;*/
   cursor: sw-resize;
 }
 .handle-bm {
-  bottom: -5px;
+  /*bottom: -5px;*/
   left: 50%;
-  margin-left: -5px;
+  /*margin-left: -5px;*/
   cursor: s-resize;
 }
 .handle-br {
-  bottom: -5px;
-  right: -5px;
+  /*bottom: -5px;*/
+  /*right: -5px;*/
   cursor: se-resize;
 }
 /*旋转handle*/
