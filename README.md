@@ -75,6 +75,22 @@
 ```vue
 <vue-draggable-resizable :snap="true" :snap-tolerance="20" />
 ```
+
+**snapToTarget**<br/>
+类型: `String`<br/>
+必需: `false`<br/>
+默认: `null`
+
+当调用`snap`时，定义组件对齐到其他外部元素。
+
+```vue
+<!-- guide-line 为外部元素样式名 -->
+<vue-draggable-resizable
+  :snap="true"
+  :snap-tolerance="20"
+  snap-to-target="guide-line"
+/>
+```
 ## 新增Events
 **refLineParams**<br/>
 参数: params<br/>

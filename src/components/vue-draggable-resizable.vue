@@ -218,6 +218,10 @@ export default {
         return typeof val === 'number'
       }
     },
+    snapToTarget: {
+      type: String,
+      default: null
+    },
     // 缩放比例
     scaleRatio: {
       type: Number,
@@ -715,7 +719,12 @@ export default {
         for (let i in refLine) { refLine[i] = JSON.parse(JSON.stringify(temArr)) }
 
         // 获取当前父节点下所有子节点
-        const nodes = this.$el.parentNode.childNodes
+        const nodes = Array.from(this.$el.parentNode.childNodes)
+
+        if (this.snapToTarget) {
+          const targets = document.querySelectorAll('.' + this.snapToTarget)
+          if (targets.length) nodes.push(...targets)
+        }
 
         let tem = {
           value: { x: [[], [], []], y: [[], [], []] },
@@ -732,9 +741,23 @@ export default {
           activeBottom = groupTop + groupHeight
         }
         for (let item of nodes) {
-          if (item.className !== undefined && !item.className.includes(this.classNameActive) && item.getAttribute('data-is-snap') !== null && item.getAttribute('data-is-snap') !== 'false') {
-            const w = item.offsetWidth
-            const h = item.offsetHeight
+          const className = item.className
+          if (className === undefined) continue
+          const snapIgnore = item.getAttribute('data-is-snap')
+          item.isGuideLine = className.includes(this.snapToTarget)
+          if (item.isGuideLine) {
+            item.isVGuideLine = className.includes('line-v')
+          }
+          if (!className.includes(this.classNameActive) && (snapIgnore !== null || item.isGuideLine) && snapIgnore !== 'false') {
+            let w = item.offsetWidth
+            let h = item.offsetHeight
+            if (item.isGuideLine) {
+              if (item.isVGuideLine) {
+                w = 0
+              } else {
+                h = 0
+              }
+            }
             const l = item.offsetLeft // 对齐目标的left
             const r = l + w // 对齐目标right
             const t = item.offsetTop// 对齐目标的top
