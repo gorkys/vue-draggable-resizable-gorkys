@@ -45,11 +45,13 @@
       <!--辅助线-->
       <span class="ref-line v-line"
             v-for="item in vLine"
+            :key="item.id"
             v-show="item.display"
             :style="{ left: item.position, top: item.origin, height: item.lineLength}"
       />
       <span class="ref-line h-line"
             v-for="item in hLine"
+            :key="item.id"
             v-show="item.display"
             :style="{ top: item.position, left: item.origin, width: item.lineLength}"
       />
@@ -76,8 +78,15 @@ export default {
     // 辅助线回调事件
     getRefLineParams (params) {
       const { vLine, hLine } = params
-      this.vLine = vLine
-      this.hLine = hLine
+      let id = 0
+      this.vLine = vLine.map(item => {
+        item['id'] = ++id
+        return item
+      })
+      this.hLine = hLine.map(item => {
+        item['id'] = ++id
+        return item
+      })
     }
   }
 }

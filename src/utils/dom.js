@@ -1,6 +1,6 @@
 import { isFunction } from './fns'
 
-//将选择器与父元素匹配
+// 将选择器与父元素匹配
 export function matchesSelectorToParentElements (el, selector, baseNode) {
   let node = el
 
