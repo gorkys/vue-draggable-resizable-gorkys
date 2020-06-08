@@ -420,6 +420,8 @@ export default {
         this.mouseClickPosition.right = this.right
         this.mouseClickPosition.top = this.top
         this.mouseClickPosition.bottom = this.bottom
+        this.mouseClickPosition.w = this.width
+        this.mouseClickPosition.h = this.height
 
         if (this.parent) {
           this.bounds = this.calcDragLimits()
@@ -494,6 +496,8 @@ export default {
       this.mouseClickPosition.right = this.right
       this.mouseClickPosition.top = this.top
       this.mouseClickPosition.bottom = this.bottom
+      this.mouseClickPosition.w = this.width
+      this.mouseClickPosition.h = this.height
 
       this.bounds = this.calcResizeLimits()
 
@@ -829,6 +833,8 @@ export default {
               this.left = this.mouseClickPosition.left
               this.right = this.mouseClickPosition.right
               this.bottom = this.mouseClickPosition.bottom
+              this.width = this.mouseClickPosition.w
+              this.height = this.mouseClickPosition.h
             }
           }
         }
