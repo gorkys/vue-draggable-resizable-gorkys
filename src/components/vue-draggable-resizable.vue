@@ -1026,6 +1026,7 @@ export default {
     // 正则获取left与top
     formatTransformVal (string) {
       let [left, top] = string.replace(/[^0-9\-,]/g, '').split(',')
+      if (top === undefined) top = 0
       return [+left, +top]
     }
   },
