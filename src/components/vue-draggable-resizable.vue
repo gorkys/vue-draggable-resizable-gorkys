@@ -616,7 +616,7 @@ export default {
       }
     },
     // 元素移动
-    handleDrag  (e) {
+    async handleDrag  (e) {
       const axis = this.axis
       const grid = this.grid
       const bounds = this.bounds
@@ -639,8 +639,7 @@ export default {
       this.right = right
       this.bottom = bottom
 
-      this.snapCheck()
-
+      await this.snapCheck()
       this.$emit('dragging', this.left, this.top)
     },
     moveHorizontally (val) {
