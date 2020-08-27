@@ -346,6 +346,9 @@ export default {
     checkParentSize () {
       if (this.parent) {
         const [newParentWidth, newParentHeight] = this.getParentSize()
+        // 修复父元素改变大小后，组件resizing时活动异常
+        this.right = newParentWidth - this.width - this.left
+        this.bottom = newParentHeight - this.height - this.top
 
         this.parentWidth = newParentWidth
         this.parentHeight = newParentHeight
