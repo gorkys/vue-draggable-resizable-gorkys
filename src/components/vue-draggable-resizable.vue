@@ -948,12 +948,7 @@ export default {
 
   watch: {
     parentSize: {
-      handler: function (value) {
-        if (value && this.parent) {
-          this.parentWidth = value.width
-          this.parentHeight = value.height
-        }
-      },
+      handler: 'checkParentSize',
       deep: true
     },
     active (val) {
