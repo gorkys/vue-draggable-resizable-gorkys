@@ -194,6 +194,10 @@ export default {
       type: [Boolean, String],
       default: false
     },
+    parentSize: {
+      type: Object,
+      defualt: null
+    },
     onDragStart: {
       type: Function,
       default: null
@@ -943,6 +947,15 @@ export default {
   },
 
   watch: {
+    parentSize: {
+      handler: function (value) {
+        if (value && this.parent) {
+          this.parentWidth = value.width
+          this.parentHeight = value.height
+        }
+      },
+      deep: true
+    },
     active (val) {
       this.enabled = val
 
