@@ -8,6 +8,7 @@
       [classNameDraggable]: draggable,
       [classNameResizable]: resizable
     }, className]"
+    @click="elementEnable"
     @mousedown="elementDown"
     @touchstart="elementTouchDown"
   >
@@ -263,7 +264,8 @@ export default {
       enabled: this.active,
       resizing: false,
       dragging: false,
-      zIndex: this.z
+      zIndex: this.z,
+      brotherNodes: null
     }
   },
 
@@ -359,8 +361,18 @@ export default {
 
       this.elementDown(e)
     },
+    elementEnable (e) {
+      if (this.enabled) return
+      const target = e.target || e.srcElement
+      if (this.$el.contains(target)) {
+        this.enabled = true
+        this.$emit('activated')
+        this.$emit('update:active', true)
+      }
+    },
     // 元素按下
     elementDown (e) {
+      if (!this.enabled) return
       const target = e.target || e.srcElement
 
       if (this.$el.contains(target)) {
@@ -375,16 +387,17 @@ export default {
           return
         }
 
-        if (!this.enabled) {
-          this.enabled = true
-
-          this.$emit('activated')
-          this.$emit('update:active', true)
-        }
-
         if (this.draggable) {
           this.dragging = true
         }
+
+        this.brotherNodes = Array.from(this.$el.parentNode.childNodes)
+        if (this.snapToTarget) {
+          const targets = document.querySelectorAll('.' + this.snapToTarget)
+          if (targets.length) this.brotherNodes.push(...targets)
+        }
+
+        this.brotherNodes = this.brotherNodes.filter(node => !!node.className)
 
         this.mouseClickPosition.mouseX = e.touches ? e.touches[0].pageX : e.pageX
         this.mouseClickPosition.mouseY = e.touches ? e.touches[0].pageY : e.pageY
@@ -441,6 +454,7 @@ export default {
     },
     // 控制柄按下
     handleDown (handle, e) {
+      if (!this.enabled) return
       if (this.onResizeStart && this.onResizeStart(handle, e) === false) {
         return
       }
@@ -574,10 +588,12 @@ export default {
     },
     // 移动
     move (e) {
+      if (this.dragging) {
+        this.elementMove(e)
+        return
+      }
       if (this.resizing) {
         this.handleMove(e)
-      } else if (this.dragging) {
-        this.elementMove(e)
       }
     },
     // 元素移动
@@ -723,12 +739,7 @@ export default {
         for (let i in refLine) { refLine[i] = JSON.parse(JSON.stringify(temArr)) }
 
         // 获取当前父节点下所有子节点
-        const nodes = Array.from(this.$el.parentNode.childNodes)
-
-        if (this.snapToTarget) {
-          const targets = document.querySelectorAll('.' + this.snapToTarget)
-          if (targets.length) nodes.push(...targets)
-        }
+        const nodes = this.brotherNodes
 
         let tem = {
           value: { x: [[], [], []], y: [[], [], []] },
@@ -746,7 +757,6 @@ export default {
         }
         for (let item of nodes) {
           const className = item.className
-          if (className === undefined) continue
           const snapIgnore = item.getAttribute('data-is-snap')
           item.isGuideLine = className.includes(this.snapToTarget)
           if (item.isGuideLine) {
@@ -888,7 +898,7 @@ export default {
       let groupLeft = 0
       let groupTop = 0
       for (let item of nodes) {
-        if (item.className !== undefined && item.className.includes(this.classNameActive)) {
+        if (item.className.includes(this.classNameActive)) {
           activeAll.push(item)
         }
       }
