@@ -115,6 +115,10 @@ export default {
       type: Boolean,
       default: true
     },
+    shiftable: {
+      type: Boolean,
+      default: false
+    },
     // 锁定宽高比
     lockAspectRatio: {
       type: Boolean,
@@ -280,7 +284,14 @@ export default {
       enabled: this.active,
       resizing: false,
       dragging: false,
-      zIndex: this.z
+      zIndex: this.z,
+
+      isShifting: false,
+      startLeft: null,
+      startTop: null,
+      endLeft: null,
+      endTop: null
+
     }
   },
 
@@ -314,6 +325,30 @@ export default {
     addEvent(document.documentElement, 'touchend touchcancel', this.deselect)
 
     addEvent(window, 'resize', this.checkParentSize)
+
+    if (this.shiftable) {
+      document.onkeydown = (e) => {
+        const shiftKey = e.shiftKey || e.metaKey
+        // console.log(shiftKey, '键盘按下')
+        if (shiftKey && !this.startLeft) {
+          this.isShifting = true
+          this.startLeft = this.left
+          this.startTop = this.top
+        }
+      }
+      document.onkeyup = (e) => {
+        // console.log('键盘松手')
+        if (e.keyCode === 16) {
+          this.left = this.endLeft
+          this.top = this.endTop
+          this.isShifting = false
+          this.startLeft = null
+          this.startTop = null
+          this.endLeft = null
+          this.endTop = null
+        }
+      }
+    }
   },
   beforeDestroy: function () {
     removeEvent(document.documentElement, 'mousedown', this.deselect)
@@ -322,6 +357,9 @@ export default {
     removeEvent(document.documentElement, 'touchmove', this.move)
     removeEvent(document.documentElement, 'mouseup', this.handleUp)
     removeEvent(document.documentElement, 'touchend touchcancel', this.deselect)
+
+    removeEvent(document.documentElement, 'keydown')
+    removeEvent(document.documentElement, 'keyup')
 
     removeEvent(window, 'resize', this.checkParentSize)
   },
@@ -380,6 +418,10 @@ export default {
       this.elementDown(e)
     },
     elementMouseDown (e) {
+      if (e.buttons === 2 || e.buttons === 3) {
+        removeEvent(document.documentElement, 'mousemove', this.move)
+        return
+      }
       eventsFor = events.mouse
       this.elementDown(e)
     },
@@ -395,7 +437,6 @@ export default {
         if (this.onDragStart(e) === false) {
           return
         }
-
         if (
           (this.dragHandle && !matchesSelectorToParentElements(target, this.dragHandle, this.$el)) ||
           (this.dragCancel && matchesSelectorToParentElements(target, this.dragCancel, this.$el))
@@ -637,8 +678,26 @@ export default {
       }
       const right = restrictToBounds(mouseClickPosition.right + deltaX, bounds.minRight, bounds.maxRight)
       const bottom = restrictToBounds(mouseClickPosition.bottom + deltaY, bounds.minBottom, bounds.maxBottom)
-      this.left = left
-      this.top = top
+
+      // 添加shift快捷键 水平垂直移动
+      if (this.isShifting) {
+        const diffX = left - this.startLeft
+        const diffY = top - this.startTop
+        this.endLeft = left
+        this.endTop = top
+        if (Math.abs(diffX) > Math.abs(diffY)) {
+          this.left = left
+          this.top = this.startTop
+        } else {
+          this.top = top
+          this.left = this.startLeft
+        }
+      } else {
+        // 正常移动
+        this.left = left
+        this.top = top
+      }
+
       this.right = right
       this.bottom = bottom
 
