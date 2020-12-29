@@ -10,6 +10,7 @@
         :min-height="200"
         :isConflictCheck="true"
         :snap="true"
+        :shiftable="true"
         :snapTolerance="1"
         @refLineParams="getRefLineParams"
         class="test1">
@@ -24,6 +25,7 @@
         :min-height="200"
         :isConflictCheck="true"
         :snap="true"
+        :shiftable="true"
         :snapTolerance="1"
         @refLineParams="getRefLineParams"
         class="test2">
@@ -38,6 +40,7 @@
         :min-height="200"
         :isConflictCheck="true"
         :snap="true"
+        :shiftable="true"
         :snapTolerance="1"
         @refLineParams="getRefLineParams"
         class="test3">
@@ -88,6 +91,11 @@ export default {
         return item
       })
     }
+  },
+  mounted () {
+    // document.onkeydown = (e) => {
+    //   console.log(e)
+    // }
   }
 }
 </script>

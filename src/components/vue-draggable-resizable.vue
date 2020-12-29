@@ -327,27 +327,8 @@ export default {
     addEvent(window, 'resize', this.checkParentSize)
 
     if (this.shiftable) {
-      document.onkeydown = (e) => {
-        const shiftKey = e.shiftKey || e.metaKey
-        // console.log(shiftKey, '键盘按下')
-        if (shiftKey && !this.startLeft) {
-          this.isShifting = true
-          this.startLeft = this.left
-          this.startTop = this.top
-        }
-      }
-      document.onkeyup = (e) => {
-        // console.log('键盘松手')
-        if (e.keyCode === 16) {
-          this.left = this.endLeft
-          this.top = this.endTop
-          this.isShifting = false
-          this.startLeft = null
-          this.startTop = null
-          this.endLeft = null
-          this.endTop = null
-        }
-      }
+      addEvent(document.documentElement, 'keydown', this.shiftKeyDown)
+      addEvent(document.documentElement, 'keyup', this.shiftKeyUp)
     }
   },
   beforeDestroy: function () {
@@ -486,6 +467,27 @@ export default {
         maxTop: Math.floor((this.parentHeight - this.height - this.top) / this.grid[1]) * this.grid[1] + this.top,
         minBottom: this.bottom % this.grid[1],
         maxBottom: Math.floor((this.parentHeight - this.height - this.bottom) / this.grid[1]) * this.grid[1] + this.bottom
+      }
+    },
+    shiftKeyDown (e) {
+      const shiftKey = e.shiftKey
+      // console.log(e, shiftKey, '键盘按下')
+      if (shiftKey && !this.startLeft) {
+        this.isShifting = true
+        this.startLeft = this.left
+        this.startTop = this.top
+      }
+    },
+    shiftKeyUp (e) {
+      // console.log('键盘松手')
+      if (e.keyCode === 16) {
+        this.left = this.endLeft
+        this.top = this.endTop
+        this.isShifting = false
+        this.startLeft = null
+        this.startTop = null
+        this.endLeft = null
+        this.endTop = null
       }
     },
     // 取消
