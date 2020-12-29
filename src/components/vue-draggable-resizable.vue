@@ -297,9 +297,9 @@ export default {
 
   created: function () {
     // eslint-disable-next-line 无效的prop：minWidth不能大于maxWidth
-    if (this.maxWidth && this.minWidth > this.maxWidth) console.warn('[Vdr warn]: Invalid prop: minWidth cannot be greater than maxWidth')
+    if (this.maxWidth && this.minWidth > this.maxWidth) window.console.warn('[Vdr warn]: Invalid prop: minWidth cannot be greater than maxWidth')
     // eslint-disable-next-line 无效prop：minHeight不能大于maxHeight'
-    if (this.maxWidth && this.minHeight > this.maxHeight) console.warn('[Vdr warn]: Invalid prop: minHeight cannot be greater than maxHeight')
+    if (this.maxWidth && this.minHeight > this.maxHeight) window.console.warn('[Vdr warn]: Invalid prop: minHeight cannot be greater than maxHeight')
 
     this.resetBoundsAndMouseState()
   },
