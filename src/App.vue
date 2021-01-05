@@ -11,6 +11,7 @@
         :isConflictCheck="true"
         :snap="true"
         :shiftable="true"
+        :lockAspectRatio="true"
         :snapTolerance="1"
         @refLineParams="getRefLineParams"
         class="test1">
@@ -26,7 +27,8 @@
         :isConflictCheck="true"
         :snap="true"
         :shiftable="true"
-        :snapTolerance="1"
+        :lockAspectRatio="true"
+        :snapTolerance="2"
         @refLineParams="getRefLineParams"
         class="test2">
       </vue-draggable-resizable>
@@ -41,7 +43,7 @@
         :isConflictCheck="true"
         :snap="true"
         :shiftable="true"
-        :snapTolerance="1"
+        :snapTolerance="3"
         @refLineParams="getRefLineParams"
         class="test3">
       </vue-draggable-resizable>

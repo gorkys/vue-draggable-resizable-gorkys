@@ -481,8 +481,8 @@ export default {
     shiftKeyUp (e) {
       // console.log('键盘松手')
       if (e.keyCode === 16) {
-        this.left = this.endLeft
-        this.top = this.endTop
+        this.left = this.endLeft === null ? this.left : this.endLeft
+        this.top = this.endTop === null ? this.top : this.endTop
         this.isShifting = false
         this.startLeft = null
         this.startTop = null
@@ -528,12 +528,12 @@ export default {
 
       // Here we avoid a dangerous recursion by faking
       // corner handles as middle handles
-      if (this.lockAspectRatio && !handle.includes('m')) {
-        this.handle = 'm' + handle.substring(1)
-      } else {
-        this.handle = handle
-      }
-
+      // if (this.lockAspectRatio && !handle.includes('m')) {
+      //   this.handle = 'm' + handle.substring(1)
+      // } else {
+      //   this.handle = handle
+      // }
+      this.handle = handle
       this.resizing = true
 
       this.mouseClickPosition.mouseX = e.touches ? e.touches[0].pageX : e.pageX
@@ -746,8 +746,15 @@ export default {
           this.bounds.minBottom,
           this.bounds.maxBottom
         )
-        if (this.lockAspectRatio && this.resizingOnY) {
-          right = this.right - (this.bottom - bottom) * aspectFactor
+        if (this.lockAspectRatio) {
+          if (this.handle === 'bl') { // 左下
+            left = this.left + (this.bottom - bottom) * aspectFactor
+          } else if (this.handle === 'br') { // 右下
+            right = this.right - (this.bottom - bottom) * aspectFactor
+          } else if (this.handle === 'bm') { // 中下
+            left = this.left - ((this.bottom - bottom) / 2) * aspectFactor
+            right = this.right - ((this.bottom - bottom) / 2) * aspectFactor
+          }
         }
       } else if (this.handle.includes('t')) {
         top = restrictToBounds(
@@ -755,8 +762,15 @@ export default {
           this.bounds.minTop,
           this.bounds.maxTop
         )
-        if (this.lockAspectRatio && this.resizingOnY) {
-          left = this.left - (this.top - top) * aspectFactor
+        if (this.lockAspectRatio) {
+          if (this.handle === 'tr') { // 右上
+            right = this.right + (this.top - top) * aspectFactor
+          } else if (this.handle === 'tl') { // 左上
+            left = this.left - (this.top - top) * aspectFactor
+          } else if (this.handle === 'tm') { // 中上
+            left = this.left - ((this.top - top) / 2) * aspectFactor
+            right = this.right - ((this.top - top) / 2) * aspectFactor
+          }
         }
       }
 
@@ -766,8 +780,15 @@ export default {
           this.bounds.minRight,
           this.bounds.maxRight
         )
-        if (this.lockAspectRatio && this.resizingOnX) {
-          bottom = this.bottom - (this.right - right) / aspectFactor
+        if (this.lockAspectRatio) {
+          if (this.handle === 'tr') { // 右上
+            top = this.top - (this.right - right) / aspectFactor
+          } else if (this.handle === 'br') { // 左上 右下
+            bottom = this.bottom - (this.right - right) / aspectFactor
+          } else if (this.handle === 'mr') { // 左中
+            top = this.top - ((this.right - right) / 2) * aspectFactor
+            bottom = this.bottom - ((this.right - right) / 2) * aspectFactor
+          }
         }
       } else if (this.handle.includes('l')) {
         left = restrictToBounds(
@@ -775,8 +796,15 @@ export default {
           this.bounds.minLeft,
           this.bounds.maxLeft
         )
-        if (this.lockAspectRatio && this.resizingOnX) {
-          top = this.top - (this.left - left) / aspectFactor
+        if (this.lockAspectRatio) {
+          if (this.handle === 'bl') { // 左下
+            bottom = this.bottom - (this.left - left) / aspectFactor
+          } else if (this.handle === 'tl') { // 左上 右下
+            top = this.top - (this.left - left) / aspectFactor
+          } else if (this.handle === 'ml') { // 右中
+            top = this.top - ((this.left - left) / 2) * aspectFactor
+            bottom = this.bottom - ((this.left - left) / 2) * aspectFactor
+          }
         }
       }
 
@@ -785,6 +813,7 @@ export default {
       if (this.onResize(this.handle, left, top, width, height) === false) {
         return
       }
+      // console.log('left:' + left, 'top:' + top, 'right:' + right, 'bottom:' + bottom, 'width:' + width, 'height:' + height)
       this.left = left
       this.top = top
       this.right = right
