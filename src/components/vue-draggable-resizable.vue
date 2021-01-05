@@ -115,6 +115,10 @@ export default {
       type: Boolean,
       default: true
     },
+    shiftable: {
+      type: Boolean,
+      default: false
+    },
     // 锁定宽高比
     lockAspectRatio: {
       type: Boolean,
@@ -280,15 +284,22 @@ export default {
       enabled: this.active,
       resizing: false,
       dragging: false,
-      zIndex: this.z
+      zIndex: this.z,
+
+      isShifting: false,
+      startLeft: null,
+      startTop: null,
+      endLeft: null,
+      endTop: null
+
     }
   },
 
   created: function () {
     // eslint-disable-next-line 无效的prop：minWidth不能大于maxWidth
-    if (this.maxWidth && this.minWidth > this.maxWidth) console.warn('[Vdr warn]: Invalid prop: minWidth cannot be greater than maxWidth')
+    if (this.maxWidth && this.minWidth > this.maxWidth) window.console.warn('[Vdr warn]: Invalid prop: minWidth cannot be greater than maxWidth')
     // eslint-disable-next-line 无效prop：minHeight不能大于maxHeight'
-    if (this.maxWidth && this.minHeight > this.maxHeight) console.warn('[Vdr warn]: Invalid prop: minHeight cannot be greater than maxHeight')
+    if (this.maxWidth && this.minHeight > this.maxHeight) window.console.warn('[Vdr warn]: Invalid prop: minHeight cannot be greater than maxHeight')
 
     this.resetBoundsAndMouseState()
   },
@@ -314,6 +325,11 @@ export default {
     addEvent(document.documentElement, 'touchend touchcancel', this.deselect)
 
     addEvent(window, 'resize', this.checkParentSize)
+
+    if (this.shiftable) {
+      addEvent(document.documentElement, 'keydown', this.shiftKeyDown)
+      addEvent(document.documentElement, 'keyup', this.shiftKeyUp)
+    }
   },
   beforeDestroy: function () {
     removeEvent(document.documentElement, 'mousedown', this.deselect)
@@ -322,6 +338,9 @@ export default {
     removeEvent(document.documentElement, 'touchmove', this.move)
     removeEvent(document.documentElement, 'mouseup', this.handleUp)
     removeEvent(document.documentElement, 'touchend touchcancel', this.deselect)
+
+    removeEvent(document.documentElement, 'keydown')
+    removeEvent(document.documentElement, 'keyup')
 
     removeEvent(window, 'resize', this.checkParentSize)
   },
@@ -380,6 +399,10 @@ export default {
       this.elementDown(e)
     },
     elementMouseDown (e) {
+      if (e.buttons === 2 || e.buttons === 3) {
+        removeEvent(document.documentElement, 'mousemove', this.move)
+        return
+      }
       eventsFor = events.mouse
       this.elementDown(e)
     },
@@ -395,7 +418,6 @@ export default {
         if (this.onDragStart(e) === false) {
           return
         }
-
         if (
           (this.dragHandle && !matchesSelectorToParentElements(target, this.dragHandle, this.$el)) ||
           (this.dragCancel && matchesSelectorToParentElements(target, this.dragCancel, this.$el))
@@ -447,6 +469,27 @@ export default {
         maxBottom: Math.floor((this.parentHeight - this.height - this.bottom) / this.grid[1]) * this.grid[1] + this.bottom
       }
     },
+    shiftKeyDown (e) {
+      const shiftKey = e.shiftKey
+      // console.log(e, shiftKey, '键盘按下')
+      if (shiftKey && !this.startLeft) {
+        this.isShifting = true
+        this.startLeft = this.left
+        this.startTop = this.top
+      }
+    },
+    shiftKeyUp (e) {
+      // console.log('键盘松手')
+      if (e.keyCode === 16) {
+        this.left = this.endLeft === null ? this.left : this.endLeft
+        this.top = this.endTop === null ? this.top : this.endTop
+        this.isShifting = false
+        this.startLeft = null
+        this.startTop = null
+        this.endLeft = null
+        this.endTop = null
+      }
+    },
     // 取消
     deselect (e) {
       const target = e.target || e.srcElement
@@ -485,12 +528,12 @@ export default {
 
       // Here we avoid a dangerous recursion by faking
       // corner handles as middle handles
-      if (this.lockAspectRatio && !handle.includes('m')) {
-        this.handle = 'm' + handle.substring(1)
-      } else {
-        this.handle = handle
-      }
-
+      // if (this.lockAspectRatio && !handle.includes('m')) {
+      //   this.handle = 'm' + handle.substring(1)
+      // } else {
+      //   this.handle = handle
+      // }
+      this.handle = handle
       this.resizing = true
 
       this.mouseClickPosition.mouseX = e.touches ? e.touches[0].pageX : e.pageX
@@ -637,8 +680,26 @@ export default {
       }
       const right = restrictToBounds(mouseClickPosition.right + deltaX, bounds.minRight, bounds.maxRight)
       const bottom = restrictToBounds(mouseClickPosition.bottom + deltaY, bounds.minBottom, bounds.maxBottom)
-      this.left = left
-      this.top = top
+
+      // 添加shift快捷键 水平垂直移动
+      if (this.isShifting) {
+        const diffX = left - this.startLeft
+        const diffY = top - this.startTop
+        this.endLeft = left
+        this.endTop = top
+        if (Math.abs(diffX) > Math.abs(diffY)) {
+          this.left = left
+          this.top = this.startTop
+        } else {
+          this.top = top
+          this.left = this.startLeft
+        }
+      } else {
+        // 正常移动
+        this.left = left
+        this.top = top
+      }
+
       this.right = right
       this.bottom = bottom
 
@@ -685,8 +746,15 @@ export default {
           this.bounds.minBottom,
           this.bounds.maxBottom
         )
-        if (this.lockAspectRatio && this.resizingOnY) {
-          right = this.right - (this.bottom - bottom) * aspectFactor
+        if (this.lockAspectRatio) {
+          if (this.handle === 'bl') { // 左下
+            left = this.left + (this.bottom - bottom) * aspectFactor
+          } else if (this.handle === 'br') { // 右下
+            right = this.right - (this.bottom - bottom) * aspectFactor
+          } else if (this.handle === 'bm') { // 中下
+            left = this.left - ((this.bottom - bottom) / 2) * aspectFactor
+            right = this.right - ((this.bottom - bottom) / 2) * aspectFactor
+          }
         }
       } else if (this.handle.includes('t')) {
         top = restrictToBounds(
@@ -694,8 +762,15 @@ export default {
           this.bounds.minTop,
           this.bounds.maxTop
         )
-        if (this.lockAspectRatio && this.resizingOnY) {
-          left = this.left - (this.top - top) * aspectFactor
+        if (this.lockAspectRatio) {
+          if (this.handle === 'tr') { // 右上
+            right = this.right + (this.top - top) * aspectFactor
+          } else if (this.handle === 'tl') { // 左上
+            left = this.left - (this.top - top) * aspectFactor
+          } else if (this.handle === 'tm') { // 中上
+            left = this.left - ((this.top - top) / 2) * aspectFactor
+            right = this.right - ((this.top - top) / 2) * aspectFactor
+          }
         }
       }
 
@@ -705,8 +780,15 @@ export default {
           this.bounds.minRight,
           this.bounds.maxRight
         )
-        if (this.lockAspectRatio && this.resizingOnX) {
-          bottom = this.bottom - (this.right - right) / aspectFactor
+        if (this.lockAspectRatio) {
+          if (this.handle === 'tr') { // 右上
+            top = this.top - (this.right - right) / aspectFactor
+          } else if (this.handle === 'br') { // 左上 右下
+            bottom = this.bottom - (this.right - right) / aspectFactor
+          } else if (this.handle === 'mr') { // 左中
+            top = this.top - ((this.right - right) / 2) * aspectFactor
+            bottom = this.bottom - ((this.right - right) / 2) * aspectFactor
+          }
         }
       } else if (this.handle.includes('l')) {
         left = restrictToBounds(
@@ -714,8 +796,15 @@ export default {
           this.bounds.minLeft,
           this.bounds.maxLeft
         )
-        if (this.lockAspectRatio && this.resizingOnX) {
-          top = this.top - (this.left - left) / aspectFactor
+        if (this.lockAspectRatio) {
+          if (this.handle === 'bl') { // 左下
+            bottom = this.bottom - (this.left - left) / aspectFactor
+          } else if (this.handle === 'tl') { // 左上 右下
+            top = this.top - (this.left - left) / aspectFactor
+          } else if (this.handle === 'ml') { // 右中
+            top = this.top - ((this.left - left) / 2) * aspectFactor
+            bottom = this.bottom - ((this.left - left) / 2) * aspectFactor
+          }
         }
       }
 
@@ -724,6 +813,7 @@ export default {
       if (this.onResize(this.handle, left, top, width, height) === false) {
         return
       }
+      // console.log('left:' + left, 'top:' + top, 'right:' + right, 'bottom:' + bottom, 'width:' + width, 'height:' + height)
       this.left = left
       this.top = top
       this.right = right

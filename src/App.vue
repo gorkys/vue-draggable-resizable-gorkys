@@ -10,6 +10,8 @@
         :min-height="200"
         :isConflictCheck="true"
         :snap="true"
+        :shiftable="true"
+        :lockAspectRatio="true"
         :snapTolerance="1"
         @refLineParams="getRefLineParams"
         class="test1">
@@ -24,7 +26,9 @@
         :min-height="200"
         :isConflictCheck="true"
         :snap="true"
-        :snapTolerance="1"
+        :shiftable="true"
+        :lockAspectRatio="true"
+        :snapTolerance="2"
         @refLineParams="getRefLineParams"
         class="test2">
       </vue-draggable-resizable>
@@ -38,7 +42,8 @@
         :min-height="200"
         :isConflictCheck="true"
         :snap="true"
-        :snapTolerance="1"
+        :shiftable="true"
+        :snapTolerance="3"
         @refLineParams="getRefLineParams"
         class="test3">
       </vue-draggable-resizable>
@@ -88,6 +93,11 @@ export default {
         return item
       })
     }
+  },
+  mounted () {
+    // document.onkeydown = (e) => {
+    //   console.log(e)
+    // }
   }
 }
 </script>
