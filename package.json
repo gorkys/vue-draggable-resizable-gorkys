@@ -69,13 +69,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gorkys/vue-draggable-resizable-gorkys.git"
+    "url": "https://github.com/wuzhibo/vue-draggable-resizable-gorkys.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gorkys/vue-draggable-resizable-gorkys/issues"
+    "url": "https://github.com/wuzhibo/vue-draggable-resizable-gorkys/issues"
   },
-  "homepage": "https://github.com/gorkys/vue-draggable-resizable-gorkys",
+  "homepage": "https://github.com/wuzhibo/vue-draggable-resizable-gorkys",
   "keywords": [
     "vue",
     "component",
