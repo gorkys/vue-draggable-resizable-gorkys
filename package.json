@@ -1,5 +1,5 @@
 {
-  "name": "vue-draggable-resizable-lowcode",
+  "name": "@wuzhibo/vue-draggable-resizable-gorkys",
   "version": "2.4.4",
   "author": "Maurizio Bonani <maurizio.bonani@gmail.com>",
   "main": "dist/VueDraggableResizable.umd.min.js",
@@ -69,13 +69,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wuzhibo/vue-draggable-resizable-gorkys.git"
+    "url": "https://github.com/wuzhibo0902/vue-draggable-resizable-gorkys.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wuzhibo/vue-draggable-resizable-gorkys/issues"
+    "url": "https://github.com/wuzhibo0902/vue-draggable-resizable-gorkys/issues"
   },
-  "homepage": "https://github.com/wuzhibo/vue-draggable-resizable-gorkys",
+  "homepage": "https://github.com/wuzhibo0902/vue-draggable-resizable-gorkys",
   "keywords": [
     "vue",
     "component",
