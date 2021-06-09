@@ -837,6 +837,7 @@ export default {
               this.bottom = this.mouseClickPosition.bottom
               this.width = this.mouseClickPosition.w
               this.height = this.mouseClickPosition.h
+              this.$emit('resizing', this.left, this.top, this.width, this.height)
             }
           }
         }
