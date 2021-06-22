@@ -310,8 +310,10 @@ export default {
 
     this.settingAttribute()
 
-    addEvent(document.documentElement, 'mousedown', this.deselect)
-    addEvent(document.documentElement, 'touchend touchcancel', this.deselect)
+    // 优化：取消选中的行为优先绑定在父节点上
+    const parentElement = this.$el.parentNode
+    addEvent(parentElement || document.documentElement, 'mousedown', this.deselect)
+    addEvent(parentElement || document.documentElement, 'touchend touchcancel', this.deselect)
 
     addEvent(window, 'resize', this.checkParentSize)
   },
