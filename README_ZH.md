@@ -1,4 +1,4 @@
-<p align="center"><img src="https://rawgit.com/mauricius/vue-draggable-resizable/v1/docs/resources/logo.png" alt="logo"></p>
+<!-- <p align="center"><img src="https://rawgit.com/mauricius/vue-draggable-resizable/v1/docs/resources/logo.png" alt="logo"></p> -->
 <h1 align="center">VueDraggableResizable 2</h1>
 
 [![Latest Version on NPM](https://img.shields.io/npm/v/vue-draggable-resizable.svg?style=flat-square)](https://npmjs.com/package/vue-draggable-resizable)
@@ -8,6 +8,11 @@
 > Vue2组件，用于可拖动和可调整大小的元素。
 
 如果您正在寻找组件的版本1，可以在[v1分支](https://github.com/mauricius/vue-draggable-resizable/tree/v1)上找到它。
+
+## 改fork版本修复的问题清单：
+* fix：开启自动对齐后，元素依据中线对齐可能会超出父容器边界的问题 2021-07-02
+* fix：取消选中的行为优先绑定在父节点上 2021-06-22
+* fix：冲突检测回退后没有再次触发resizing事件的bug 2021-06-08
 
 ## 目录
 
