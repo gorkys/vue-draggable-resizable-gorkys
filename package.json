@@ -1,6 +1,6 @@
 {
   "name": "@wuzhibo/vue-draggable-resizable-gorkys",
-  "version": "2.4.7",
+  "version": "2.4.8",
   "author": "Maurizio Bonani <maurizio.bonani@gmail.com>",
   "main": "dist/VueDraggableResizable.umd.min.js",
   "unpkg": "dist/VueDraggableResizable.umd.min.js",
