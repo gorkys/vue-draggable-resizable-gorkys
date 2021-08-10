@@ -10,6 +10,7 @@
     }, className]"
     @mousedown="elementMouseDown"
     @touchstart="elementTouchDown"
+    @contextmenu="onContextMenu"
   >
     <div
       v-for="handle in actualHandles"
@@ -329,6 +330,10 @@ export default {
   },
 
   methods: {
+    // 右键菜单
+    onContextMenu (e) {
+      this.$emit('contextmenu', e)
+    },
     // 重置边界和鼠标状态
     resetBoundsAndMouseState () {
       this.mouseClickPosition = { mouseX: 0, mouseY: 0, x: 0, y: 0, w: 0, h: 0 }

@@ -4,8 +4,8 @@
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![npm](https://img.shields.io/npm/dt/vue-draggable-resizable.svg?style=flat-square)](https://www.npmjs.com/package/vue-draggable-resizable-gorkys)
 
-
 ## 该fork版本修复的问题清单：
+* fix：增加右键菜单事件contextmenu 2021-08-10
 * fix：开启自动对齐后，元素依据中线对齐可能会超出父容器边界的问题 2021-07-02
 * fix：取消选中的行为优先绑定在父节点上 2021-06-22
 * fix：冲突检测回退后没有再次触发resizing事件的bug 2021-06-08
@@ -98,7 +98,7 @@
 **refLineParams**<br/>
 参数: params<br/>
 
-返回参数是一个Object,里面包含`vLine`与`hLine`，具体使用参考下面代码。  
+返回参数是一个Object,里面包含`vLine`与`hLine`，具体使用参考下面代码。
 
 ```vue
 <div>
