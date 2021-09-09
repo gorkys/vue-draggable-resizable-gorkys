@@ -10,6 +10,7 @@
     }, className]"
     @mousedown="elementMouseDown"
     @touchstart="elementTouchDown"
+    @contextmenu="onContextMenu"
   >
     <div
       v-for="handle in actualHandles"
@@ -310,8 +311,10 @@ export default {
 
     this.settingAttribute()
 
-    addEvent(document.documentElement, 'mousedown', this.deselect)
-    addEvent(document.documentElement, 'touchend touchcancel', this.deselect)
+    // 优化：取消选中的行为优先绑定在父节点上
+    const parentElement = this.$el.parentNode
+    addEvent(parentElement || document.documentElement, 'mousedown', this.deselect)
+    addEvent(parentElement || document.documentElement, 'touchend touchcancel', this.deselect)
 
     addEvent(window, 'resize', this.checkParentSize)
   },
@@ -327,6 +330,10 @@ export default {
   },
 
   methods: {
+    // 右键菜单
+    onContextMenu (e) {
+      this.$emit('contextmenu', e)
+    },
     // 重置边界和鼠标状态
     resetBoundsAndMouseState () {
       this.mouseClickPosition = { mouseX: 0, mouseY: 0, x: 0, y: 0, w: 0, h: 0 }
@@ -837,6 +844,7 @@ export default {
               this.bottom = this.mouseClickPosition.bottom
               this.width = this.mouseClickPosition.w
               this.height = this.mouseClickPosition.h
+              this.$emit('resizing', this.left, this.top, this.width, this.height)
             }
           }
         }
@@ -898,9 +906,10 @@ export default {
             tem['display'] = [ts, TS, bs, BS, hc, hc, ls, LS, rs, RS, vc, vc]
             tem['position'] = [t, b, t, b, t + h / 2, t + h / 2, l, r, l, r, l + w / 2, l + w / 2]
 
+            // fix：中线自动对齐，元素可能超过父元素边界的问题
             if (ts) {
               if (bln) {
-                this.top = t - height
+                this.top = Math.max(t - height, this.bounds.minTop)
                 this.bottom = this.parentHeight - this.top - height
               }
               tem.value.y[0].push(l, r, activeLeft, activeRight)
@@ -914,7 +923,7 @@ export default {
             }
             if (TS) {
               if (bln) {
-                this.top = b - height
+                this.top = Math.max(b - height, this.bounds.minTop)
                 this.bottom = this.parentHeight - this.top - height
               }
               tem.value.y[1].push(l, r, activeLeft, activeRight)
@@ -929,7 +938,7 @@ export default {
 
             if (ls) {
               if (bln) {
-                this.left = l - width
+                this.left = Math.max(l - width, this.bounds.minLeft)
                 this.right = this.parentWidth - this.left - width
               }
               tem.value.x[0].push(t, b, activeTop, activeBottom)
@@ -943,7 +952,7 @@ export default {
             }
             if (LS) {
               if (bln) {
-                this.left = r - width
+                this.left = Math.max(r - width, this.bounds.minLeft)
                 this.right = this.parentWidth - this.left - width
               }
               tem.value.x[1].push(t, b, activeTop, activeBottom)
@@ -958,14 +967,14 @@ export default {
 
             if (hc) {
               if (bln) {
-                this.top = t + h / 2 - height / 2
+                this.top = Math.max(t + h / 2 - height / 2, this.bounds.minTop)
                 this.bottom = this.parentHeight - this.top - height
               }
               tem.value.y[2].push(l, r, activeLeft, activeRight)
             }
             if (vc) {
               if (bln) {
-                this.left = l + w / 2 - width / 2
+                this.left = Math.max(l + w / 2 - width / 2, this.bounds.minLeft)
                 this.right = this.parentWidth - this.left - width
               }
               tem.value.x[2].push(t, b, activeTop, activeBottom)

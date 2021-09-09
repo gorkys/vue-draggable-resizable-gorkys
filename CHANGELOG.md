@@ -2,6 +2,9 @@
 
 All notable changes to `vue-draggable-resizable` will be documented in this file
 
+## 2.4.9 - 2021-08-10
+- add contextmenu event
+
 ## 1.7.0 - 2018-04-04
 - add touch events
 
