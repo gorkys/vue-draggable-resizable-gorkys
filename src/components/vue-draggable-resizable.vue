@@ -314,12 +314,14 @@ export default {
     // 优化：取消选中的行为优先绑定在父节点上
     const parentElement = this.$el.parentNode
     addEvent(parentElement || document.documentElement, 'mousedown', this.deselect)
+    addEvent(parentElement || document.documentElement, 'touchstart', this.deselect)
     addEvent(parentElement || document.documentElement, 'touchend touchcancel', this.deselect)
 
     addEvent(window, 'resize', this.checkParentSize)
   },
   beforeDestroy: function () {
-    removeEvent(document.documentElement, 'mousedown', this.deselect)
+    removeEvent(document.documentElement, 'mousedown touchstart', this.deselect)
+    removeEvent(document.documentElement, 'touchstart', this.deselect)
     removeEvent(document.documentElement, 'touchstart', this.handleUp)
     removeEvent(document.documentElement, 'mousemove', this.move)
     removeEvent(document.documentElement, 'touchmove', this.move)
