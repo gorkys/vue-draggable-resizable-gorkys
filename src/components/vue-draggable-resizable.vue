@@ -471,8 +471,10 @@ export default {
 
         removeEvent(document.documentElement, eventsFor.move, this.handleResize)
       }
-
-      this.resetBoundsAndMouseState()
+      
+      if (e.button !== 2) {
+        this.resetBoundsAndMouseState()
+      }
     },
     // 控制柄触摸按下
     handleTouchDown (handle, e) {
