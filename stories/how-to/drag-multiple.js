@@ -52,10 +52,17 @@ export default () => ({
     dragging(id, left, top) {
       this.draggingId = id;
 
-      if (! this.sync) return;
+      const draggingElement = this.elements.find(el => el.id === id);
+      if (!draggingElement) return;
 
-      const offsetX = left - this.draggingElement.x;
-      const offsetY = top - this.draggingElement.y;
+      const offsetX = left - draggingElement.x;
+      const offsetY = top - draggingElement.y;
+
+      if (!this.sync) {
+        this.prevOffsetX = offsetX;
+        this.prevOffsetY = offsetY;
+        return;
+      }
 
       const deltaX = this.deltaX(offsetX);
       const deltaY = this.deltaY(offsetY);
