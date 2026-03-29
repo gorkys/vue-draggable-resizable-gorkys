@@ -1046,9 +1046,9 @@ export default {
     // 正则获取left与top
     formatTransformVal (string) {
       // 使用正则表达式匹配 translate 值，避免 rotate 值干扰
-      const match = string.match(/translate\(\s*(-?\d+(?:\.\d+)?)px,\s*(-?\d+(?:\.\d+)?)px\)/)
+      const match = string.match(/translate\(\s*(-?\d+(?:\.\d+)?)px(?:,\s*(-?\d+(?:\.\d+)?)px)?\)/)
       if (match) {
-        return [Number(match[1]), Number(match[2])]
+        return [Number(match[1]), Number(match[2] ?? 0)]
       }
       return [0, 0]
     }
