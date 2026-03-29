@@ -61,7 +61,6 @@ const userSelectAuto = {
 let eventsFor = events.mouse
 
 export default {
-  replace: true,
   name: 'vue-draggable-resizable',
   props: {
     className: {
@@ -252,6 +251,22 @@ export default {
           switch: true
         }
       }
+    },
+    // 激活时是否将组件提升到最前面
+    activeOnTop: {
+      type: Boolean,
+      default: false
+    },
+    // 是否支持右键选中组件
+    selectOnContextMenu: {
+      type: Boolean,
+      default: false
+    },
+    // 旋转角度（度）
+    rotate: {
+      type: Number,
+      default: 0,
+      validator: (val) => typeof val === 'number'
     }
   },
 
@@ -319,7 +334,7 @@ export default {
 
     addEvent(window, 'resize', this.checkParentSize)
   },
-  beforeDestroy: function () {
+  beforeUnmount: function () {
     removeEvent(document.documentElement, 'mousedown touchstart', this.deselect)
     removeEvent(document.documentElement, 'touchstart', this.deselect)
     removeEvent(document.documentElement, 'touchstart', this.handleUp)
@@ -334,6 +349,28 @@ export default {
   methods: {
     // 右键菜单
     onContextMenu (e) {
+      // 如果支持右键选中，则激活组件
+      if (this.selectOnContextMenu && !this.enabled) {
+        this.enabled = true
+
+        // 确保位置信息正确
+        if (this.parent) {
+          const [newParentWidth, newParentHeight] = this.getParentSize()
+          this.parentWidth = newParentWidth
+          this.parentHeight = newParentHeight
+          this.right = this.parentWidth - this.width - this.left
+          this.bottom = this.parentHeight - this.height - this.top
+        }
+
+        // 如果activeOnTop为true，将z-index设置为最高
+        if (this.activeOnTop) {
+          this.zIndex = 9999
+        }
+
+        this.$emit('activated')
+        this.$emit('update:active', true)
+      }
+
       this.$emit('contextmenu', e)
     },
     // 重置边界和鼠标状态
@@ -417,6 +454,20 @@ export default {
         if (!this.enabled) {
           this.enabled = true
 
+          // 确保位置信息正确
+          if (this.parent) {
+            const [newParentWidth, newParentHeight] = this.getParentSize()
+            this.parentWidth = newParentWidth
+            this.parentHeight = newParentHeight
+            this.right = this.parentWidth - this.width - this.left
+            this.bottom = this.parentHeight - this.height - this.top
+          }
+
+          // 如果activeOnTop为true，将z-index设置为最高
+          if (this.activeOnTop) {
+            this.zIndex = 9999
+          }
+
           this.$emit('activated')
           this.$emit('update:active', true)
         }
@@ -471,7 +522,7 @@ export default {
 
         removeEvent(document.documentElement, eventsFor.move, this.handleResize)
       }
-      
+
       if (e.button !== 2) {
         this.resetBoundsAndMouseState()
       }
@@ -657,13 +708,13 @@ export default {
       this.$emit('dragging', this.left, this.top)
     },
     moveHorizontally (val) {
-      const [deltaX, _] = snapToGrid(this.grid, val, this.top, this.scale)
+      const [deltaX, _] = snapToGrid(this.grid, val, this.top, this.scaleRatio)
       const left = restrictToBounds(deltaX, this.bounds.minLeft, this.bounds.maxLeft)
       this.left = left
       this.right = this.parentWidth - this.width - left
     },
     moveVertically (val) {
-      const [_, deltaY] = snapToGrid(this.grid, this.left, val, this.scale)
+      const [_, deltaY] = snapToGrid(this.grid, this.left, val, this.scaleRatio)
       const top = restrictToBounds(deltaY, this.bounds.minTop, this.bounds.maxTop)
       this.top = top
       this.bottom = this.parentHeight - this.height - top
@@ -744,7 +795,7 @@ export default {
       this.$emit('resizing', this.left, this.top, this.width, this.height)
     },
     changeWidth (val) {
-      const [newWidth, _] = snapToGrid(this.grid, val, 0, this.scale)
+      const [newWidth, _] = snapToGrid(this.grid, val, 0, this.scaleRatio)
       let right = restrictToBounds(
         (this.parentWidth - newWidth - this.left),
         this.bounds.minRight,
@@ -762,7 +813,7 @@ export default {
       this.height = height
     },
     changeHeight (val) {
-      const [_, newHeight] = snapToGrid(this.grid, 0, val, this.scale)
+      const [_, newHeight] = snapToGrid(this.grid, 0, val, this.scaleRatio)
       let bottom = restrictToBounds(
         (this.parentHeight - newHeight - this.top),
         this.bounds.minBottom,
@@ -886,6 +937,12 @@ export default {
           activeTop = groupTop
           activeBottom = groupTop + groupHeight
         }
+        // 辅助线坐标与是否显示(display)对应的数组,易于循环遍历
+        const arrTem = [0, 1, 0, 1, 2, 2, 0, 1, 0, 1, 2, 2]
+        // 跟踪哪些辅助线类型被激活
+        const displayFlags = new Array(12).fill(false)
+        const positions = new Array(12).fill(0)
+
         for (let item of nodes) {
           if (item.className !== undefined && !item.className.includes(this.classNameActive) && item.getAttribute('data-is-snap') !== null && item.getAttribute('data-is-snap') !== 'false') {
             const w = item.offsetWidth
@@ -907,8 +964,16 @@ export default {
             const rs = Math.abs(l - activeLeft) <= this.snapTolerance // 外右
             const RS = Math.abs(r - activeLeft) <= this.snapTolerance // 外右
 
-            tem['display'] = [ts, TS, bs, BS, hc, hc, ls, LS, rs, RS, vc, vc]
-            tem['position'] = [t, b, t, b, t + h / 2, t + h / 2, l, r, l, r, l + w / 2, l + w / 2]
+            const currentDisplay = [ts, TS, bs, BS, hc, hc, ls, LS, rs, RS, vc, vc]
+            const currentPosition = [t, b, t, b, t + h / 2, t + h / 2, l, r, l, r, l + w / 2, l + w / 2]
+
+            // 更新显示标志和位置（优先使用已激活的条件）
+            for (let i = 0; i < 12; i++) {
+              if (currentDisplay[i]) {
+                displayFlags[i] = true
+                positions[i] = currentPosition[i]
+              }
+            }
 
             // fix：中线自动对齐，元素可能超过父元素边界的问题
             if (ts) {
@@ -983,22 +1048,23 @@ export default {
               }
               tem.value.x[2].push(t, b, activeTop, activeBottom)
             }
-            // 辅助线坐标与是否显示(display)对应的数组,易于循环遍历
-            const arrTem = [0, 1, 0, 1, 2, 2, 0, 1, 0, 1, 2, 2]
-            for (let i = 0; i <= arrTem.length; i++) {
-              // 前6为Y辅助线,后6为X辅助线
-              const xory = i < 6 ? 'y' : 'x'
-              const horv = i < 6 ? 'hLine' : 'vLine'
-              if (tem.display[i]) {
-                const { origin, length } = this.calcLineValues(tem.value[xory][arrTem[i]])
-                refLine[horv][arrTem[i]].display = tem.display[i]
-                refLine[horv][arrTem[i]].position = tem.position[i] + 'px'
-                refLine[horv][arrTem[i]].origin = origin
-                refLine[horv][arrTem[i]].lineLength = length
-              }
-            }
           }
         }
+
+        // 循环结束后，统一计算并设置辅助线
+        for (let i = 0; i < 12; i++) {
+          // 前6为Y辅助线,后6为X辅助线
+          const xory = i < 6 ? 'y' : 'x'
+          const horv = i < 6 ? 'hLine' : 'vLine'
+          if (displayFlags[i] && tem.value[xory][arrTem[i]].length > 0) {
+            const { origin, length } = this.calcLineValues(tem.value[xory][arrTem[i]])
+            refLine[horv][arrTem[i]].display = true
+            refLine[horv][arrTem[i]].position = positions[i] + 'px'
+            refLine[horv][arrTem[i]].origin = origin
+            refLine[horv][arrTem[i]].lineLength = length
+          }
+        }
+
         this.$emit('refLineParams', refLine)
       }
     },
@@ -1040,7 +1106,7 @@ export default {
     },
     // 正则获取left与top
     formatTransformVal (string) {
-      let [left, top] = string.replace(/[^0-9\-,]/g, '').split(',')
+      let [left, top] = string.replace(/[^0-9\-,.]/g, '').split(',')
       if (top === undefined) top = 0
       return [+left, +top]
     }
@@ -1101,8 +1167,12 @@ export default {
       }
     },
     style () {
+      const transform = this.rotate
+        ? `translate(${this.left}px, ${this.top}px) rotate(${this.rotate}deg)`
+        : `translate(${this.left}px, ${this.top}px)`
+
       return {
-        transform: `translate(${this.left}px, ${this.top}px)`,
+        transform,
         width: this.computedWidth,
         height: this.computedHeight,
         zIndex: this.zIndex,
@@ -1147,6 +1217,12 @@ export default {
       this.enabled = val
 
       if (val) {
+        // 确保位置信息正确
+        if (this.parent) {
+          const [newParentWidth, newParentHeight] = this.getParentSize()
+          this.parentWidth = newParentWidth
+          this.parentHeight = newParentHeight
+        }
         this.$emit('activated')
       } else {
         this.$emit('deactivated')
@@ -1187,13 +1263,23 @@ export default {
       }
     },
     minWidth (val) {
-      if (val > 0 && val <= this.width) {
+      if (val > 0) {
         this.minW = val
+        // 如果当前宽度小于新的最小宽度，调整宽度
+        if (this.width < val) {
+          this.width = val
+          this.right = this.parentWidth - this.width - this.left
+        }
       }
     },
     minHeight (val) {
-      if (val > 0 && val <= this.height) {
+      if (val > 0) {
         this.minH = val
+        // 如果当前高度小于新的最小高度，调整高度
+        if (this.height < val) {
+          this.height = val
+          this.bottom = this.parentHeight - this.height - this.top
+        }
       }
     },
     maxWidth (val) {
