@@ -43,14 +43,12 @@ const events = {
   }
 }
 
-// 禁止用户选取
 const userSelectNone = {
   userSelect: 'none',
   MozUserSelect: 'none',
   WebkitUserSelect: 'none',
   MsUserSelect: 'none'
 }
-// 用户选中自动
 const userSelectAuto = {
   userSelect: 'auto',
   MozUserSelect: 'auto',
@@ -171,6 +169,10 @@ export default {
       type: [String, Number],
       default: 'auto',
       validator: (val) => (typeof val === 'string' ? val === 'auto' : val >= 0)
+    },
+    rotate: {
+      type: Number,
+      default: 0
     },
     handles: {
       type: Array,
@@ -301,7 +303,7 @@ export default {
     addEvent(window, 'resize', this.checkParentSize)
   },
 
-  beforeUnmount: function () {
+  beforeDestroy: function () {
     removeEvent(document.documentElement, 'mousedown touchstart', this.deselect)
     removeEvent(document.documentElement, 'touchstart', this.deselect)
     removeEvent(document.documentElement, 'touchstart', this.handleUp)
@@ -923,9 +925,11 @@ export default {
       return { groupWidth, groupHeight, groupLeft, groupTop, bln }
     },
     formatTransformVal (string) {
-      let [left, top] = string.replace(/[^0-9\-,.]/g, '').split(',')
-      if (top === undefined) top = 0
-      return [+left, +top]
+      const match = string.match(/translate\(\s*(-?\d+(?:\.\d+)?)px,\s*(-?\d+(?:\.\d+)?)px\)/)
+      if (match) {
+        return [Number(match[1]), Number(match[2])]
+      }
+      return [0, 0]
     }
   },
   computed: {
