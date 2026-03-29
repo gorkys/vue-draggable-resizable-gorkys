@@ -4,11 +4,11 @@ import syn from 'syn'
 
 let wrapper
 
-describe('`scale` prop', function () {
-  it('should drag the component accordingly to the `scale` prop', function (done) {
+describe('`scaleRatio` prop', function () {
+  it('should drag the component accordingly to the `scaleRatio` prop', function (done) {
     const ParentComponent = {
       template: `<div>
-        <vue-draggable-resizable :x="0" :y="0" :w="200" :h="200" :scale="0.5" :active="true"></vue-draggable-resizable>
+        <vue-draggable-resizable :x="0" :y="0" :w="200" :h="200" :scaleRatio="0.5" :active="true"></vue-draggable-resizable>
       </div>`,
       components: {
         VueDraggableResizable
@@ -42,10 +42,10 @@ describe('`scale` prop', function () {
     })
   })
 
-  it('should resize the component accordingly to the `scale` prop', function (done) {
+  it('should resize the component accordingly to the `scaleRatio` prop', function (done) {
     const ParentComponent = {
       template: `<div>
-        <vue-draggable-resizable :x="0" :y="0" :w="200" :h="200" :scale="1.5" :active="true"></vue-draggable-resizable>
+        <vue-draggable-resizable :x="0" :y="0" :w="200" :h="200" :scaleRatio="1.5" :active="true"></vue-draggable-resizable>
       </div>`,
       components: {
         VueDraggableResizable
