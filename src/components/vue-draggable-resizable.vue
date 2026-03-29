@@ -292,7 +292,8 @@ export default {
       enabled: this.active,
       resizing: false,
       dragging: false,
-      zIndex: this.z
+      zIndex: this.z,
+      previousZIndex: this.z
     }
   },
 
@@ -335,6 +336,27 @@ export default {
   },
 
   methods: {
+    // 计算兄弟元素的最大 z-index + 1
+    computeTopZ () {
+      if (!this.$el.parentNode) return 9999
+      const siblings = this.$el.parentNode.children
+      let maxZ = 0
+      for (let i = 0; i < siblings.length; i++) {
+        const sibling = siblings[i]
+        if (sibling !== this.$el && sibling.style) {
+          const z = parseInt(sibling.style.zIndex, 10)
+          if (!isNaN(z) && z > maxZ) {
+            maxZ = z
+          }
+        }
+      }
+      return maxZ + 1
+    },
+    // 提升到最前面
+    promoteToTop () {
+      this.previousZIndex = this.zIndex
+      this.zIndex = this.computeTopZ()
+    },
     // 右键菜单
     onContextMenu (e) {
       // 如果支持右键选中，则激活组件
@@ -350,7 +372,7 @@ export default {
         }
         // 如果activeOnTop为true，将z-index设置为最高
         if (this.activeOnTop) {
-          this.zIndex = 9999
+          this.promoteToTop()
         }
         this.$emit('activated')
         this.$emit('update:active', true)
@@ -438,7 +460,7 @@ export default {
           }
           // 如果activeOnTop为true，将z-index设置为最高
           if (this.activeOnTop) {
-            this.zIndex = 9999
+            this.promoteToTop()
           }
           this.$emit('activated')
           this.$emit('update:active', true)
@@ -481,6 +503,10 @@ export default {
       if (!this.$el.contains(target) && !regex.test(target.className)) {
         if (this.enabled && !this.preventDeactivation) {
           this.enabled = false
+          // 恢复原来的 z-index
+          if (this.activeOnTop) {
+            this.zIndex = this.previousZIndex
+          }
           this.$emit('deactivated')
           this.$emit('update:active', false)
         }
@@ -1116,12 +1142,17 @@ export default {
         }
         this.$emit('activated')
       } else {
+        // 恢复原来的 z-index
+        if (this.activeOnTop) {
+          this.zIndex = this.previousZIndex
+        }
         this.$emit('deactivated')
       }
     },
     z (val) {
       if (val >= 0 || val === 'auto') {
         this.zIndex = val
+        this.previousZIndex = val
       }
     },
     x (val) {
@@ -1150,23 +1181,19 @@ export default {
       }
     },
     minWidth (val) {
-      if (val > 0) {
-        this.minW = val
-        // 如果当前宽度小于新的最小宽度，调整宽度
-        if (this.width < val) {
-          this.width = val
-          this.right = this.parentWidth - this.width - this.left
-        }
+      this.minW = val
+      if (this.width < val) {
+        this.width = val
+        this.widthTouched = true
+        this.right = this.parentWidth - this.width - this.left
       }
     },
     minHeight (val) {
-      if (val > 0) {
-        this.minH = val
-        // 如果当前高度小于新的最小高度，调整高度
-        if (this.height < val) {
-          this.height = val
-          this.bottom = this.parentHeight - this.height - this.top
-        }
+      this.minH = val
+      if (this.height < val) {
+        this.height = val
+        this.heightTouched = true
+        this.bottom = this.parentHeight - this.height - this.top
       }
     },
     maxWidth (val) {
