@@ -471,7 +471,7 @@ export default {
 
         removeEvent(document.documentElement, eventsFor.move, this.handleResize)
       }
-      
+
       if (e.button !== 2) {
         this.resetBoundsAndMouseState()
       }
@@ -1040,7 +1040,7 @@ export default {
     },
     // 正则获取left与top
     formatTransformVal (string) {
-      let [left, top] = string.replace(/[^0-9\-,]/g, '').split(',')
+      let [left, top] = string.replace(/[^0-9.,-]/g, '').split(',')
       if (top === undefined) top = 0
       return [+left, +top]
     }
