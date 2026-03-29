@@ -19,7 +19,7 @@ export default () => ({
       </vue-draggable-resizable>
       <div id="toolbar">
         <label>
-            <input type="checkbox" name="sync" v-model="sync" disabled> Synchronize (use <b>ctrl</b> key)
+            <input type="checkbox" name="sync" v-model="sync" disabled> Synchronize (use <b>ctrl</b> or <b>cmd</b> key)
         </label>
       </div>
     </div>
@@ -37,15 +37,21 @@ export default () => ({
     }
   },
   mounted() {
+    // 支持 Ctrl (keyCode 17) 和 Command (keyCode 91, 224) 键
+    const syncKeys = [17, 91, 224];
     window.addEventListener('keydown', ev => {
-      if (ev.keyCode === 17) {
+      if (syncKeys.includes(ev.keyCode) || ev.ctrlKey || ev.metaKey) {
         this.sync = true;
       }
     });
     window.addEventListener('keyup', ev => {
-      if (ev.keyCode === 17) {
+      if (syncKeys.includes(ev.keyCode)) {
         this.sync = false;
       }
+    });
+    // 失去焦点时重置
+    window.addEventListener('blur', () => {
+      this.sync = false;
     });
   },
   methods: {
