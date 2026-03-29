@@ -1222,6 +1222,8 @@ export default {
           const [newParentWidth, newParentHeight] = this.getParentSize()
           this.parentWidth = newParentWidth
           this.parentHeight = newParentHeight
+          this.right = this.parentWidth - this.width - this.left
+          this.bottom = this.parentHeight - this.height - this.top
         }
         this.$emit('activated')
       } else {
