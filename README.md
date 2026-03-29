@@ -10,6 +10,11 @@
 * fix：开启自动对齐后，元素依据中线对齐可能会超出父容器边界的问题 2021-07-02
 * fix：取消选中的行为优先绑定在父节点上 2021-06-22
 * fix：冲突检测回退后没有再次触发resizing事件的bug 2021-06-08
+* fix：formatTransformVal函数支持小数点 2026-03-29
+* fix：修复多条辅助线显示问题 2026-03-29
+* fix：修复同时拖拽多个元素移动不同步问题 2026-03-29
+* fix：修复xywh属性设置无效问题 2026-03-29
+* fix：修复activated导致transform属性丢失问题 2026-03-29
 
 ## 新增特征✨
 
@@ -18,6 +23,10 @@
 - 冲突检测
 - 吸附对齐
 - 默认样式优化
+- 支持minWidth/minHeight动态改变
+- 支持被遮挡元素的拖拽（activeOnTop属性）
+- 支持右键选中组件（selectOnContextMenu属性）
+- 支持旋转功能（rotate属性）
 
 > Q交流群：138146781
 
@@ -95,6 +104,40 @@
 ```vue
 <vue-draggable-resizable :snap="true" :snap-tolerance="20" />
 ```
+
+**activeOnTop**<br/>
+类型: `Boolean`<br/>
+必需: `false`<br/>
+默认: `false`
+
+定义组件激活时是否自动提升到最前面（z-index设为9999）。
+
+```vue
+<vue-draggable-resizable :active-on-top="true" />
+```
+
+**selectOnContextMenu**<br/>
+类型: `Boolean`<br/>
+必需: `false`<br/>
+默认: `false`
+
+定义组件是否支持右键选中。
+
+```vue
+<vue-draggable-resizable :select-on-context-menu="true" />
+```
+
+**rotate**<br/>
+类型: `Number`<br/>
+必需: `false`<br/>
+默认: `0`
+
+定义组件的旋转角度（单位：度）。
+
+```vue
+<vue-draggable-resizable :rotate="45" />
+```
+
 ## 新增Events
 **refLineParams**<br/>
 参数: params<br/>
