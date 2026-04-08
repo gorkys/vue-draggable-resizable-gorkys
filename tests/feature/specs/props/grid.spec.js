@@ -16,14 +16,14 @@ describe('`grid` prop', function () {
     expect(wrapper.props().grid[1]).to.equal(40)
   })
 
-  it('should react to the changes of the `grid` prop', function () {
+  it('should react to the changes of the `grid` prop', async function () {
     wrapper = mount(VueDraggableResizable, {
       propsData: {
         grid: [20, 40]
       }
     })
 
-    wrapper.setProps({ grid: [10, 30] })
+    await wrapper.setProps({ grid: [10, 30] })
 
     expect(wrapper.props().grid[0]).to.equal(10)
     expect(wrapper.props().grid[1]).to.equal(30)

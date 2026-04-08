@@ -17,7 +17,7 @@ describe('`max-width` and `max-height` props', function () {
     expect(wrapper.props().maxHeight).to.equal(300)
   })
 
-  it('should react to `max-width` and `max-height` prop changes', function () {
+  it('should react to `max-width` and `max-height` prop changes', async function () {
     wrapper = mount(VueDraggableResizable, {
       attachToDocument: true,
       propsData: {
@@ -26,7 +26,7 @@ describe('`max-width` and `max-height` props', function () {
       }
     })
 
-    wrapper.setProps({ maxWidth: 300, maxHeight: 200 })
+    await wrapper.setProps({ maxWidth: 300, maxHeight: 200 })
 
     expect(wrapper.props().maxWidth).to.equal(300)
     expect(wrapper.props().maxHeight).to.equal(200)

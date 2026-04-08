@@ -267,19 +267,19 @@ describe('props validation', function () {
     const parent = getProp('parent')
 
     expect(parent.required).to.be.undefined
-    expect(parent.type).to.equal(Boolean)
+    expect(parent.type).to.deep.equal([Boolean, String])
     expect(parent.default).to.equal(false)
   })
 
-  it('should validate `scale` prop', function () {
-    const scale = getProp('scale')
+  it('should validate `scaleRatio` prop', function () {
+    const scale = getProp('scaleRatio')
 
     expect(scale.required).to.be.undefined
     expect(scale.type).to.equal(Number)
     expect(scale.default).to.equal(1)
     expect(scale.validator(1)).to.be.true
-    expect(scale.validator(0)).to.be.false
-    expect(scale.validator(-1)).to.be.false
+    expect(scale.validator(0)).to.be.true
+    expect(scale.validator(-1)).to.be.true
   })
 
   it('should validate `onDragStart` prop', function () {

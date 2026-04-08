@@ -1,11 +1,11 @@
 import './components/vue-draggable-resizable.css'
 
-import VueDraggableResizable from './components/vue-draggable-resizable'
+import VueDraggableResizable from './components/vue-draggable-resizable.vue'
 
-export function install (Vue) {
+export function install (app) {
   if (install.installed) return
   install.installed = true
-  Vue.component('VueDraggableResizable', VueDraggableResizable)
+  app.component('VueDraggableResizable', VueDraggableResizable)
 }
 
 const plugin = {
@@ -19,7 +19,8 @@ if (typeof window !== 'undefined') {
   GlobalVue = global.Vue
 }
 if (GlobalVue) {
-  GlobalVue.use(plugin)
+  install(GlobalVue)
 }
 
+export { VueDraggableResizable }
 export default VueDraggableResizable

@@ -53,21 +53,20 @@ describe('Basic', function () {
     expect(wrapper.find('div.handle-ml').html()).to.contain('<span>ML</span>')
   })
 
-  it('should not block event bubbling', function (done) {
+  it('should not block event bubbling', async function () {
     wrapper = mount(VueDraggableResizable, {
       slots: {
         default: '<input type="text" class="input" />'
       }
     })
 
-    wrapper.find('.input').trigger('mousedown')
+    await wrapper.find('.input').trigger('mousedown')
 
     expect(wrapper.emitted()).to.have.property('activated')
 
-    wrapper.vm.$nextTick(() => {
-      expect(wrapper.classes()).to.contain('active')
-      done()
-    })
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.classes()).to.contain('active')
   })
 
   afterEach(() => wrapper.destroy())

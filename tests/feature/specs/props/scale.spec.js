@@ -4,11 +4,11 @@ import syn from 'syn'
 
 let wrapper
 
-describe('`scale` prop', function () {
-  it('should drag the component accordingly to the `scale` prop', function (done) {
+describe('`scaleRatio` prop', function () {
+  it('should drag the component accordingly to the `scaleRatio` prop', async function () {
     const ParentComponent = {
       template: `<div>
-        <vue-draggable-resizable :x="0" :y="0" :w="200" :h="200" :scale="0.5" :active="true"></vue-draggable-resizable>
+        <vue-draggable-resizable :x="0" :y="0" :w="200" :h="200" :scale-ratio="0.5" :active="true"></vue-draggable-resizable>
       </div>`,
       components: {
         VueDraggableResizable
@@ -19,33 +19,29 @@ describe('`scale` prop', function () {
       attachToDocument: true
     })
 
-    wrapper.vm.$nextTick(() => {
-      const $el = wrapper.vm.$children[0].$el
+    const component = wrapper.findComponent(VueDraggableResizable)
 
-      const rect = $el.getBoundingClientRect()
-      const fromX = rect.left
-      const fromY = rect.top
+    await component.vm.$nextTick()
 
-      syn.drag(
-        $el,
-        {
-          from: { pageX: fromX, pageY: fromY },
-          to: { pageX: fromX + 50, pageY: fromY + 50 },
-          duration: 10
-        },
-        function () {
-          expect($el.style.transform).to.equal('translate(100px, 100px)')
+    const $el = component.vm.$el
+    const rect = $el.getBoundingClientRect()
 
-          done()
-        }
-      )
-    })
+    await syn.drag(
+      $el,
+      {
+        from: { pageX: rect.left, pageY: rect.top },
+        to: { pageX: rect.left + 50, pageY: rect.top + 50 },
+        duration: 10
+      }
+    )
+
+    expect($el.style.transform).to.equal('translate(100px, 100px)')
   })
 
-  it('should resize the component accordingly to the `scale` prop', function (done) {
+  it('should resize the component accordingly to the `scaleRatio` prop', async function () {
     const ParentComponent = {
       template: `<div>
-        <vue-draggable-resizable :x="0" :y="0" :w="200" :h="200" :scale="1.5" :active="true"></vue-draggable-resizable>
+        <vue-draggable-resizable :x="0" :y="0" :w="200" :h="200" :scale-ratio="1.5" :active="true"></vue-draggable-resizable>
       </div>`,
       components: {
         VueDraggableResizable
@@ -56,28 +52,25 @@ describe('`scale` prop', function () {
       attachToDocument: true
     })
 
-    wrapper.vm.$nextTick(() => {
-      const $el = wrapper.vm.$children[0].$el
+    const component = wrapper.findComponent(VueDraggableResizable)
 
-      const rect = $el.querySelector('div.handle-br').getBoundingClientRect()
-      const fromX = rect.left
-      const fromY = rect.top
+    await component.vm.$nextTick()
 
-      syn.drag(
-        $el,
-        {
-          from: { pageX: fromX, pageY: fromY },
-          to: { pageX: fromX + 50, pageY: fromY + 50 },
-          duration: 10
-        },
-        function () {
-          expect($el.style.width).to.equal('233px')
-          expect($el.style.height).to.equal('233px')
+    const $el = component.vm.$el
+    const handle = $el.querySelector('div.handle-br')
+    const rect = handle.getBoundingClientRect()
 
-          done()
-        }
-      )
-    })
+    await syn.drag(
+      handle,
+      {
+        from: { pageX: rect.left, pageY: rect.top },
+        to: { pageX: rect.left + 50, pageY: rect.top + 50 },
+        duration: 10
+      }
+    )
+
+    expect($el.style.width).to.equal('233px')
+    expect($el.style.height).to.equal('233px')
   })
 
   afterEach(() => wrapper.destroy())

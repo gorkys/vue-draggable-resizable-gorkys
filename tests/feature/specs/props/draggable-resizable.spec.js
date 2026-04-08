@@ -41,7 +41,7 @@ describe('component draggable', function () {
     })
   })
 
-  it('should react to `draggable` prop changes', function () {
+  it('should react to `draggable` prop changes', async function () {
     wrapper = mount(VueDraggableResizable, {
       attachToDocument: true,
       propsData: {
@@ -49,7 +49,7 @@ describe('component draggable', function () {
       }
     })
 
-    wrapper.setProps({ draggable: true })
+    await wrapper.setProps({ draggable: true })
 
     expect(wrapper.classes()).to.contain('draggable')
   })
@@ -128,7 +128,7 @@ describe('component resizable', function () {
     expect(wrapper.findAll('div.handle').length).to.equal(0)
   })
 
-  it('should react to `resizable` prop changes', function () {
+  it('should react to `resizable` prop changes', async function () {
     wrapper = mount(VueDraggableResizable, {
       attachToDocument: true,
       propsData: {
@@ -136,7 +136,7 @@ describe('component resizable', function () {
       }
     })
 
-    wrapper.setProps({ resizable: true })
+    await wrapper.setProps({ resizable: true })
 
     expect(wrapper.classes()).to.contain('resizable')
   })
