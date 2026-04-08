@@ -1,5 +1,3 @@
-import Vue from 'vue'
-
 export default () => ({
   template: `
     <div>
@@ -37,7 +35,7 @@ export default () => ({
     }
   },
   mounted() {
-    // 支持 Ctrl (keyCode 17) 和 Command (keyCode 91, 224) 键
+    // 支持 Ctrl (keyCode 17) �?Command (keyCode 91, 224) �?
     const syncKeys = [17, 91, 224];
     window.addEventListener('keydown', ev => {
       if (syncKeys.includes(ev.keyCode) || ev.ctrlKey || ev.metaKey) {
@@ -49,7 +47,7 @@ export default () => ({
         this.sync = false;
       }
     });
-    // 失去焦点时重置
+    // 失去焦点时重�?
     window.addEventListener('blur', () => {
       this.sync = false;
     });

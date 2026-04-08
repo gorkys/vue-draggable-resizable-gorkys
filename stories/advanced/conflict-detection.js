@@ -1,5 +1,3 @@
-import Vue from 'vue'
-
 export default () => ({
   template: `
     <div style="height: 600px; width: 1200px; border: 1px solid red; position: relative;margin: 0 auto">

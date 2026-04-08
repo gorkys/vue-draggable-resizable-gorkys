@@ -1,5 +1,3 @@
-import Vue from 'vue'
-
 const style = {
     position: 'relative',
     backgroundColor: '#808080',

@@ -1,5 +1,3 @@
-import Vue from 'vue'
-
 export default () => ({
   template: `
     <vue-draggable-resizable :lock-aspect-ratio="true" :minHeight="100" :minWidth="50">
