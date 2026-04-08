@@ -267,7 +267,8 @@ describe('props validation', function () {
     const parent = getProp('parent')
 
     expect(parent.required).to.be.undefined
-    expect(parent.type).to.equal(Boolean)
+    expect(parent.type).to.contain(Boolean)
+    expect(parent.type).to.contain(String)
     expect(parent.default).to.equal(false)
   })
 

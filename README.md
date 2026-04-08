@@ -105,6 +105,18 @@
 <vue-draggable-resizable :snap="true" :snap-tolerance="20" />
 ```
 
+**parent**<br/>
+Type: `Boolean | String`<br/>
+Required: `false`<br/>
+Default: `false`
+
+Constrains the component inside a parent boundary. Pass `true` to use the direct parent element, or pass a CSS selector string to use the matched element as the boundary source.
+
+```vue
+<vue-draggable-resizable :parent="true" />
+<vue-draggable-resizable parent=".canvas-container" />
+```
+
 **activeOnTop**<br/>
 类型: `Boolean`<br/>
 必需: `false`<br/>

@@ -157,5 +157,42 @@ describe('`parent` prop', function () {
     })
   })
 
+  it('should accept a parent selector string and clamp dragging to the matched element', function (done) {
+    const ParentComponent = {
+      template: `<div class="parent" style="width: 200px; height: 200px;">
+        <vue-draggable-resizable :x="0" :y="0" :w="200" :h="200" parent=".parent" :active="true"></vue-draggable-resizable>
+      </div>`,
+      components: {
+        VueDraggableResizable
+      }
+    }
+
+    wrapper = mount(ParentComponent, {
+      attachToDocument: true
+    })
+
+    wrapper.vm.$nextTick(() => {
+      const $el = wrapper.vm.$children[0].$el
+
+      const rect = $el.getBoundingClientRect()
+      const fromX = rect.left + rect.width / 2
+      const fromY = rect.top + rect.height / 2
+
+      syn.drag(
+        $el,
+        {
+          from: { pageX: fromX, pageY: fromY },
+          to: { pageX: fromX + 50, pageY: fromY + 50 },
+          duration: 10
+        },
+        function () {
+          expect($el.style.transform).to.equal('translate(0px, 0px)')
+
+          done()
+        }
+      )
+    })
+  })
+
   afterEach(() => wrapper.destroy())
 })
