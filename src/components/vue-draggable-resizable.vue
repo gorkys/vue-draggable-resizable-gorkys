@@ -572,13 +572,7 @@ export default {
         return
       }
       if (e.stopPropagation) e.stopPropagation()
-      // Here we avoid a dangerous recursion by faking
-      // corner handles as middle handles
-      if (this.lockAspectRatio && !handle.includes('m')) {
-        this.handle = 'm' + handle.substring(1)
-      } else {
-        this.handle = handle
-      }
+      this.handle = handle
       this.syncGeometry()
       this.resizing = true
       this.mouseClickPosition.mouseX = e.touches ? e.touches[0].pageX : e.pageX
@@ -735,6 +729,12 @@ export default {
       const mouseClickPosition = this.mouseClickPosition
       const lockAspectRatio = this.lockAspectRatio
       const aspectFactor = this.aspectFactor
+      const isCornerHandle = ['tl', 'tr', 'br', 'bl'].includes(this.handle)
+      const resizeHandle = lockAspectRatio && isCornerHandle
+        ? 'm' + this.handle.substring(1)
+        : this.handle
+      const resizingOnX = Boolean(resizeHandle) && (resizeHandle.includes('l') || resizeHandle.includes('r'))
+      const resizingOnY = Boolean(resizeHandle) && (resizeHandle.includes('t') || resizeHandle.includes('b'))
       const tmpDeltaX = mouseClickPosition.mouseX - (e.touches ? e.touches[0].pageX : e.pageX)
       const tmpDeltaY = mouseClickPosition.mouseY - (e.touches ? e.touches[0].pageY : e.pageY)
       if (!this.widthTouched && tmpDeltaX) {
@@ -744,42 +744,50 @@ export default {
         this.heightTouched = true
       }
       const [deltaX, deltaY] = snapToGrid(this.grid, tmpDeltaX, tmpDeltaY, this.scaleRatio)
-      if (this.handle.includes('b')) {
+      if (resizeHandle.includes('b')) {
         bottom = restrictToBounds(
           mouseClickPosition.bottom + deltaY,
           this.bounds.minBottom,
           this.bounds.maxBottom
         )
-        if (this.lockAspectRatio && this.resizingOnY) {
+        if (lockAspectRatio && resizingOnY) {
           right = this.right - (this.bottom - bottom) * aspectFactor
         }
-      } else if (this.handle.includes('t')) {
+      } else if (resizeHandle.includes('t')) {
         top = restrictToBounds(
           mouseClickPosition.top - deltaY,
           this.bounds.minTop,
           this.bounds.maxTop
         )
-        if (this.lockAspectRatio && this.resizingOnY) {
+        if (lockAspectRatio && resizingOnY) {
           left = this.left - (this.top - top) * aspectFactor
         }
       }
-      if (this.handle.includes('r')) {
+      if (resizeHandle.includes('r')) {
         right = restrictToBounds(
           mouseClickPosition.right + deltaX,
           this.bounds.minRight,
           this.bounds.maxRight
         )
-        if (this.lockAspectRatio && this.resizingOnX) {
-          bottom = this.bottom - (this.right - right) / aspectFactor
+        if (lockAspectRatio && resizingOnX) {
+          if (isCornerHandle && this.handle.includes('t')) {
+            top = this.top - (this.right - right) / aspectFactor
+          } else {
+            bottom = this.bottom - (this.right - right) / aspectFactor
+          }
         }
-      } else if (this.handle.includes('l')) {
+      } else if (resizeHandle.includes('l')) {
         left = restrictToBounds(
           mouseClickPosition.left - deltaX,
           this.bounds.minLeft,
           this.bounds.maxLeft
         )
-        if (this.lockAspectRatio && this.resizingOnX) {
-          top = this.top - (this.left - left) / aspectFactor
+        if (lockAspectRatio && resizingOnX) {
+          if (isCornerHandle && this.handle.includes('b')) {
+            bottom = this.bottom - (this.left - left) / aspectFactor
+          } else {
+            top = this.top - (this.left - left) / aspectFactor
+          }
         }
       }
       const width = computeWidth(this.parentWidth, left, right)
@@ -1159,15 +1167,6 @@ export default {
         }
       }
       return this.height + 'px'
-    },
-    resizingOnX () {
-      return (Boolean(this.handle) && (this.handle.includes('l') || this.handle.includes('r')))
-    },
-    resizingOnY () {
-      return (Boolean(this.handle) && (this.handle.includes('t') || this.handle.includes('b')))
-    },
-    isCornerHandle () {
-      return (Boolean(this.handle) && ['tl', 'tr', 'br', 'bl'].includes(this.handle))
     }
   },
 
