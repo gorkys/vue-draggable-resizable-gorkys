@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import VueDraggableResizable from './components/vue-draggable-resizable'
+import VueDraggableResizable from './components/vue-draggable-resizable.vue'
 import './components/vue-draggable-resizable.css'
 export default {
   name: 'app',
@@ -80,11 +80,11 @@ export default {
       const { vLine, hLine } = params
       let id = 0
       this.vLine = vLine.map(item => {
-        item['id'] = ++id
+        item.id = ++id
         return item
       })
       this.hLine = hLine.map(item => {
-        item['id'] = ++id
+        item.id = ++id
         return item
       })
     }

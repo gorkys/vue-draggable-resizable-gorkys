@@ -1,13 +1,21 @@
 module.exports = {
   env: {
-    mocha: true
+    browser: true,
+    mocha: true,
+    node: true
   },
   globals: {
-    'expect': true,
-    'sinon': true
+    expect: true,
+    sinon: true
   },
   parserOptions: {
-    parser: 'babel-eslint'
+    parser: '@babel/eslint-parser',
+    babelOptions: {
+      configFile: false
+    },
+    ecmaVersion: 'latest',
+    requireConfigFile: false,
+    sourceType: 'module'
   },
   rules: {
     'import/no-extraneous-dependencies': 'off',

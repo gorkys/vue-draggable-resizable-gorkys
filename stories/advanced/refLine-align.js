@@ -1,7 +1,6 @@
 /*
  Created by Gorky on 2019/11/25
 */
-import Vue from 'vue'
 
 export default () => ({
   template: `

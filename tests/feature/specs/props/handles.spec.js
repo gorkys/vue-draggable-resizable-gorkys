@@ -26,7 +26,7 @@ describe('`handles` prop', function () {
     expect(wrapper.findAll('div.handle').length).to.equal(0)
   })
 
-  it('should react to `handles` prop changes', function () {
+  it('should react to `handles` prop changes', async function () {
     wrapper = mount(VueDraggableResizable, {
       attachToDocument: true,
       propsData: {
@@ -34,7 +34,7 @@ describe('`handles` prop', function () {
       }
     })
 
-    wrapper.setProps({ handles: ['tl', 'tm', 'tr', 'bl', 'bm', 'br'] })
+    await wrapper.setProps({ handles: ['tl', 'tm', 'tr', 'bl', 'bm', 'br'] })
 
     expect(wrapper.props().handles).to.have.length(6)
     expect(wrapper.findAll('div.handle').length).to.equal(6)

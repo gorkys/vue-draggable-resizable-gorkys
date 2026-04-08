@@ -1,5 +1,3 @@
-import Vue from 'vue'
-
 export default () => ({
   template: `
     <vue-draggable-resizable :w="200" :h="200" :x="0" :y="0" @resizing="onResize" @resizestop="onResizeStop">

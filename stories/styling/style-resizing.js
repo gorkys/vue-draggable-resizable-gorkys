@@ -1,5 +1,3 @@
-import Vue from 'vue'
-
 export default () => ({
   template: `
     <vue-draggable-resizable class-name-resizing="my-resizing-class" class-name="my-class">

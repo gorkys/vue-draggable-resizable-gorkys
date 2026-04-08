@@ -1,11 +1,12 @@
-html, body, #root, #root > div {
+html, body, #root, #root > div, #storybook-root, #storybook-root > div {
   height: 100%;
   margin: 0;
   box-sizing: border-box;
   font-family: Arial;
 }
 
-#root > div {
+#root > div,
+#storybook-root > div {
   position: relative;
   padding: 0px;
 }
@@ -130,4 +131,20 @@ html, body, #root, #root > div {
 .my-handle-class-bm:hover,
 .my-handle-class-br:hover {
     transform: scale(1.4);
+}
+
+.ref-line {
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+  background-color: #ef4444;
+  opacity: 0.85;
+}
+
+.ref-line.v-line {
+  width: 1px;
+}
+
+.ref-line.h-line {
+  height: 1px;
 }

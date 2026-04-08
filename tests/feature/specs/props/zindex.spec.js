@@ -23,7 +23,7 @@ describe('zIndex prop', function () {
     expect(wrapper.vm.$el.style.zIndex).to.equal('auto')
   })
 
-  it('should react to `z` prop changes', function () {
+  it('should react to `z` prop changes', async function () {
     wrapper = mount(VueDraggableResizable, {
       attachToDocument: true,
       propsData: {
@@ -31,7 +31,7 @@ describe('zIndex prop', function () {
       }
     })
 
-    wrapper.setProps({ z: 999 })
+    await wrapper.setProps({ z: 999 })
 
     expect(wrapper.vm.$data.zIndex).to.equal(999)
   })

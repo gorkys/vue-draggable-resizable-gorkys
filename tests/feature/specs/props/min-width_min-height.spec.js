@@ -18,7 +18,7 @@ describe('`min-height` and `min-width` props', function () {
     expect(wrapper.props().minWidth).to.equal(200)
   })
 
-  it('should react to `min-height` and `min-width` prop changes', function () {
+  it('should react to `min-height` and `min-width` prop changes', async function () {
     wrapper = mount(VueDraggableResizable, {
       attachToDocument: true,
       propsData: {
@@ -27,7 +27,7 @@ describe('`min-height` and `min-width` props', function () {
       }
     })
 
-    wrapper.setProps({ minHeight: 200, minWidth: 300 })
+    await wrapper.setProps({ minHeight: 200, minWidth: 300 })
 
     expect(wrapper.props().minHeight).to.equal(200)
     expect(wrapper.props().minWidth).to.equal(300)

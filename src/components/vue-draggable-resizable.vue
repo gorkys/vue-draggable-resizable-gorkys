@@ -60,8 +60,35 @@ const userSelectAuto = {
 
 let eventsFor = events.mouse
 
+function isPrimaryButton (event) {
+  if (!(event instanceof MouseEvent)) {
+    return true
+  }
+
+  if (typeof event.which === 'number' && event.which !== 0) {
+    return event.which === 1
+  }
+
+  if (typeof event.button === 'number') {
+    return event.button === 0
+  }
+
+  return true
+}
+
 export default {
   name: 'vue-draggable-resizable',
+  emits: [
+    'activated',
+    'contextmenu',
+    'deactivated',
+    'dragging',
+    'dragstop',
+    'refLineParams',
+    'resizing',
+    'resizestop',
+    'update:active'
+  ],
   props: {
     className: {
       type: String,
@@ -317,21 +344,39 @@ export default {
     this.right = this.parentWidth - this.width - this.left
     this.bottom = this.parentHeight - this.height - this.top
     this.settingAttribute()
-    const parentElement = this.$el.parentNode
-    addEvent(parentElement || document.documentElement, 'mousedown', this.deselect)
-    addEvent(parentElement || document.documentElement, 'touchstart', this.deselect)
-    addEvent(parentElement || document.documentElement, 'touchend touchcancel', this.deselect)
+    this.deselectTarget = document.documentElement
+    addEvent(this.deselectTarget, 'mousedown', this.deselect)
+    addEvent(this.deselectTarget, 'touchstart', this.deselect)
+    addEvent(this.deselectTarget, 'touchend touchcancel', this.deselect)
     addEvent(window, 'resize', this.checkParentSize)
   },
 
+  updated: function () {
+    if (this.dragging || this.resizing || !this.$el) {
+      return
+    }
+
+    if (this.w !== 'auto' && this.h !== 'auto') {
+      return
+    }
+
+    const [width, height] = getComputedSize(this.$el)
+    const widthChanged = this.w === 'auto' && !this.widthTouched && width !== this.width
+    const heightChanged = this.h === 'auto' && !this.heightTouched && height !== this.height
+
+    if (widthChanged || heightChanged) {
+      this.syncGeometry()
+    }
+  },
+
   beforeUnmount: function () {
-    removeEvent(document.documentElement, 'mousedown touchstart', this.deselect)
-    removeEvent(document.documentElement, 'touchstart', this.deselect)
+    removeEvent(this.deselectTarget || document.documentElement, 'mousedown', this.deselect)
+    removeEvent(this.deselectTarget || document.documentElement, 'touchstart', this.deselect)
+    removeEvent(this.deselectTarget || document.documentElement, 'touchend touchcancel', this.deselect)
     removeEvent(document.documentElement, 'touchstart', this.handleUp)
     removeEvent(document.documentElement, 'mousemove', this.move)
     removeEvent(document.documentElement, 'touchmove', this.move)
     removeEvent(document.documentElement, 'mouseup', this.handleUp)
-    removeEvent(document.documentElement, 'touchend touchcancel', this.deselect)
     removeEvent(window, 'resize', this.checkParentSize)
   },
 
@@ -481,7 +526,7 @@ export default {
     },
     // 元素按下
     elementDown (e) {
-      if (e instanceof MouseEvent && e.which !== 1) {
+      if (!isPrimaryButton(e)) {
         return
       }
       const target = e.target || e.srcElement
@@ -565,7 +610,7 @@ export default {
     },
     // 控制柄按下
     handleDown (handle, e) {
-      if (e instanceof MouseEvent && e.which !== 1) {
+      if (!isPrimaryButton(e)) {
         return
       }
       if (this.onResizeStart(handle, e) === false) {
@@ -808,7 +853,7 @@ export default {
     },
     changeWidth (val) {
       const [newWidth, _] = snapToGrid(this.grid, val, 0, this.scaleRatio)
-      let right = restrictToBounds(
+      const right = restrictToBounds(
         (this.parentWidth - newWidth - this.left),
         this.bounds.minRight,
         this.bounds.maxRight
@@ -826,7 +871,7 @@ export default {
     },
     changeHeight (val) {
       const [_, newHeight] = snapToGrid(this.grid, 0, val, this.scaleRatio)
-      let bottom = restrictToBounds(
+      const bottom = restrictToBounds(
         (this.parentHeight - newHeight - this.top),
         this.bounds.minBottom,
         this.bounds.maxBottom
@@ -848,7 +893,7 @@ export default {
       // 初始化辅助线数据
       const temArr = new Array(3).fill({ display: false, position: '', origin: '', lineLength: '' })
       const refLine = { vLine: [], hLine: [] }
-      for (let i in refLine) { refLine[i] = JSON.parse(JSON.stringify(temArr)) }
+      for (const i in refLine) { refLine[i] = JSON.parse(JSON.stringify(temArr)) }
       if (this.resizing) {
         this.resizing = false
         await this.conflictCheck()
@@ -880,12 +925,12 @@ export default {
       const height = this.height
       if (this.isConflictCheck) {
         const nodes = this.$el.parentNode.childNodes // 获取当前父节点下所有子节点
-        for (let item of nodes) {
+        for (const item of nodes) {
           if (item.className !== undefined && !item.className.includes(this.classNameActive) && item.getAttribute('data-is-check') !== null && item.getAttribute('data-is-check') !== 'false') {
             const tw = item.offsetWidth
             const th = item.offsetHeight
             // 正则获取left与right
-            let [tl, tt] = this.formatTransformVal(item.style.transform)
+            const [tl, tt] = this.formatTransformVal(item.style.transform)
             // 左上角与右下角重叠
             const tfAndBr = (top >= tt && left >= tl && tt + th > top && tl + tw > left) || (top <= tt && left < tl && top + height > tt && left + width > tl)
             // 右上角与左下角重叠
@@ -924,10 +969,10 @@ export default {
         // 初始化辅助线数据
         const temArr = new Array(3).fill({ display: false, position: '', origin: '', lineLength: '' })
         const refLine = { vLine: [], hLine: [] }
-        for (let i in refLine) { refLine[i] = JSON.parse(JSON.stringify(temArr)) }
+        for (const i in refLine) { refLine[i] = JSON.parse(JSON.stringify(temArr)) }
         // 获取当前父节点下所有子节点
         const nodes = this.$el.parentNode.childNodes
-        let tem = {
+        const tem = {
           value: { x: [[], [], []], y: [[], [], []] },
           display: [],
           position: []
@@ -946,7 +991,7 @@ export default {
         // 跟踪哪些辅助线类型被激活
         const displayFlags = new Array(12).fill(false)
         const positions = new Array(12).fill(0)
-        for (let item of nodes) {
+        for (const item of nodes) {
           if (item.className !== undefined && !item.className.includes(this.classNameActive) && item.getAttribute('data-is-snap') !== null && item.getAttribute('data-is-snap') !== 'false') {
             const w = item.offsetWidth
             const h = item.offsetHeight
@@ -1074,14 +1119,14 @@ export default {
       let groupHeight = 0
       let groupLeft = 0
       let groupTop = 0
-      for (let item of nodes) {
+      for (const item of nodes) {
         if (item.className !== undefined && item.className.includes(this.classNameActive)) {
           activeAll.push(item)
         }
       }
       const AllLength = activeAll.length
       if (AllLength > 1) {
-        for (let i of activeAll) {
+        for (const i of activeAll) {
           const l = i.offsetLeft
           const r = l + i.offsetWidth
           const t = i.offsetTop

@@ -6,7 +6,7 @@ import sinon from 'sinon'
 let wrapper
 
 describe('`onDragStart` and `onResizeStart` props', function () {
-  it('should call `onDragStart` callback when the component is clicked', function () {
+  it('should call `onDragStart` callback when the component is clicked', async function () {
     const onDragStartCallback = sinon.spy()
 
     wrapper = mount(VueDraggableResizable, {
@@ -16,12 +16,12 @@ describe('`onDragStart` and `onResizeStart` props', function () {
       }
     })
 
-    wrapper.trigger('mousedown')
+    await wrapper.trigger('mousedown')
 
     sinon.assert.called(onDragStartCallback)
   })
 
-  it('should prevent activation of the component if the `onDragStart` callback returns false', function () {
+  it('should prevent activation of the component if the `onDragStart` callback returns false', async function () {
     const onDragStartCallback = () => false
 
     wrapper = mount(VueDraggableResizable, {
@@ -31,13 +31,13 @@ describe('`onDragStart` and `onResizeStart` props', function () {
       }
     })
 
-    wrapper.trigger('mousedown')
+    await wrapper.trigger('mousedown')
 
     expect(wrapper.emitted()).to.not.have.property('activated')
     expect(wrapper.classes()).to.not.contain('active')
   })
 
-  it('should call `onResizeStart` callback when the component is resized', function (done) {
+  it('should call `onResizeStart` callback when the component is resized', async function () {
     const onResizeStartCallback = sinon.spy()
 
     wrapper = mount(VueDraggableResizable, {
@@ -48,30 +48,25 @@ describe('`onDragStart` and `onResizeStart` props', function () {
       }
     })
 
-    wrapper.vm.$nextTick(() => {
-      const $el = wrapper.vm.$el
+    await wrapper.vm.$nextTick()
 
-      const rect = $el.querySelector('div.handle-br').getBoundingClientRect()
-      const fromX = rect.left
-      const fromY = rect.top
+    const $el = wrapper.vm.$el
+    const handle = $el.querySelector('div.handle-br')
+    const rect = handle.getBoundingClientRect()
 
-      syn.drag(
-        $el.querySelector('div.handle-br'),
-        {
-          from: { pageX: fromX, pageY: fromY },
-          to: { pageX: fromX + 50, pageY: fromY + 50 },
-          duration: 10
-        },
-        function () {
-          sinon.assert.called(onResizeStartCallback)
+    await syn.drag(
+      handle,
+      {
+        from: { pageX: rect.left, pageY: rect.top },
+        to: { pageX: rect.left + 50, pageY: rect.top + 50 },
+        duration: 10
+      }
+    )
 
-          done()
-        }
-      )
-    })
+    sinon.assert.called(onResizeStartCallback)
   })
 
-  it('should prevent resizing the component if the `onResizeStart` callback returns false', function (done) {
+  it('should prevent resizing the component if the `onResizeStart` callback returns false', async function () {
     const onResizeStartCallback = () => false
 
     wrapper = mount(VueDraggableResizable, {
@@ -84,35 +79,30 @@ describe('`onDragStart` and `onResizeStart` props', function () {
       }
     })
 
-    wrapper.vm.$nextTick(() => {
-      const $el = wrapper.vm.$el
+    await wrapper.vm.$nextTick()
 
-      const rect = $el.querySelector('div.handle-br').getBoundingClientRect()
-      const fromX = rect.left
-      const fromY = rect.top
+    const $el = wrapper.vm.$el
+    const handle = $el.querySelector('div.handle-br')
+    const rect = handle.getBoundingClientRect()
 
-      syn.drag(
-        $el.querySelector('div.handle-br'),
-        {
-          from: { pageX: fromX, pageY: fromY },
-          to: { pageX: fromX + 50, pageY: fromY + 50 },
-          duration: 10
-        },
-        function () {
-          expect($el.style.width).to.equal('100px')
-          expect($el.style.height).to.equal('100px')
+    await syn.drag(
+      handle,
+      {
+        from: { pageX: rect.left, pageY: rect.top },
+        to: { pageX: rect.left + 50, pageY: rect.top + 50 },
+        duration: 10
+      }
+    )
 
-          done()
-        }
-      )
-    })
+    expect($el.style.width).to.equal('100px')
+    expect($el.style.height).to.equal('100px')
   })
 
   afterEach(() => wrapper.destroy())
 })
 
 describe('`onDrag` and `onResize` props', function () {
-  it('should call `onDrag` callback when the component is dragged', function (done) {
+  it('should call `onDrag` callback when the component is dragged', async function () {
     const onDragCallback = sinon.spy()
 
     wrapper = mount(VueDraggableResizable, {
@@ -125,30 +115,24 @@ describe('`onDrag` and `onResize` props', function () {
       }
     })
 
-    wrapper.vm.$nextTick(() => {
-      const $el = wrapper.vm.$el
-      const rect = $el.getBoundingClientRect()
+    await wrapper.vm.$nextTick()
 
-      const fromX = rect.left + rect.width / 2
-      const fromY = rect.top + rect.height / 2
+    const $el = wrapper.vm.$el
+    const rect = $el.getBoundingClientRect()
 
-      syn.drag(
-        $el,
-        {
-          from: { pageX: fromX, pageY: fromY },
-          to: { pageX: fromX + 50, pageY: fromY + 50 }
-        },
-        function () {
-          sinon.assert.called(onDragCallback)
-          sinon.assert.calledWith(onDragCallback, 0, 0)
+    await syn.drag(
+      $el,
+      {
+        from: { pageX: rect.left + rect.width / 2, pageY: rect.top + rect.height / 2 },
+        to: { pageX: rect.left + rect.width / 2 + 50, pageY: rect.top + rect.height / 2 + 50 }
+      }
+    )
 
-          done()
-        }
-      )
-    })
+    sinon.assert.called(onDragCallback)
+    sinon.assert.calledWith(onDragCallback, 50, 50)
   })
 
-  it('should prevent dragging the component if the `onDrag` callback returns false', function (done) {
+  it('should prevent dragging the component if the `onDrag` callback returns false', async function () {
     const onDragCallback = (x, y) => {
       if (x > 10) return false
       if (y > 10) return false
@@ -164,32 +148,26 @@ describe('`onDrag` and `onResize` props', function () {
       }
     })
 
-    wrapper.vm.$nextTick(() => {
-      const $el = wrapper.vm.$el
-      const rect = $el.getBoundingClientRect()
+    await wrapper.vm.$nextTick()
 
-      const fromX = rect.left + rect.width / 2
-      const fromY = rect.top + rect.height / 2
+    const $el = wrapper.vm.$el
+    const rect = $el.getBoundingClientRect()
 
-      syn.drag(
-        $el,
-        {
-          from: { pageX: fromX, pageY: fromY },
-          to: { pageX: fromX + 50, pageY: fromY + 50 },
-          duration: 1500
-        },
-        function () {
-          expect($el.style.transform).to.equal('translate(10px, 10px)')
-          expect($el.style.width).to.equal('100px')
-          expect($el.style.height).to.equal('100px')
+    await syn.drag(
+      $el,
+      {
+        from: { pageX: rect.left + rect.width / 2, pageY: rect.top + rect.height / 2 },
+        to: { pageX: rect.left + rect.width / 2 + 50, pageY: rect.top + rect.height / 2 + 50 },
+        duration: 1500
+      }
+    )
 
-          done()
-        }
-      )
-    })
+    expect($el.style.transform).to.equal('translate(10px, 10px)')
+    expect($el.style.width).to.equal('100px')
+    expect($el.style.height).to.equal('100px')
   })
 
-  it('should call `onResize` callback when the component is resized', function (done) {
+  it('should call `onResize` callback when the component is resized', async function () {
     const onResizeCallback = sinon.spy()
 
     wrapper = mount(VueDraggableResizable, {
@@ -202,31 +180,26 @@ describe('`onDrag` and `onResize` props', function () {
       }
     })
 
-    wrapper.vm.$nextTick(() => {
-      const $el = wrapper.vm.$el
+    await wrapper.vm.$nextTick()
 
-      const rect = $el.querySelector('div.handle-br').getBoundingClientRect()
-      const fromX = rect.left
-      const fromY = rect.top
+    const $el = wrapper.vm.$el
+    const handle = $el.querySelector('div.handle-br')
+    const rect = handle.getBoundingClientRect()
 
-      syn.drag(
-        $el.querySelector('div.handle-br'),
-        {
-          from: { pageX: fromX, pageY: fromY },
-          to: { pageX: fromX + 50, pageY: fromY + 50 },
-          duration: 10
-        },
-        function () {
-          sinon.assert.called(onResizeCallback)
-          sinon.assert.calledWith(onResizeCallback, 'br', 0, 0, 100, 100)
+    await syn.drag(
+      handle,
+      {
+        from: { pageX: rect.left, pageY: rect.top },
+        to: { pageX: rect.left + 50, pageY: rect.top + 50 },
+        duration: 10
+      }
+    )
 
-          done()
-        }
-      )
-    })
+    sinon.assert.called(onResizeCallback)
+    sinon.assert.calledWith(onResizeCallback, 'br', 0, 0, 150, 150)
   })
 
-  it('should prevent resizing the component if the `onResize` callback returns false', function (done) {
+  it('should prevent resizing the component if the `onResize` callback returns false', async function () {
     const onResizeCallback = (handle, x, y, w, h) => {
       if (w > 110) return false
       if (h > 110) return false
@@ -242,28 +215,23 @@ describe('`onDrag` and `onResize` props', function () {
       }
     })
 
-    wrapper.vm.$nextTick(() => {
-      const $el = wrapper.vm.$el
+    await wrapper.vm.$nextTick()
 
-      const rect = $el.querySelector('div.handle-br').getBoundingClientRect()
-      const fromX = rect.left
-      const fromY = rect.top
+    const $el = wrapper.vm.$el
+    const handle = $el.querySelector('div.handle-br')
+    const rect = handle.getBoundingClientRect()
 
-      syn.drag(
-        $el.querySelector('div.handle-br'),
-        {
-          from: { pageX: fromX, pageY: fromY },
-          to: { pageX: fromX + 50, pageY: fromY + 50 },
-          duration: 1500
-        },
-        function () {
-          expect($el.style.width).to.equal('110px')
-          expect($el.style.height).to.equal('110px')
+    await syn.drag(
+      handle,
+      {
+        from: { pageX: rect.left, pageY: rect.top },
+        to: { pageX: rect.left + 50, pageY: rect.top + 50 },
+        duration: 1500
+      }
+    )
 
-          done()
-        }
-      )
-    })
+    expect($el.style.width).to.equal('110px')
+    expect($el.style.height).to.equal('110px')
   })
 
   afterEach(() => wrapper.destroy())

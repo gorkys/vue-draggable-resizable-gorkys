@@ -1,5 +1,3 @@
-import Vue from 'vue'
-
 const style = {
   border: 'dashed 1px black'
 };
