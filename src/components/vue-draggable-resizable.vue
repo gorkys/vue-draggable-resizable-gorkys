@@ -721,7 +721,7 @@ export default {
       this.bottom = this.parentHeight - this.height - top
     },
     // 控制柄移动
-    handleResize (e) {
+    async handleResize (e) {
       let left = this.left
       let top = this.top
       let right = this.right
@@ -801,6 +801,9 @@ export default {
       this.bottom = bottom
       this.width = width
       this.height = height
+      if (this.snap) {
+        await this.snapCheck({ applySnap: false })
+      }
       this.$emit('resizing', this.left, this.top, this.width, this.height)
     },
     changeWidth (val) {
@@ -910,7 +913,7 @@ export default {
       }
     },
     // 检测对齐元素
-    async snapCheck () {
+    async snapCheck ({ applySnap = true } = {}) {
       let width = this.width
       let height = this.height
       if (this.snap) {
@@ -971,70 +974,70 @@ export default {
             }
             // fix：中线自动对齐，元素可能超过父元素边界的问题
             if (ts) {
-              if (bln) {
+              if (bln && applySnap) {
                 this.top = Math.max(t - height, this.bounds.minTop)
                 this.bottom = this.parentHeight - this.top - height
               }
               tem.value.y[0].push(l, r, activeLeft, activeRight)
             }
             if (bs) {
-              if (bln) {
+              if (bln && applySnap) {
                 this.top = t
                 this.bottom = this.parentHeight - this.top - height
               }
               tem.value.y[0].push(l, r, activeLeft, activeRight)
             }
             if (TS) {
-              if (bln) {
+              if (bln && applySnap) {
                 this.top = Math.max(b - height, this.bounds.minTop)
                 this.bottom = this.parentHeight - this.top - height
               }
               tem.value.y[1].push(l, r, activeLeft, activeRight)
             }
             if (BS) {
-              if (bln) {
+              if (bln && applySnap) {
                 this.top = b
                 this.bottom = this.parentHeight - this.top - height
               }
               tem.value.y[1].push(l, r, activeLeft, activeRight)
             }
             if (ls) {
-              if (bln) {
+              if (bln && applySnap) {
                 this.left = Math.max(l - width, this.bounds.minLeft)
                 this.right = this.parentWidth - this.left - width
               }
               tem.value.x[0].push(t, b, activeTop, activeBottom)
             }
             if (rs) {
-              if (bln) {
+              if (bln && applySnap) {
                 this.left = l
                 this.right = this.parentWidth - this.left - width
               }
               tem.value.x[0].push(t, b, activeTop, activeBottom)
             }
             if (LS) {
-              if (bln) {
+              if (bln && applySnap) {
                 this.left = Math.max(r - width, this.bounds.minLeft)
                 this.right = this.parentWidth - this.left - width
               }
               tem.value.x[1].push(t, b, activeTop, activeBottom)
             }
             if (RS) {
-              if (bln) {
+              if (bln && applySnap) {
                 this.left = r
                 this.right = this.parentWidth - this.left - width
               }
               tem.value.x[1].push(t, b, activeTop, activeBottom)
             }
             if (hc) {
-              if (bln) {
+              if (bln && applySnap) {
                 this.top = Math.max(t + h / 2 - height / 2, this.bounds.minTop)
                 this.bottom = this.parentHeight - this.top - height
               }
               tem.value.y[2].push(l, r, activeLeft, activeRight)
             }
             if (vc) {
-              if (bln) {
+              if (bln && applySnap) {
                 this.left = Math.max(l + w / 2 - width / 2, this.bounds.minLeft)
                 this.right = this.parentWidth - this.left - width
               }

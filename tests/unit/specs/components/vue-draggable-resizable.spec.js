@@ -84,5 +84,25 @@ describe('vue-draggable-resizable', function () {
       expect(context.width).to.equal(300)
       expect(context.height).to.equal(150)
     })
+
+    it('should calculate snap lines while resizing when snap is enabled', async function () {
+      const context = createResizeContext('br')
+      let snapCheckOptions = null
+
+      context.lockAspectRatio = false
+      context.snap = true
+      context.snapCheck = async function (options) {
+        snapCheckOptions = options
+      }
+
+      await VueDraggableResizable.methods.handleResize.call(context, {
+        pageX: 100,
+        pageY: 100
+      })
+
+      expect(snapCheckOptions).to.deep.equal({ applySnap: false })
+      expect(context.width).to.equal(300)
+      expect(context.height).to.equal(200)
+    })
   })
 })
