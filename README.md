@@ -114,6 +114,7 @@ createApp(App)
 | `handles` | `String[]` | `['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml']` | Visible resize handles. |
 | `dragHandle` | `String \| null` | `null` | Only start dragging from matching descendants. |
 | `dragCancel` | `String \| null` | `null` | Prevent dragging from matching descendants. |
+| `parent` | `Boolean \| String` | `false` | Constrain to the direct parent or to the element matched by a CSS selector. |
 | `lockAspectRatio` | `Boolean` | `false` | Preserve aspect ratio while resizing. |
 | `rotate` | `Number` | `0` | Rotation in degrees. |
 | `scaleRatio` | `Number` | `1` | Correct pointer math for scaled canvases. |

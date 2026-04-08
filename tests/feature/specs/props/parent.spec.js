@@ -3,6 +3,7 @@ import { mount } from '@vue/test-utils'
 import syn from 'syn'
 
 let wrapper
+let selectorBoundary
 
 describe('`parent` prop', function () {
   it('should drag the component outside the parent node if `parent` prop is false', async function () {
@@ -143,5 +144,55 @@ describe('`parent` prop', function () {
     expect($el.style.height).to.equal('200px')
   })
 
-  afterEach(() => wrapper.destroy())
+  it('should accept a parent selector string and clamp dragging to the matched element', async function () {
+    selectorBoundary = document.createElement('div')
+    selectorBoundary.className = 'parent-selector-boundary'
+    selectorBoundary.style.width = '200px'
+    selectorBoundary.style.height = '200px'
+    document.body.appendChild(selectorBoundary)
+
+    wrapper = mount(VueDraggableResizable, {
+      attachTo: selectorBoundary,
+      props: {
+        x: 0,
+        y: 0,
+        w: 200,
+        h: 200,
+        parent: '.parent-selector-boundary',
+        active: true
+      }
+    })
+
+    await wrapper.vm.$nextTick()
+
+    const $el = wrapper.element
+
+    const rect = $el.getBoundingClientRect()
+    const fromX = rect.left + rect.width / 2
+    const fromY = rect.top + rect.height / 2
+
+    await syn.drag(
+      $el,
+      {
+        from: { pageX: fromX, pageY: fromY },
+        to: { pageX: fromX + 50, pageY: fromY + 50 },
+        duration: 10
+      }
+    )
+
+    expect($el.style.transform).to.equal('translate(0px, 0px)')
+  })
+
+  afterEach(() => {
+    if (wrapper) {
+      wrapper.destroy()
+      wrapper = null
+    }
+
+    if (selectorBoundary?.parentNode) {
+      selectorBoundary.parentNode.removeChild(selectorBoundary)
+    }
+
+    selectorBoundary = null
+  })
 })
