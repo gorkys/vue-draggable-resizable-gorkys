@@ -32,6 +32,29 @@ describe('`max-width` and `max-height` props', function () {
     expect(wrapper.props().maxHeight).to.equal(200)
   })
 
+  it('should clamp rendered size when `max-width` and `max-height` shrink', function (done) {
+    wrapper = mount(VueDraggableResizable, {
+      attachToDocument: true,
+      propsData: {
+        maxWidth: 200,
+        maxHeight: 200,
+        w: 200,
+        h: 200
+      }
+    })
+
+    wrapper.setProps({ maxWidth: 100, maxHeight: 120 })
+
+    wrapper.vm.$nextTick(() => {
+      const $el = wrapper.vm.$el
+
+      expect($el.style.width).to.equal('100px')
+      expect($el.style.height).to.equal('120px')
+
+      done()
+    })
+  })
+
   it('should not resize the component over `max-width` and `max-height` props', function (done) {
     wrapper = mount(VueDraggableResizable, {
       attachToDocument: true,

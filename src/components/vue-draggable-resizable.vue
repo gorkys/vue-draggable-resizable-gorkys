@@ -353,6 +353,67 @@ export default {
       return maxZ + 1
     },
     // 提升到最前面
+    syncParentSize () {
+      if (!this.parent) {
+        return
+      }
+      const [newParentWidth, newParentHeight] = this.getParentSize()
+      this.parentWidth = newParentWidth
+      this.parentHeight = newParentHeight
+    },
+    syncAutoSize () {
+      if (!this.$el) {
+        return
+      }
+      const shouldSyncWidth = this.w === 'auto' && !this.widthTouched
+      const shouldSyncHeight = this.h === 'auto' && !this.heightTouched
+      if (!shouldSyncWidth && !shouldSyncHeight) {
+        return
+      }
+      const [width, height] = getComputedSize(this.$el)
+      if (shouldSyncWidth) {
+        this.width = width
+      }
+      if (shouldSyncHeight) {
+        this.height = height
+      }
+    },
+    clampToSizeBounds () {
+      if (this.width === null || this.height === null) {
+        return
+      }
+      if (this.width < this.minW) {
+        this.width = this.minW
+        this.widthTouched = true
+      } else if (this.maxW !== null && this.width > this.maxW) {
+        this.width = this.maxW
+        this.widthTouched = true
+      }
+      if (this.height < this.minH) {
+        this.height = this.minH
+        this.heightTouched = true
+      } else if (this.maxH !== null && this.height > this.maxH) {
+        this.height = this.maxH
+        this.heightTouched = true
+      }
+    },
+    syncGeometry () {
+      this.syncParentSize()
+      this.syncAutoSize()
+      this.clampToSizeBounds()
+      if (this.width === null || this.height === null) {
+        return
+      }
+      if (this.parent) {
+        this.left = restrictToBounds(this.left, 0, Math.max(this.parentWidth - this.width, 0))
+        this.top = restrictToBounds(this.top, 0, Math.max(this.parentHeight - this.height, 0))
+      }
+      this.right = this.parentWidth - this.width - this.left
+      this.bottom = this.parentHeight - this.height - this.top
+      if (this.lockAspectRatio && this.height) {
+        this.aspectFactor = this.width / this.height
+      }
+    },
     promoteToTop () {
       this.previousZIndex = this.zIndex
       this.zIndex = this.computeTopZ()
@@ -362,14 +423,8 @@ export default {
       // 如果支持右键选中，则激活组件
       if (this.selectOnContextMenu && !this.enabled) {
         this.enabled = true
+        this.syncGeometry()
         // 确保位置信息正确
-        if (this.parent) {
-          const [newParentWidth, newParentHeight] = this.getParentSize()
-          this.parentWidth = newParentWidth
-          this.parentHeight = newParentHeight
-          this.right = this.parentWidth - this.width - this.left
-          this.bottom = this.parentHeight - this.height - this.top
-        }
         // 如果activeOnTop为true，将z-index设置为最高
         if (this.activeOnTop) {
           this.promoteToTop()
@@ -395,14 +450,7 @@ export default {
     },
     // 检查父元素大小
     checkParentSize () {
-      if (this.parent) {
-        const [newParentWidth, newParentHeight] = this.getParentSize()
-        // 修复父元素改变大小后，组件resizing时活动异常
-        this.right = newParentWidth - this.width - this.left
-        this.bottom = newParentHeight - this.height - this.top
-        this.parentWidth = newParentWidth
-        this.parentHeight = newParentHeight
-      }
+      this.syncGeometry()
     },
     // 获取父元素大小
     getParentSize () {
@@ -448,16 +496,10 @@ export default {
           this.dragging = false
           return
         }
+        this.syncGeometry()
         if (!this.enabled) {
           this.enabled = true
           // 确保位置信息正确
-          if (this.parent) {
-            const [newParentWidth, newParentHeight] = this.getParentSize()
-            this.parentWidth = newParentWidth
-            this.parentHeight = newParentHeight
-            this.right = this.parentWidth - this.width - this.left
-            this.bottom = this.parentHeight - this.height - this.top
-          }
           // 如果activeOnTop为true，将z-index设置为最高
           if (this.activeOnTop) {
             this.promoteToTop()
@@ -531,6 +573,7 @@ export default {
       }
       if (e.stopPropagation) e.stopPropagation()
       this.handle = handle
+      this.syncGeometry()
       this.resizing = true
       this.mouseClickPosition.mouseX = e.touches ? e.touches[0].pageX : e.pageX
       this.mouseClickPosition.mouseY = e.touches ? e.touches[0].pageY : e.pageY
@@ -1054,9 +1097,9 @@ export default {
     // 正则获取left与top
     formatTransformVal (string) {
       // 使用正则表达式匹配 translate 值，避免 rotate 值干扰
-      const match = string.match(/translate\(\s*(-?\d+(?:\.\d+)?)px,\s*(-?\d+(?:\.\d+)?)px\)/)
+      const match = string.match(/translate\(\s*(-?\d+(?:\.\d+)?)px(?:,\s*(-?\d+(?:\.\d+)?)px)?\)/)
       if (match) {
-        return [Number(match[1]), Number(match[2])]
+        return [Number(match[1]), Number(match[2] ?? 0)]
       }
       return [0, 0]
     }
@@ -1131,14 +1174,8 @@ export default {
     active (val) {
       this.enabled = val
       if (val) {
+        this.syncGeometry()
         // 确保位置信息正确
-        if (this.parent) {
-          const [newParentWidth, newParentHeight] = this.getParentSize()
-          this.parentWidth = newParentWidth
-          this.parentHeight = newParentHeight
-          this.right = this.parentWidth - this.width - this.left
-          this.bottom = this.parentHeight - this.height - this.top
-        }
         this.$emit('activated')
       } else {
         // 恢复原来的 z-index
@@ -1158,6 +1195,7 @@ export default {
       if (this.resizing || this.dragging) {
         return
       }
+      this.syncGeometry()
       if (this.parent) {
         this.bounds = this.calcDragLimits()
       }
@@ -1167,6 +1205,7 @@ export default {
       if (this.resizing || this.dragging) {
         return
       }
+      this.syncGeometry()
       if (this.parent) {
         this.bounds = this.calcDragLimits()
       }
@@ -1181,30 +1220,30 @@ export default {
     },
     minWidth (val) {
       this.minW = val
-      if (this.width < val) {
-        this.width = val
-        this.widthTouched = true
-        this.right = this.parentWidth - this.width - this.left
-      }
+      this.syncGeometry()
     },
     minHeight (val) {
       this.minH = val
-      if (this.height < val) {
-        this.height = val
-        this.heightTouched = true
-        this.bottom = this.parentHeight - this.height - this.top
-      }
+      this.syncGeometry()
     },
     maxWidth (val) {
       this.maxW = val
+      this.syncGeometry()
     },
     maxHeight (val) {
       this.maxH = val
+      this.syncGeometry()
     },
     w (val) {
       if (this.resizing || this.dragging) {
         return
       }
+      if (val === 'auto') {
+        this.widthTouched = false
+        this.syncGeometry()
+        return
+      }
+      this.syncGeometry()
       if (this.parent) {
         this.bounds = this.calcResizeLimits()
       }
@@ -1214,6 +1253,12 @@ export default {
       if (this.resizing || this.dragging) {
         return
       }
+      if (val === 'auto') {
+        this.heightTouched = false
+        this.syncGeometry()
+        return
+      }
+      this.syncGeometry()
       if (this.parent) {
         this.bounds = this.calcResizeLimits()
       }

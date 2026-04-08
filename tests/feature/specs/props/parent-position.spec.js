@@ -63,6 +63,44 @@ describe('`parent` and `position` props', function () {
     })
   })
 
+  it('should use the latest auto height when clamping the position inside the parent node', function (done) {
+    const ParentComponent = {
+      data () {
+        return {
+          contentHeight: 50
+        }
+      },
+      template: `<div class="parent" style="width: 200px; height: 200px;">
+        <vue-draggable-resizable :x="0" :y="0" :w="100" h="auto" :parent="true" :active="true">
+          <div class="content" :style="{ height: contentHeight + 'px' }"></div>
+        </vue-draggable-resizable>
+      </div>`,
+      components: {
+        VueDraggableResizable
+      }
+    }
+
+    parent = mount(ParentComponent, {
+      attachToDocument: true
+    })
+
+    wrapper = createWrapper(parent.vm.$children[0])
+
+    parent.setData({ contentHeight: 150 })
+
+    parent.vm.$nextTick(() => {
+      wrapper.setProps({ y: 100 })
+
+      wrapper.vm.$nextTick(() => {
+        const $el = wrapper.vm.$el
+
+        expect($el.style.transform).to.equal('translate(0px, 50px)')
+
+        done()
+      })
+    })
+  })
+
   afterEach(() => {
     wrapper.destroy()
     parent.destroy()
